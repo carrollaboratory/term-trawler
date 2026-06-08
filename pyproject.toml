@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "term-trawler"
+description = "Terminology collection script"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+
+dependencies = [
+    "requests",
+    "PyYAML",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "rich",
+    "pytest",
+    "rich_argparse",
+]
+
+[tool.setuptools_scm]
+version_file = "src/ttrawler/_version.py"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]  # list of folders that contain the packages (["."] by default)
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml"]
+
+[project.scripts]
+trawler = "trawler:exec"

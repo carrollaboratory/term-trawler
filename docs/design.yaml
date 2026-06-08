@@ -1,0 +1,220 @@
+# ============================================================
+# Design Document Template
+# claude.ai | AI-Assisted Design Document
+# ============================================================
+
+metadata:
+  title: "Term Trawler"
+  version: "0.1.0"
+  status: draft # draft | review | approved
+  created: "2026-06-08"
+  updated: "2026-06-08"
+  author: "Eric Torstenson"
+  reviewers: []
+
+# ============================================================
+# 1. OVERVIEW
+# ============================================================
+overview:
+  summary: >
+    Pulls all relevant terminologies from external sources into the DBT
+    database using schema, [terminology-trove](https://github.com/carrollaboratory/md-terminology-trove)
+  goals:
+    - Create internal representation of all terms used by the studies used in our transformations.
+    - Provide additional details such as FHIR Systems that will be used by downstream transforms.
+    - Provide additional details that may be useful for analysts, such as harmonization details found inside the sources as well as parent/child relationships
+  non_goals:
+    - This will not capture all possible details associated with each term, only those relevant to our ETL and analytical needs
+
+# ============================================================
+# 2. CONTEXT & MOTIVATION
+# ============================================================
+context:
+  background: >
+    The data flowing through the ETL process will land with a large number of
+    public terms which provide a number of challenges:
+     - These terms must be able to be validated for correctness
+     - While the curies are sufficiently distinct, additional context may be important downstream users (or ETL engineers)
+     - Key meta data, like FHIR Systems, must be defined in a central location
+  motivation: >
+    Validation can be done using external APIs, but would require processing external to DBT. Additional metadata is currently not supported by the access model, making information like displays unavailable.
+  references:
+    - label: "[Reference name]"
+      url: "[URL or doc path]"
+
+# ============================================================
+# 3. SCOPE
+# ============================================================
+scope:
+  in_scope:
+    - Python CLI application to run ingest
+    - YAML configuration defining each ontology of interest
+      - Ontology Source (OMOP, OWL download path, etc)
+      - FHIR system
+      - Other possible metadata not directly available from the source
+    - Support for
+      - OMOP source text files
+      - OWL source files (EDAM)
+  out_of_scope:
+    - For now, we are focussing on only the vocabularies from OMOP and ontologies available in OWL format
+  constraints:
+    - "[Technical, time, or resource constraint]"
+  assumptions:
+    - "[Assumption being made]"
+
+# ============================================================
+# 4. STAKEHOLDERS
+# ============================================================
+stakeholders:
+  - role: Developer
+    name: Yelean Cox
+    responsibilities:
+      - Application Developer
+
+# ============================================================
+# 5. TECHNICAL DESIGN
+# ============================================================
+technical_design:
+  architecture:
+    description: >
+      Trawler Ingest - Basic wrapper that loads the configuration to determine
+      which terminologies are to be found and how they are to be harvested.
+    components:
+      - name: Trawler
+        description: |
+          Main application that loads YAML config and iterates over each of
+          terminologies and runs the appropriate ingest calls
+        technology: Python w/ YAML config
+      - name: Term Extractor
+        description: |
+          Adapter pattern to allow the trawler to load data from varied
+          sources using a common interface. Initial adapters include: OMOP,
+          OWL
+      - name: Term Loader
+        description: |
+          Loads data into the defined schema the [SQL Alchemy interface](https://github.com/carrollaboratory/piper/blob/main/src/piper/datamodel/linkml.py). This
+          will require the DBT staging template name as well as the target
+          model's SQL Alchemy model added as a dependency to the execution
+          repository.
+
+  data_model:
+    description: >
+      The resulting data will be stored within the database according to the
+      [md-terminology-trove (MDTT)](https://github.com/carrollaboratory/md-terminology-trove)
+      data model. Input will be structured, but the format will be dependent on
+      source.
+    entities:
+      - name: Configuration Vocabulary
+        description: |
+          This will provide all details required for the trawler to ingest
+          the data for each of the vocabularies
+      - name: MDTT:Concept
+        description: This captures the details for each term/concept
+      - name: MDTT:Vocabulary
+        description: |
+          Details related to the vocabulary itself including non-standard
+          information like the fhir-system
+
+  interfaces:
+    inputs:
+      - name: YAML Configuration
+        format: YAML
+        description: |
+          Configuration containing details relating to each of the vocabularies
+
+      - name: OMOP Flat File
+        format: TSV Format
+        description: |
+          For convenience, we can pull most of our terms from OMOP downloads.
+          These files can either be loaded into a RDB and queried or parsed
+          directly.
+
+      - name: OWL File
+        format: OWL
+        description: |
+          OWL is a robust, logic-based Semantic Web standard used to author
+          ontologies.
+
+    outputs:
+      - name: "[md-terminology-trove](https://github.com/carrollaboratory/md-terminology-trove)"
+        format: "DBT Table data"
+        description: "Database entries within the data warehouse"
+
+  dependencies:
+    internal:
+      - name: "[linkml SQL Alchemy Adapter]([SQL Alchemy interface](https://github.com/carrollaboratory/piper/blob/main/src/piper/datamodel/linkml.py)"
+        version: current
+        purpose: This can provide an OO interface to the database tables. It may not be necessary, however, using this may make porting to different databases more seamless
+    external:
+      - name: "[rdflib](https://github.com/RDFLib/rdflib)"
+        version: 7.6.0
+        purpose: This will be used to extract information from OWL files
+
+# ============================================================
+# 6. IMPLEMENTATION APPROACH
+# ============================================================
+implementation:
+  strategy: >
+    [Describe the overall implementation strategy at a high level.]
+  phases:
+    - phase: 1
+      name: "[Phase name]"
+      description: "[What gets done in this phase]"
+  error_handling: >
+    [How errors, edge cases, and failures will be handled.]
+  logging: >
+    [What will be logged and at what verbosity levels.]
+
+# ============================================================
+# 7. TESTING STRATEGY
+# ============================================================
+testing:
+  approach: >
+    [Unit, integration, manual — describe the strategy.]
+  test_cases:
+    - id: TC-001
+      description: "[What is being tested]"
+      expected_result: "[What success looks like]"
+  acceptance_criteria:
+    - "[Criterion that must be true before this is considered done]"
+
+# ============================================================
+# 8. RISKS & MITIGATIONS
+# ============================================================
+risks:
+  - id: R-001
+    description: "[Risk description]"
+    likelihood: low # low | medium | high
+    impact: low # low | medium | high
+    mitigation: "[How this risk is mitigated]"
+
+# ============================================================
+# 9. OPEN QUESTIONS
+# ============================================================
+open_questions:
+  - id: Q-001
+    question: "[Unresolved question]"
+    owner: "[Who will resolve it]"
+    due: "YYYY-MM-DD"
+
+# ============================================================
+# 10. DECISION LOG
+# ============================================================
+decision_log:
+  - id: D-001
+    date: "YYYY-MM-DD"
+    decision: "[What was decided]"
+    rationale: "[Why this decision was made]"
+    alternatives_considered:
+      - "[Alternative that was not chosen]"
+
+# ============================================================
+# 11. APPENDIX
+# ============================================================
+appendix:
+  glossary:
+    - term: "[Term]"
+      definition: "[Definition]"
+  diagrams: []
+  notes: >
+    [Any additional free-form notes.]
