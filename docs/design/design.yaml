@@ -39,8 +39,8 @@ context:
   motivation: >
     Validation can be done using external APIs, but would require processing external to DBT. Additional metadata is currently not supported by the access model, making information like displays unavailable.
   references:
-    - label: "[Reference name]"
-      url: "[URL or doc path]"
+    - label: "Implementation Details"
+      url: design/phase1-details
 
 # ============================================================
 # 3. SCOPE
@@ -52,9 +52,12 @@ scope:
       - Ontology Source (OMOP, OWL download path, etc)
       - FHIR system
       - Other possible metadata not directly available from the source
-    - Support for
-      - OMOP source text files
-      - OWL source files (EDAM)
+    - Support for:
+        - OMOP source text files
+        - OWL source files (EDAM)
+    - Table Support
+      - Vocabulary
+      - Concept
   out_of_scope:
     - For now, we are focussing on only the vocabularies from OMOP and ontologies available in OWL format
   constraints:
@@ -136,34 +139,59 @@ technical_design:
           ontologies.
 
     outputs:
-      - name: "[md-terminology-trove](https://github.com/carrollaboratory/md-terminology-trove)"
+      - name: "md-terminology-trove"
         format: "DBT Table data"
-        description: "Database entries within the data warehouse"
+        description: "[md-terminology-trove](https://github.com/carrollaboratory/md-terminology-trove) is a schema whose data entries live within the data warehouse"
 
   dependencies:
     internal:
-      - name: "[linkml SQL Alchemy Adapter]([SQL Alchemy interface](https://github.com/carrollaboratory/piper/blob/main/src/piper/datamodel/linkml.py)"
+      - name: "LinkML SQL Alchemy Adapter"
         version: current
-        purpose: This can provide an OO interface to the database tables. It may not be necessary, however, using this may make porting to different databases more seamless
+        purpose: |
+          [linkml SQL Alchemy Adapter]([SQL Alchemy interface](https://github.com/carrollaboratory/piper/blob/main/src/piper/datamodel/linkml.py) can
+          provide an OO interface to the database tables. It may not be necessary, however, using this may make porting to different databases more seamless
     external:
-      - name: "[rdflib](https://github.com/RDFLib/rdflib)"
+      - name: "rdflib"
         version: 7.6.0
-        purpose: This will be used to extract information from OWL files
+        purpose: "[rdflib](https://github.com/RDFLib/rdflib) will be used to extract information from OWL files"
 
 # ============================================================
 # 6. IMPLEMENTATION APPROACH
 # ============================================================
 implementation:
   strategy: >
-    [Describe the overall implementation strategy at a high level.]
+    A very basic CLI application that accepts a single YAML configuration that
+    identifies which terminologies to load, the source for each of those
+    terminologies and any additional metadata necessary for loading this data.
+    Support for various source types and additional metadata can be added in
+    separate stages.
   phases:
     - phase: 1
-      name: "[Phase name]"
-      description: "[What gets done in this phase]"
+      name: "Core Process"
+      description: |
+        Basic CLI application will allow the application to be run either on a
+        laptop or as part of an orchestrated pipeline. Components include:
+          - CLI application
+          - YAML Configuration direction to control ingestion and DB connection
+          - Base adapter model
+          - Source OMOP adapter
+          - Source OWL adapter
+
   error_handling: >
-    [How errors, edge cases, and failures will be handled.]
+    - Core Python exceptions will be used where suitable.
+    - Basic DB connection issues will immediately halt.
+    - Schema related issues will also cause hard stop
   logging: >
-    [What will be logged and at what verbosity levels.]
+    WARNING and ERROR logging used appropriately
+    INFO Level will include
+      - Successful database connections
+      - Vocabulary section and which adapter type is being used
+      - filenames and URLs that are successfully acquired and processed
+      - High level summary of DB entries added/updated
+    DEBUG Level will include
+      - SQL Statements if we are writing our own SQL
+      - HTTP responses where appropriate
+      - Complete record rows when using with a serialization library instead of SQL
 
 # ============================================================
 # 7. TESTING STRATEGY
@@ -183,10 +211,20 @@ testing:
 # ============================================================
 risks:
   - id: R-001
-    description: "[Risk description]"
+    description: "Large input data may be too large for some tooling"
     likelihood: low # low | medium | high
     impact: low # low | medium | high
-    mitigation: "[How this risk is mitigated]"
+    mitigation: |
+      We'll be streaming most of the data directly from file to avoid data
+      loading restrictions for large data components like OMOP.
+  - id: R-002
+    description: "rdflib is unfamiliar and may not handle EDAM correctly"
+    likelihood: low
+    impact: low
+    mitigation: |
+      No one on the team has used this library before. If there are issues
+      using the library, we will have to fall back to searching for an
+      alternative approach to loading data in OWL format.
 
 # ============================================================
 # 9. OPEN QUESTIONS
@@ -202,19 +240,27 @@ open_questions:
 # ============================================================
 decision_log:
   - id: D-001
-    date: "YYYY-MM-DD"
-    decision: "[What was decided]"
-    rationale: "[Why this decision was made]"
+    date: "2026-06-09"
+    decision: "Streaming flat TSV content is sufficient"
+    rationale: "We can maintain a low memory profile without adding extra deps"
     alternatives_considered:
-      - "[Alternative that was not chosen]"
+      - "I was considering dumping to database and then streaming from there, but this seems good enough"
+  - id: D-002
+    date: "2026-06-09"
+    decision: "rdflib seems to work OK with EDAM"
+    rationale: "Claude generated a simple test example and it looks fine for a quick glance and the interface looks reasonable."
+    alternatives_considered:
+      - "This simply confirms we aren't likely to need to find an alternative"
 
 # ============================================================
 # 11. APPENDIX
 # ============================================================
 appendix:
   glossary:
-    - term: "[Term]"
-      definition: "[Definition]"
+    - term: "Vocabulary"
+      definition: "Standized public terminology. This is interchangeable with Ontology we've used over the last few years. "
+    - term: "Concept"
+      definition: "This is just a single code within a vocabulary. This is somewhat synonymous with our Term or Code."
   diagrams: []
   notes: >
     [Any additional free-form notes.]

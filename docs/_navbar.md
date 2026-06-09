@@ -1,2 +1,2 @@
 * [Term Trawler](README.md)
-  * [Design](DESIGN.md)
+  * [Design](design/DESIGN.md)
