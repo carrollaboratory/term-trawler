@@ -1,0 +1,19 @@
+warehouse:
+  db_uri: "postgresql://localhost:5432/[database_name]"
+vocabularies:
+  - vocabulary_id: "SNOMED"
+    vocabulary_name: "Systematic Nomenclature of Medicine - Clinical Terms"
+    description: "SNOMED CT (Systematized Nomenclature of Medicine Clinical Terms) is a comprehensive clinical terminology used to code, query and analyze health data. The terminology system is maintained and distributed by SNOMED International, the trading name of the International Health Terminology Standards Development Organisation (IHTSDO), established in 2007."
+    prefix: "snomedct"
+    fhir_system: "http://snomed.info/sct"
+    vocabulary_uri: "http://snomed.info/id/[code]"
+    archive_filename: # where zip file with ontology lives in bucket
+    source_type: "OMOP"
+    ## ADD HP AND LOINC
+  - vocabulary_name: "EDAM - The ontology of data analysis and management"
+    description: "EDAM is a comprehensive ontology of well-established, familiar concepts that are prevalent within scientific data analysis and data management (both within and beyond life sciences and imaging)."
+    prefix: "edam"
+    fhir_system: "http://edamontology.org/EDAM.owl"
+    vocabulary_uri: "http://edamontology.org/[code]"
+    owl_file: "http://edamontology.org/EDAM.owl" # where to download owl file
+    source_type: "OWL"
