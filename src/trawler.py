@@ -24,7 +24,7 @@ def exec(args: list[str] | None = None):
         "--config",
         default="dev.yaml",
         required=False,
-        help="Configuration file specifying vocabularies to gather and warehouse for loading."
+        help="Configuration file specifying vocabularies to load and warehouse for loading."
     )
 
     args = parser.parse_args(args)
