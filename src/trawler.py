@@ -5,9 +5,7 @@ from argparse import ArgumentParser  # , FileType
 from pathlib import Path
 
 from ttrawler import init_logging
-
-def print_arg(arg: str):
-    print(arg)
+from extraction_loop import extract
 
 def exec(args: list[str] | None = None):
     parser = ArgumentParser(
@@ -36,12 +34,9 @@ def exec(args: list[str] | None = None):
         parser.error(f"{config_path} file not found.")
     # Initialize the logger with whatever the user requested
     init_logging(args.log_level)
-    logging.info(f"You have chose to use: {args}")
-    logging.warn(f"Hello")
-    logging.error("world")
-    logging.debug("Goodbye")
+    logging.info(f"You have chosen to use: {args}")
 
-    print_arg(arg=args.config)
+    extract(config_path)
 
 
 if __name__ == "__main__":
