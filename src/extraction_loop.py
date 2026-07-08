@@ -1,16 +1,20 @@
-import yaml
-import extractors
 import logging
 from pathlib import Path
 
+import yaml
+
+import extractors
 
 EXTRACTORS = {
-    getattr(obj, "extractor_name"): obj    # OMOP: obj are your dictionary entries
-    for name in extractors.__all__         # iterate over each of your __all__ strings
+    getattr(obj, "extractor_name"): obj  # OMOP: obj are your dictionary entries
+    for name in extractors.__all__  # iterate over each of your __all__ strings
     if (obj := getattr(extractors, name))  # Unpack the class object from the module
-    and issubclass(obj, extractors.ExtractorBase)  # Confirm that it is a child class of the ExtractorBase
-    and obj is not extractors.ExtractorBase # Avoid capturing the parent class itself.
+    and issubclass(
+        obj, extractors.ExtractorBase
+    )  # Confirm that it is a child class of the ExtractorBase
+    and obj is not extractors.ExtractorBase  # Avoid capturing the parent class itself.
 }
+
 
 def extract(config_path: Path):
     """Iterates over the 'vocabularies' property in the config file and runs

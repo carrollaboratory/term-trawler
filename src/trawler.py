@@ -1,13 +1,13 @@
 #!/bin/env python
 import logging
-import sys
 from argparse import ArgumentParser  # , FileType
 from pathlib import Path
 
-from ttrawler import init_logging
 from extraction_loop import extract
+from ttrawler import init_logging
 
-def exec(args: list[str] | None = None):
+
+def exec():
     parser = ArgumentParser(
         prog="term-trawler",
         description="""Trawling the depths of the internet for terminology catches of the day.""",
@@ -24,10 +24,10 @@ def exec(args: list[str] | None = None):
         "--config",
         default="dev.yaml",
         required=False,
-        help="Configuration file specifying vocabularies to load and warehouse for loading."
+        help="Configuration file specifying vocabularies to load and warehouse for loading.",
     )
 
-    args = parser.parse_args(args)
+    args = parser.parse_args()
 
     config_path = Path(args.config)
     if not config_path.exists():
