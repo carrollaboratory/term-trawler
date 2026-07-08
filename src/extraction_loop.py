@@ -2,6 +2,7 @@ import yaml
 from extractors.omop import OmopExtractor
 from extractors.owl import OwlExtractor
 import logging
+from pathlib import Path
 
 
 EXTRACTORS = {
@@ -9,7 +10,7 @@ EXTRACTORS = {
     "OWL": OwlExtractor
 }
 
-def extract(config_path):
+def extract(config_path: Path):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
 

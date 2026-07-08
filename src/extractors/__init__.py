@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class SourceConfig(ABC):
+class ExtractorBase(ABC):
     def __init__(self, config: dict):
         self.config = config
 
