@@ -1,13 +1,15 @@
 import yaml
-from extractors.omop import OmopExtractor
-from extractors.owl import OwlExtractor
+import extractors
 import logging
 from pathlib import Path
 
 
 EXTRACTORS = {
-    "OMOP": OmopExtractor,
-    "OWL": OwlExtractor
+    getattr(obj, "extractor_name"): obj    # OMOP: obj are your dictionary entries
+    for name in extractors.__all__         # iterate over each of your __all__ strings
+    if (obj := getattr(extractors, name))  # Unpack the class object from the module
+    and issubclass(obj, extractors.ExtractorBase)  # Confirm that it is a child class of the ExtractorBase
+    and obj is not extractors.ExtractorBase # Avoid capturing the parent class itself.
 }
 
 def extract(config_path: Path):
