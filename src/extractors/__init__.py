@@ -10,7 +10,6 @@ class ExtractorBase(ABC):
     def extract_data(self, data_type: Any):
         pass
 
-
 from .omop import OmopExtractor  # noqa: E402
 from .owl import OwlExtractor  # noqa: E402
 

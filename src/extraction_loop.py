@@ -34,4 +34,4 @@ def extract(config_path: Path):
             continue
 
         extractor = extractor_type(vocab)
-        extractor.extract_data(data_type=None)
+        list(extractor.extract_data(data_type=None))
