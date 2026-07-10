@@ -1,11 +1,16 @@
 import logging
 import sys
+from typing import TYPE_CHECKING
 
 # Rich Logging if rich is installed
-if sys.stderr.isatty():
+if sys.stderr.isatty() or TYPE_CHECKING:
     from rich.console import Console
     from rich.logging import RichHandler
     from rich.traceback import install
+
+    USE_RICH = True
+else:
+    USE_RICH = False
 
 
 def init_logging(loglevel: str | None = None):
@@ -13,7 +18,7 @@ def init_logging(loglevel: str | None = None):
     if loglevel is None:
         loglevel = "WARN"
     DATEFMT = "%Y-%m-%dT%H:%M:%SZ"
-    if sys.stderr.isatty():
+    if sys.stderr.isatty() and USE_RICH:
         install(show_locals=True)
 
         handler = RichHandler(

@@ -1,12 +1,13 @@
 #!/bin/env python
 import logging
-import sys
 from argparse import ArgumentParser  # , FileType
+from pathlib import Path
 
+from extraction_loop import extract
 from ttrawler import init_logging
 
 
-def exec(args: list[str] | None = None):
+def exec():
     parser = ArgumentParser(
         prog="term-trawler",
         description="""Trawling the depths of the internet for terminology catches of the day.""",
@@ -18,15 +19,25 @@ def exec(args: list[str] | None = None):
         default="INFO",
         help="Logging level tolerated (default is INFO)",
     )
+    parser.add_argument(
+        "-c",
+        "--config",
+        default="dev.yaml",
+        required=False,
+        help="Configuration file specifying vocabularies to load and warehouse for loading.",
+    )
 
-    args = parser.parse_args(args)
+    args = parser.parse_args()
+
+    config_path = Path(args.config)
+    if not config_path.exists():
+        parser.error(f"{config_path} file not found.")
     # Initialize the logger with whatever the user requested
     init_logging(args.log_level)
-    logging.info(f"You have chose to use: {args}")
-    logging.warn(f"Hello")
-    logging.error("world")
-    logging.debug("Goodbye")
+    logging.info(f"You have chosen to use: {args}")
+
+    extract(config_path)
 
 
 if __name__ == "__main__":
-    exec(sys.argv)
+    exec()
