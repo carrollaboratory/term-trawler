@@ -32,6 +32,5 @@ def extract(config_path: Path):
         if extractor_type is None:
             logging.warning(f"{source_type} is not a valid source type.")
             continue
-
-        extractor = extractor_type(vocab)
-        list(extractor.extract_data(data_type=None))
+        with extractor_type(vocab) as extractor:
+            list(extractor.extract_data(data_type=None))
