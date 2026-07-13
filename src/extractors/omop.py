@@ -1,3 +1,4 @@
+import csv
 import tempfile
 import zipfile
 from collections.abc import Generator
@@ -11,29 +12,32 @@ class OmopExtractor(ExtractorBase):
 
     def __init__(self, config: dict):
         super().__init__(config)
-        self.vocabulary_id = config["vocabulary_id"]
         self.filename = config["archive_filename"]
 
     def __enter__(self):
         self.temp_obj = tempfile.TemporaryDirectory()
         self.temp_dir = self.temp_obj.name
-        print(f"Created temporary {self.temp_dir} file.")
-        return self
+        try:
+            with zipfile.ZipFile(self.filename) as zf:
+                zf.extractall(self.temp_dir)
+                print(
+                    f"Created temporary {self.temp_dir} directory and extracted archive."
+                )
+                return self
+        except zipfile.BadZipfile:
+            print(f"OMOP {self.filename} could not be extracted.")
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         print("Cleaning up resource now!")
         self.temp_obj.cleanup()
-        # Return True if you want to suppress an exception, False otherwise
         return False
 
-    def extract_data(self, data_type: Any) -> Generator[Dict[str, Any], None, None]:
-        try:
-            with zipfile.ZipFile(self.filename) as zf:
-                for item in zf.namelist():
-                    zf.extract(item, path=self.temp_dir)
-                    yield item
-            print(
-                f"OMOP {self.config['vocabulary_id']} file extracted to {self.temp_dir}"
-            )
-        except zipfile.BadZipfile:
-            print(f"OMOP {self.config['vocabulary_id']} could not be extracted.")
+    def extract_data(
+        self, vocabulary_id: str, data_type: str
+    ) -> Generator[Dict[str, Any], None, None]:
+        file_path = f"{self.temp_dir}/{data_type}.csv"
+        with open(file_path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            for row in reader:
+                if row.get("vocabulary_id") == vocabulary_id:
+                    yield row

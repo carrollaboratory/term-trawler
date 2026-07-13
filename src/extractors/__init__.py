@@ -8,7 +8,9 @@ class ExtractorBase(ABC):
         self.config = config
 
     @abstractmethod
-    def extract_data(self, data_type: Any) -> Generator[Dict[str, Any], None, None]:
+    def extract_data(
+        self, vocabulary_id: str, data_type: Any
+    ) -> Generator[Dict[str, Any], None, None]:
         yield {"dict": "something"}
 
     @abstractmethod
