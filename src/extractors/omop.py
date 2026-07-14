@@ -21,7 +21,7 @@ class OmopExtractor(ExtractorBase):
             with zipfile.ZipFile(self.filename) as zf:
                 zf.extractall(self.temp_dir)
                 print(
-                    f"Created temporary {self.temp_dir} directory and extracted archive."
+                    f"Zip file extracted to {self.temp_dir}."
                 )
                 return self
         except zipfile.BadZipfile:
