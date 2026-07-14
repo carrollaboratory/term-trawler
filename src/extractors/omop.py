@@ -39,5 +39,5 @@ class OmopExtractor(ExtractorBase):
         with open(file_path, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
-                if row.get("vocabulary_id") == vocabulary_id:
+                if row.get("vocabulary_id", "").upper() == vocabulary_id.upper():
                     yield row
