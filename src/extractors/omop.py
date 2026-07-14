@@ -26,6 +26,7 @@ class OmopExtractor(ExtractorBase):
                 return self
         except zipfile.BadZipfile:
             print(f"OMOP {self.filename} could not be extracted.")
+            return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         print("Cleaning up resource now!")

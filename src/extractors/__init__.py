@@ -6,10 +6,11 @@ from typing import Any, Dict
 class ExtractorBase(ABC):
     def __init__(self, config: dict):
         self.config = config
+        self.temp_dir: str
 
     @abstractmethod
     def extract_data(
-        self, vocabulary_id: str, data_type: Any
+        self, vocabulary_id: str, data_type: str
     ) -> Generator[Dict[str, Any], None, None]:
         yield {"dict": "something"}
 
