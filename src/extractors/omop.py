@@ -36,9 +36,10 @@ class OmopExtractor(ExtractorBase):
     def extract_data(
         self, vocabulary_id: str, data_type: str
     ) -> Generator[Dict[str, Any], None, None]:
+        upper_vocab = vocabulary_id.upper()
         file_path = f"{self.temp_dir}/{data_type}.csv"
         with open(file_path, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
-                if row.get("vocabulary_id", "").upper() == vocabulary_id.upper():
+                if row.get("vocabulary_id", "").upper() == upper_vocab:
                     yield row
