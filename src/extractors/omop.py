@@ -20,9 +20,7 @@ class OmopExtractor(ExtractorBase):
         try:
             with zipfile.ZipFile(self.filename) as zf:
                 zf.extractall(self.temp_dir)
-                print(
-                    f"Zip file extracted to {self.temp_dir}."
-                )
+                print(f"Zip file extracted to {self.temp_dir}.")
                 return self
         except zipfile.BadZipfile:
             print(f"OMOP {self.filename} could not be extracted.")
@@ -34,12 +32,18 @@ class OmopExtractor(ExtractorBase):
         return False
 
     def extract_data(
-        self, vocabulary_id: str, data_type: str
-    ) -> Generator[Dict[str, Any], None, None]:
+        self, vocabulary_id: str, data_type: str, chunk_size: int=100
+    ) -> Generator[list[Dict[str, Any]], None, None]:
+        chunk = []
         upper_vocab = vocabulary_id.upper()
         file_path = f"{self.temp_dir}/{data_type}.csv"
         with open(file_path, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
                 if row.get("vocabulary_id", "").upper() == upper_vocab:
-                    yield row
+                    chunk.append(row)
+                    if len(chunk) == chunk_size:
+                        yield chunk
+                        chunk = []
+            if chunk:
+                yield chunk

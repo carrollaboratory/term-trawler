@@ -10,9 +10,9 @@ class ExtractorBase(ABC):
 
     @abstractmethod
     def extract_data(
-        self, vocabulary_id: str, data_type: str
-    ) -> Generator[Dict[str, Any], None, None]:
-        yield {"dict": "something"}
+        self, vocabulary_id: str, data_type: str, chunk_size: int
+    ) -> Generator[list[Dict[str, Any]], None, None]:
+        yield from ()
 
     @abstractmethod
     def __enter__(self):
