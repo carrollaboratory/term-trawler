@@ -44,7 +44,7 @@ def format_code(row, config_prefix=None):
         return f"{prefix}:{concept_code}"
     return concept_code
 
-def concept_rows(row, config_prefix=None):
+def concept_rows(row, config_prefix=None, version=None):
     """Takes zip file and writes the data into TermOntology format.
 
     Arguments:
@@ -54,6 +54,7 @@ def concept_rows(row, config_prefix=None):
     concept = {
         "ontology_id": row["vocabulary_id"],
         "concept_code": format_code(row, config_prefix),
+        "version": version
     }
 
     if row["vocabulary_id"] == "NCIt":
@@ -62,8 +63,31 @@ def concept_rows(row, config_prefix=None):
         concept["display"] =row["concept_name"]
     return concept
 
+def vocab_rows(row, config):
+    """Takes zip file and writes the data into TermOntology format.
 
-def write_concept(data: list, output_path: str, config_prefix=None):
+    Arguments:
+        row: Row in zip file.
+        config: The config object for a vocabulary.
+    """
+    vocabulary = {
+        "ontology_id": row["vocabulary_id"],
+        "name": row["vocabulary_name"],
+    }
+
+    if config.get("vocabulary_uri"):
+        vocabulary["ontology_uri"] = config.get("vocabulary_uri")
+    if config.get("prefix"):
+        vocabulary["prefix"] = config.get("prefix")
+    if config.get("description"):
+        vocabulary["description"] = config.get("description")
+    if config.get("archive_filename"):
+        vocabulary["source"] = f"{config.get('source_type')} - {config.get('archive_filename')}"
+
+    return vocabulary
+
+
+def write_concept(data: list, output_path: str, config_prefix=None, version=None):
     """Takes unzipped data file and writes it to a JSON file in TermConcept format.
 
     Arguments:
@@ -74,9 +98,9 @@ def write_concept(data: list, output_path: str, config_prefix=None):
     with open(output_path, "w") as o:
         for chunk in data:
             for row in chunk:
-                o.write(json.dumps(concept_rows(row, config_prefix)) + "\n")
+                o.write(json.dumps(concept_rows(row, config_prefix, version)) + "\n")
 
-def write_vocab(data, output_path):
+def write_vocab(data: list, output_path: str, config: object):
     """Takes unzipped data file and writes it to a JSON file in TermOntology format.
 
     Arguments:
@@ -87,7 +111,7 @@ def write_vocab(data, output_path):
     with open(output_path, "w") as o:
         for chunk in data:
             for row in chunk:
-                o.write(json.dumps(concept_rows(row)) + "\n")
+                o.write(json.dumps(vocab_rows(row, config)) + "\n")
 
 def extract(config_path: Path):
     """Iterates over the 'vocabularies' property in the config file and runs
@@ -103,6 +127,8 @@ def extract(config_path: Path):
 
     extracted_files = {}
     dirs_to_cleanup = []
+    version = None
+
 
     for vocab in config["vocabularies"]:
         source_type = vocab["source_type"]
@@ -128,13 +154,18 @@ def extract(config_path: Path):
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT", chunk_size=100)
         )
         vocabulary_data = list(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY", chunk_size=100)
+            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY", chunk_size=1)
         )
-        write_concept(concept_data, f"output/{vocabulary_id}_concept.jsonl", config_prefix=vocab.get("prefix"))
 
-        logging.info(
-            f"{vocabulary_id}: {sum(len(chunk) for chunk in concept_data)} concepts, {sum(len(chunk) for chunk in vocabulary_data)} vocabulary rows"
-        )
+        for chunk in vocabulary_data:
+            for row in chunk:
+                version = row.get("vocabulary_version")
+                break
+            if version is not None:
+                break
+
+        write_concept(concept_data, f"output/{vocabulary_id}_concept.jsonl", config_prefix=vocab.get("prefix"), version=version)
+        write_vocab(vocabulary_data, f"output/{vocabulary_id}_vocabulary.jsonl", config=vocab)
 
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
