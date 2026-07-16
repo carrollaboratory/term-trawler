@@ -16,20 +16,44 @@ EXTRACTORS = {
     and obj is not extractors.ExtractorBase  # Avoid capturing the parent class itself.
 }
 
-def format_code(row):
+PREFIXES = {
+    "SNOMED": "snomedct",
+    "NCIT": "NCIT"
+}
+
+def format_code(row, config_prefix=None):
+    """Takes the concept_code in the zip files and formats it to the [prefix]:[code] format
+    for the output.
+    Replaces "_" with ":" in the codes.
+    If ":" is not present in the concept_code, it first defers to the prefix in the config file,
+    then the dictionary above to build the code format.
+
+    Arguments:
+        row: Row in zip file.
+        config_prefix: The "prefix" in the config file.
+    """
     concept_code = row["concept_code"]
+    vocabulary_id = row["vocabulary_id"].upper()
     if "_" in concept_code:
         return concept_code.replace("_", ":")
-    if row["vocabulary_id"].upper() == 'SNOMED':
-        concept_code = f"snomedct:{concept_code}"
-    if row["vocabulary_id"].upper() == "NCIt".upper():
-        concept_code = f"NCIT:{concept_code}"
+    prefix = PREFIXES.get(vocabulary_id)
+    if ":" not in concept_code:
+        prefix = config_prefix or PREFIXES.get(vocabulary_id.upper(), "")
+        if prefix is None:
+            raise ValueError(f"Prefix not found for {row['vocabulary_id']}")
+        return f"{prefix}:{concept_code}"
     return concept_code
 
-def concept_rows(row):
+def concept_rows(row, config_prefix=None):
+    """Takes zip file and writes the data into TermOntology format.
+
+    Arguments:
+        row: Row in zip file.
+        config_prefix: The "prefix" in the config file.
+    """
     concept = {
         "ontology_id": row["vocabulary_id"],
-        "concept_code": format_code(row),
+        "concept_code": format_code(row, config_prefix),
     }
 
     if row["vocabulary_id"] == "NCIt":
@@ -39,7 +63,7 @@ def concept_rows(row):
     return concept
 
 
-def write_concept(data: list, output_path: str):
+def write_concept(data: list, output_path: str, config_prefix=None):
     """Takes unzipped data file and writes it to a JSON file in TermConcept format.
 
     Arguments:
@@ -50,7 +74,7 @@ def write_concept(data: list, output_path: str):
     with open(output_path, "w") as o:
         for chunk in data:
             for row in chunk:
-                o.write(json.dumps(concept_rows(row)) + "\n")
+                o.write(json.dumps(concept_rows(row, config_prefix)) + "\n")
 
 def write_vocab(data, output_path):
     """Takes unzipped data file and writes it to a JSON file in TermOntology format.
@@ -106,7 +130,7 @@ def extract(config_path: Path):
         vocabulary_data = list(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY", chunk_size=100)
         )
-        write_concept(concept_data, f"output/{vocabulary_id}_concept.jsonl")
+        write_concept(concept_data, f"output/{vocabulary_id}_concept.jsonl", config_prefix=vocab.get("prefix"))
 
         logging.info(
             f"{vocabulary_id}: {sum(len(chunk) for chunk in concept_data)} concepts, {sum(len(chunk) for chunk in vocabulary_data)} vocabulary rows"
