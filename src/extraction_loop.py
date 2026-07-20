@@ -21,9 +21,10 @@ PREFIXES = {
     "NCIT": "NCIT"
 }
 
-def format_code(row, config_prefix=None):
+def format_code(row: dict[str, str | None], config: dict):
     """Takes the concept_code in the zip files and formats it to the [prefix]:[code] format
     for the output.
+
     Replaces "_" with ":" in the codes.
     If ":" is not present in the concept_code, it first defers to the prefix in the config file,
     then the dictionary above to build the code format.
@@ -31,44 +32,75 @@ def format_code(row, config_prefix=None):
     Arguments:
         row: Row in zip file.
         config_prefix: The "prefix" in the config file.
+
+    Returns:
+        Returns the formatted concept_id
+    """
+    concept_id = row["concept_code"]
+    vocabulary_id = row["vocabulary_id"]
+    vocabulary_id = vocabulary_id.upper() if vocabulary_id else ""
+    if concept_id:
+        if "_" in concept_id:
+            return concept_id.replace("_", ":")
+        prefix = PREFIXES.get(vocabulary_id)
+        if ":" not in concept_id:
+            prefix = config.get("prefix", "") or PREFIXES.get(vocabulary_id.upper(), "")
+            if prefix is None:
+                raise ValueError(f"Prefix not found for {vocabulary_id}")
+            return f"{prefix}:{concept_id}"
+    return concept_id
+
+def found_code(row: dict[str, str | None]):
+    """Takes the concept_code in the zip files and extracts only the code portion after the delimiter,
+    or only returns the code if no delimiter is present.
+
+    Arguments:
+        row: Row in zip file.
+
+    Returns:
+        The formatted concept code.
     """
     concept_code = row["concept_code"]
-    vocabulary_id = row["vocabulary_id"].upper()
-    if "_" in concept_code:
-        return concept_code.replace("_", ":")
-    prefix = PREFIXES.get(vocabulary_id)
-    if ":" not in concept_code:
-        prefix = config_prefix or PREFIXES.get(vocabulary_id.upper(), "")
-        if prefix is None:
-            raise ValueError(f"Prefix not found for {row['vocabulary_id']}")
-        return f"{prefix}:{concept_code}"
-    return concept_code
+    if concept_code:
+        if "_" in concept_code:
+            return concept_code.split("_")[1]
+        elif ":" in concept_code:
+            return concept_code.split(":")[1]
+        else:
+            return concept_code
 
-def concept_rows(row, config_prefix=None, version=None):
+def concept_rows(row: dict[str, str | None], config: dict, version=None):
     """Takes zip file and writes the data into TermOntology format.
 
     Arguments:
         row: Row in zip file.
         config_prefix: The "prefix" in the config file.
     """
+
     concept = {
         "ontology_id": row["vocabulary_id"],
-        "concept_code": format_code(row, config_prefix),
-        "version": version
+        "concept_id": format_code(row, config),
+        "concept_code": found_code(row)
     }
 
     if row["vocabulary_id"] == "NCIt":
         concept["definition"] = row["concept_name"]
     else:
         concept["display"] =row["concept_name"]
+
+    if row["invalid_reason"]:
+        concept["version"] = row["valid_end_date"]
+    else:
+        concept["version"] = version
+
     return concept
 
-def vocab_rows(row, config):
+def vocab_rows(row: dict[str, str | None], config: dict):
     """Takes zip file and writes the data into TermOntology format.
 
     Arguments:
         row: Row in zip file.
-        config: The config object for a vocabulary.
+        config: The config dictionary for a vocabulary.
     """
     vocabulary = {
         "ontology_id": row["vocabulary_id"],
@@ -77,6 +109,8 @@ def vocab_rows(row, config):
 
     if config.get("vocabulary_uri"):
         vocabulary["ontology_uri"] = config.get("vocabulary_uri")
+    if config.get("fhir_system"):
+        vocabulary["fhir_system"] = config.get("fhir_system")
     if config.get("prefix"):
         vocabulary["prefix"] = config.get("prefix")
     if config.get("description"):
@@ -87,7 +121,7 @@ def vocab_rows(row, config):
     return vocabulary
 
 
-def write_concept(data: list, output_path: str, config_prefix=None, version=None):
+def write_concept(data: list, output_path: str, config: dict, version=None):
     """Takes unzipped data file and writes it to a JSON file in TermConcept format.
 
     Arguments:
@@ -98,9 +132,9 @@ def write_concept(data: list, output_path: str, config_prefix=None, version=None
     with open(output_path, "w") as o:
         for chunk in data:
             for row in chunk:
-                o.write(json.dumps(concept_rows(row, config_prefix, version)) + "\n")
+                o.write(json.dumps(concept_rows(row, config, version)) + "\n")
 
-def write_vocab(data: list, output_path: str, config: object):
+def write_vocab(data: list, output_path: str, config: dict):
     """Takes unzipped data file and writes it to a JSON file in TermOntology format.
 
     Arguments:
@@ -164,7 +198,7 @@ def extract(config_path: Path):
             if version is not None:
                 break
 
-        write_concept(concept_data, f"output/{vocabulary_id}_concept.jsonl", config_prefix=vocab.get("prefix"), version=version)
+        write_concept(concept_data, f"output/{vocabulary_id}_concept.jsonl", config=vocab, version=version)
         write_vocab(vocabulary_data, f"output/{vocabulary_id}_vocabulary.jsonl", config=vocab)
 
     for extractor in dirs_to_cleanup:
