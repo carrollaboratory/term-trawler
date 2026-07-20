@@ -163,7 +163,6 @@ def extract(config_path: Path):
     dirs_to_cleanup = []
     version = None
 
-
     for vocab in config["vocabularies"]:
         source_type = vocab["source_type"]
         extractor_type = EXTRACTORS.get(source_type.upper())
