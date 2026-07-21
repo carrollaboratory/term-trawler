@@ -122,7 +122,7 @@ def vocab_rows(row: dict[str, str | None], config: dict):
     return vocabulary
 
 
-def write_concept(data, output_path: str, config: dict, version=None):
+def write_concept(data: Generator[list[Dict[str, Any]]], output_path: str, config: dict, version=None):
     """Takes unzipped data file and writes it to a JSON file in TermConcept format.
 
     Arguments:
