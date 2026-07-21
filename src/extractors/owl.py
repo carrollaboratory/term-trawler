@@ -15,6 +15,9 @@ class OwlExtractor(ExtractorBase):
         return False
         # What happens when context manager is done
 
+    def get_version(self, vocabulary_id: str) -> str | None:
+        return None
+
     def extract_data(
         self, vocabulary_id: str, data_type: str, chunk_size: int
     ) -> Generator[list[Dict[str, Any]], None, None]:

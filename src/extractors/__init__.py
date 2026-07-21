@@ -15,6 +15,10 @@ class ExtractorBase(ABC):
         yield from ()
 
     @abstractmethod
+    def get_version(self, vocabulary_id: str) -> str | None:
+        pass
+
+    @abstractmethod
     def __enter__(self):
         print("Opening resource...")
         return self

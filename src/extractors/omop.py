@@ -31,6 +31,16 @@ class OmopExtractor(ExtractorBase):
         self.temp_obj.cleanup()
         return False
 
+    def get_version(self, vocabulary_id: str) -> str | None:
+        for chunk in self.extract_data(
+            vocabulary_id=vocabulary_id,
+            data_type="VOCABULARY",
+            chunk_size=1,
+        ):
+            for row in chunk:
+                return row.get("vocabulary_version")
+        return None
+
     def extract_data(
         self, vocabulary_id: str, data_type: str, chunk_size: int=100
     ) -> Generator[list[Dict[str, Any]], None, None]:
