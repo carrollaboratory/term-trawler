@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 
 class ExtractorBase(ABC):
-    chunk_size = 100
+    chunk_size = 5000
 
     def __init__(self, config: dict):
         self.config = config
