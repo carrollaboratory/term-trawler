@@ -2,7 +2,7 @@
 import logging
 from argparse import ArgumentParser  # , FileType
 from pathlib import Path
-
+from extractors import ExtractorBase
 from extraction_loop import extract
 from ttrawler import init_logging
 
@@ -29,7 +29,7 @@ def exec():
     parser.add_argument(
         "-ch",
         "--chunk",
-        default=100,
+        default=ExtractorBase.chunk_size,
         required=False,
         help="The number of rows processed at a time",
     )

@@ -4,13 +4,15 @@ from typing import Any, Dict
 
 
 class ExtractorBase(ABC):
+    chunk_size = 100
+
     def __init__(self, config: dict):
         self.config = config
         self.temp_dir: str
 
     @abstractmethod
     def extract_data(
-        self, vocabulary_id: str, data_type: str, chunk_size: int
+        self, vocabulary_id: str, data_type: str
     ) -> Generator[list[Dict[str, Any]], None, None]:
         yield from ()
 

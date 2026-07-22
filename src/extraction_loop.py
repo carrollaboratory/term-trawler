@@ -2,6 +2,7 @@ from pathlib import Path
 from collections.abc import Generator
 from typing import Any, Dict
 import extractors
+from extractors import ExtractorBase
 import json
 import yaml
 import logging
@@ -160,6 +161,7 @@ def extract(config_path: Path, chunk_size: int):
     with open(config_path) as c:
         config = yaml.safe_load(c)
 
+        ExtractorBase.chunk_size = int(chunk_size)
     extracted_files = {}
     dirs_to_cleanup = []
 
@@ -185,13 +187,13 @@ def extract(config_path: Path, chunk_size: int):
         version = extractor.get_version(vocabulary_id)
 
         write_concept(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT", chunk_size=chunk_size),
+            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
             f"output/{vocabulary_id}_concept.jsonl",
             config=vocab,
             version=version,
         )
         write_vocab(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY", chunk_size=1),
+            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
             f"output/{vocabulary_id}_vocabulary.jsonl",
             config=vocab,
         )

@@ -19,7 +19,7 @@ class OwlExtractor(ExtractorBase):
         return None
 
     def extract_data(
-        self, vocabulary_id: str, data_type: str, chunk_size: int
+        self, vocabulary_id: str, data_type: str
     ) -> Generator[list[Dict[str, Any]], None, None]:
         print(
             f"I am the OWL extractor for {self.config['vocabulary_name']}! Hoot hoot!"
