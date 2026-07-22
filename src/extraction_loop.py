@@ -118,7 +118,7 @@ def vocab_rows(row: dict[str, str | None], config: dict):
             vocabulary[dest] = config[source]
 
     if config.get("archive_filename"):
-        vocabulary["source"] = f"{config.get('source_type')} - {config.get('archive_filename')}"
+        vocabulary["source"] = f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
 
     return vocabulary
 
