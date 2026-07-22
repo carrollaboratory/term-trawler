@@ -42,7 +42,7 @@ class OmopExtractor(ExtractorBase):
         return None
 
     def extract_data(
-        self, vocabulary_id: str, data_type: str, chunk_size: int=100
+        self, vocabulary_id: str, data_type: str, chunk_size: int
     ) -> Generator[list[Dict[str, Any]], None, None]:
         chunk = []
         upper_vocab = vocabulary_id.upper()

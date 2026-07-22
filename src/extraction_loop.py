@@ -148,7 +148,7 @@ def write_vocab(data: Generator[list[Dict[str, Any]]], output_path: str, config:
             for row in chunk:
                 o.write(json.dumps(vocab_rows(row, config)) + "\n")
 
-def extract(config_path: Path):
+def extract(config_path: Path, chunk_size: int):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
     Creates a collection of archive filenames and only runs the extractor
@@ -185,7 +185,7 @@ def extract(config_path: Path):
         version = extractor.get_version(vocabulary_id)
 
         write_concept(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT", chunk_size=100),
+            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT", chunk_size=chunk_size),
             f"output/{vocabulary_id}_concept.jsonl",
             config=vocab,
             version=version,
