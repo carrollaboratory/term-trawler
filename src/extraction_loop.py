@@ -1,10 +1,12 @@
-import logging
 from pathlib import Path
-
-import yaml
-
+from collections.abc import Generator
+from typing import Any, Dict
 import extractors
+from extractors import ExtractorBase
 import json
+import yaml
+import logging
+
 
 EXTRACTORS = {
     getattr(obj, "extractor_name"): obj  # OMOP: obj are your dictionary entries
@@ -37,6 +39,8 @@ def format_code(row: dict[str, str | None], config: dict):
         Returns the formatted concept_id
     """
     concept_id = row["concept_code"]
+    if not concept_id:
+        raise ValueError("No concept_code in row.")
     vocabulary_id = row["vocabulary_id"]
     vocabulary_id = vocabulary_id.upper() if vocabulary_id else ""
     if concept_id:
@@ -45,29 +49,24 @@ def format_code(row: dict[str, str | None], config: dict):
         prefix = PREFIXES.get(vocabulary_id)
         if ":" not in concept_id:
             prefix = config.get("prefix", "") or PREFIXES.get(vocabulary_id.upper(), "")
-            if prefix is None:
+            if not prefix:
                 raise ValueError(f"Prefix not found for {vocabulary_id}")
             return f"{prefix}:{concept_id}"
     return concept_id
 
-def found_code(row: dict[str, str | None]):
-    """Takes the concept_code in the zip files and extracts only the code portion after the delimiter,
+def found_code(concept_code: str):
+    """Takes the concept_code and extracts only the code portion after the delimiter,
     or only returns the code if no delimiter is present.
 
     Arguments:
-        row: Row in zip file.
+        concept_code: The formatted concept code in [prefix]:[code] format
 
     Returns:
-        The formatted concept code.
+        The code after the delimeter in the concept_code.
     """
-    concept_code = row["concept_code"]
-    if concept_code:
-        if "_" in concept_code:
-            return concept_code.split("_")[1]
-        elif ":" in concept_code:
-            return concept_code.split(":")[1]
-        else:
-            return concept_code
+    if ":" in concept_code:
+        return concept_code.split(":")[1]
+    return concept_code
 
 def concept_rows(row: dict[str, str | None], config: dict, version=None):
     """Takes zip file and writes the data into TermOntology format.
@@ -76,11 +75,11 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
         row: Row in zip file.
         config_prefix: The "prefix" in the config file.
     """
-
+    formatted_code = format_code(row, config)
     concept = {
         "ontology_id": row["vocabulary_id"],
-        "concept_id": format_code(row, config),
-        "concept_code": found_code(row)
+        "concept_id": formatted_code,
+        "concept_code": found_code(formatted_code)
     }
 
     if row["vocabulary_id"] == "NCIt":
@@ -102,26 +101,29 @@ def vocab_rows(row: dict[str, str | None], config: dict):
         row: Row in zip file.
         config: The config dictionary for a vocabulary.
     """
+    columns = {
+        "vocabulary_uri": "ontology_uri",
+        "fhir_system": "fhir_system",
+        "prefix": "prefix",
+        "description": "description",
+    }
+
     vocabulary = {
         "ontology_id": row["vocabulary_id"],
         "name": row["vocabulary_name"],
     }
 
-    if config.get("vocabulary_uri"):
-        vocabulary["ontology_uri"] = config.get("vocabulary_uri")
-    if config.get("fhir_system"):
-        vocabulary["fhir_system"] = config.get("fhir_system")
-    if config.get("prefix"):
-        vocabulary["prefix"] = config.get("prefix")
-    if config.get("description"):
-        vocabulary["description"] = config.get("description")
+    for source, dest in columns.items():
+        if source in config:
+            vocabulary[dest] = config[source]
+
     if config.get("archive_filename"):
-        vocabulary["source"] = f"{config.get('source_type')} - {config.get('archive_filename')}"
+        vocabulary["source"] = f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
 
     return vocabulary
 
 
-def write_concept(data: list, output_path: str, config: dict, version=None):
+def write_concept(data: Generator[list[Dict[str, Any]]], output_path: str, config: dict, version=None):
     """Takes unzipped data file and writes it to a JSON file in TermConcept format.
 
     Arguments:
@@ -134,7 +136,7 @@ def write_concept(data: list, output_path: str, config: dict, version=None):
             for row in chunk:
                 o.write(json.dumps(concept_rows(row, config, version)) + "\n")
 
-def write_vocab(data: list, output_path: str, config: dict):
+def write_vocab(data: Generator[list[Dict[str, Any]]], output_path: str, config: dict):
     """Takes unzipped data file and writes it to a JSON file in TermOntology format.
 
     Arguments:
@@ -147,7 +149,7 @@ def write_vocab(data: list, output_path: str, config: dict):
             for row in chunk:
                 o.write(json.dumps(vocab_rows(row, config)) + "\n")
 
-def extract(config_path: Path):
+def extract(config_path: Path, chunk_size: int):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
     Creates a collection of archive filenames and only runs the extractor
@@ -159,9 +161,9 @@ def extract(config_path: Path):
     with open(config_path) as c:
         config = yaml.safe_load(c)
 
+        ExtractorBase.chunk_size = int(chunk_size)
     extracted_files = {}
     dirs_to_cleanup = []
-    version = None
 
     for vocab in config["vocabularies"]:
         source_type = vocab["source_type"]
@@ -182,23 +184,18 @@ def extract(config_path: Path):
             dirs_to_cleanup.append(extractor)
             if filename is not None:
                 extracted_files[filename] = extractor.temp_dir
+        version = extractor.get_version(vocabulary_id)
 
-        concept_data = list(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT", chunk_size=100)
+        write_concept(
+            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
+            f"output/{vocabulary_id}_concept.jsonl",
+            config=vocab,
+            version=version,
         )
-        vocabulary_data = list(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY", chunk_size=1)
+        write_vocab(
+            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
+            f"output/{vocabulary_id}_vocabulary.jsonl",
+            config=vocab,
         )
-
-        for chunk in vocabulary_data:
-            for row in chunk:
-                version = row.get("vocabulary_version")
-                break
-            if version is not None:
-                break
-
-        write_concept(concept_data, f"output/{vocabulary_id}_concept.jsonl", config=vocab, version=version)
-        write_vocab(vocabulary_data, f"output/{vocabulary_id}_vocabulary.jsonl", config=vocab)
-
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
