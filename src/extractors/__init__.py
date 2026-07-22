@@ -4,6 +4,8 @@ from typing import Any, Dict
 
 
 class ExtractorBase(ABC):
+    chunk_size = 100
+
     def __init__(self, config: dict):
         self.config = config
         self.temp_dir: str
@@ -11,8 +13,12 @@ class ExtractorBase(ABC):
     @abstractmethod
     def extract_data(
         self, vocabulary_id: str, data_type: str
-    ) -> Generator[Dict[str, Any], None, None]:
-        yield {"dict": "something"}
+    ) -> Generator[list[Dict[str, Any]], None, None]:
+        yield from ()
+
+    @abstractmethod
+    def get_version(self, vocabulary_id: str) -> str | None:
+        pass
 
     @abstractmethod
     def __enter__(self):

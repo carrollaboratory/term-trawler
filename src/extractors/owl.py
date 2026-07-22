@@ -15,11 +15,13 @@ class OwlExtractor(ExtractorBase):
         return False
         # What happens when context manager is done
 
+    def get_version(self, vocabulary_id: str) -> str | None:
+        return None
+
     def extract_data(
         self, vocabulary_id: str, data_type: str
-    ) -> Generator[Dict[str, Any], None, None]:
+    ) -> Generator[list[Dict[str, Any]], None, None]:
         print(
             f"I am the OWL extractor for {self.config['vocabulary_name']}! Hoot hoot!"
         )
-        for word in "this is silly".split():
-            yield {"dict": "something"}
+        yield from ()

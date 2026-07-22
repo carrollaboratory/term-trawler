@@ -2,7 +2,7 @@
 import logging
 from argparse import ArgumentParser  # , FileType
 from pathlib import Path
-
+from extractors import ExtractorBase
 from extraction_loop import extract
 from ttrawler import init_logging
 
@@ -26,6 +26,13 @@ def exec():
         required=False,
         help="Configuration file specifying vocabularies to load and warehouse for loading.",
     )
+    parser.add_argument(
+        "-ch",
+        "--chunk",
+        default=ExtractorBase.chunk_size,
+        required=False,
+        help="The number of rows processed at a time",
+    )
 
     args = parser.parse_args()
 
@@ -36,7 +43,7 @@ def exec():
     init_logging(args.log_level)
     logging.info(f"You have chosen to use: {args}")
 
-    extract(config_path)
+    extract(config_path, chunk_size=args.chunk)
 
 
 if __name__ == "__main__":
