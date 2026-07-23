@@ -18,9 +18,13 @@ class OwlExtractor(ExtractorBase):
         # What happens when context manager is done
 
     def get_version(self, vocabulary_id: str) -> str | None:
+        for chunk in self.extract_data(
+            vocabulary_id=vocabulary_id,
+            data_type="VOCABULARY",
+        ):
+            for row in chunk:
+                return row.get("vocabulary_version")
         return None
-
-
 
     def extract_data(self, vocabulary_id: str, data_type: str):
         OBO = Namespace("http://www.geneontology.org/formats/oboInOwl#")
