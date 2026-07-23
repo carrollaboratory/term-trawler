@@ -22,7 +22,6 @@ PREFIXES = {
     "SNOMED": "snomedct",
     "NCIT": "NCIT"
 }
-
 def format_code(row: dict[str, str | None], config: dict):
     """Takes the concept_code in the zip files and formats it to the [prefix]:[code] format
     for the output.
@@ -41,7 +40,7 @@ def format_code(row: dict[str, str | None], config: dict):
     concept_id = row["concept_code"]
     if not concept_id:
         raise ValueError("No concept_code in row.")
-    vocabulary_id = row["vocabulary_id"]
+    vocabulary_id = row.get("vocabulary_id") or config.get("prefix", "")
     vocabulary_id = vocabulary_id.upper() if vocabulary_id else ""
     if concept_id:
         if "_" in concept_id:
@@ -76,19 +75,20 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
         config_prefix: The "prefix" in the config file.
     """
     formatted_code = format_code(row, config)
+    vocabulary_id = row.get("vocabulary_id", config.get("prefix", ""))
     concept = {
-        "ontology_id": row["vocabulary_id"],
+        "ontology_id": vocabulary_id,
         "concept_id": formatted_code,
         "concept_code": found_code(formatted_code)
     }
 
-    if row["vocabulary_id"] == "NCIt":
+    if vocabulary_id and vocabulary_id.upper() == "NCIT":
         concept["definition"] = row["concept_name"]
     else:
-        concept["display"] =row["concept_name"]
+        concept["display"] =row.get("concept_name")
 
-    if row["invalid_reason"]:
-        concept["version"] = row["valid_end_date"]
+    if row.get("invalid_reason"):
+        concept["version"] = row.get("valid_end_date")
     else:
         concept["version"] = version
 
@@ -109,7 +109,7 @@ def vocab_rows(row: dict[str, str | None], config: dict):
     }
 
     vocabulary = {
-        "ontology_id": row["vocabulary_id"],
+        "ontology_id": row.get("vocabulary_id") or config.get("prefix", ""),
         "name": row["vocabulary_name"],
     }
 
@@ -172,7 +172,7 @@ def extract(config_path: Path, chunk_size: int):
             logging.warning(f"{source_type} is not a valid source type.")
             continue
 
-        vocabulary_id = vocab.get("vocabulary_id")
+        vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
         filename = vocab.get("archive_filename")
 
         if filename is not None and filename in extracted_files:
@@ -184,6 +184,7 @@ def extract(config_path: Path, chunk_size: int):
             dirs_to_cleanup.append(extractor)
             if filename is not None:
                 extracted_files[filename] = extractor.temp_dir
+
         version = extractor.get_version(vocabulary_id)
 
         write_concept(
