@@ -31,7 +31,7 @@ class OwlExtractor(ExtractorBase):
         DC = Namespace("http://purl.org/dc/elements/1.1/")
         file_path = self.config["owl_file"]
         g = Graph()
-        g.parse(file_path)
+        g.parse(file_path, format="application/rdf+xml")
 
         if data_type == "VOCABULARY":
             ontology_subjects = list(g.subjects(predicate=RDF.type, object=OWL.Ontology))

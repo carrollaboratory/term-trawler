@@ -82,7 +82,7 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
         "concept_code": found_code(formatted_code)
     }
 
-    if vocabulary_id and vocabulary_id.upper() == "NCIT":
+    if config.get("source_type", "").upper() == "OMOP" and vocabulary_id and vocabulary_id.upper() == "NCIT":
         concept["definition"] = row["concept_name"]
     else:
         concept["display"] =row.get("concept_name")
