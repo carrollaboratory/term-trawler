@@ -22,7 +22,7 @@ def exec():
         help="Logging level tolerated (default is INFO)",
     )
     parser.add_argument(
-         "--version", action="version", version=f"%(prog)s {version('trawler')}"
+         "--version", action="version", version=f"%(prog)s {version('term-trawler')}"
      )
     parser.add_argument(
         "-c",

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=61.0.0", "setuptools-scm", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -23,6 +23,7 @@ dev = [
     "rich",
     "pytest",
     "rich_argparse",
+    "rdflib"
 ]
 
 [tool.setuptools_scm]
