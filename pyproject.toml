@@ -14,6 +14,7 @@ classifiers = [
 dependencies = [
     "requests",
     "PyYAML",
+    #"oxrdflib"
 ]
 dynamic = ["version"]
 

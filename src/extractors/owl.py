@@ -58,7 +58,7 @@ class OwlExtractor(ExtractorBase):
                     "vocabulary_id": self.config.get("prefix", ""),
                     "definition": str(definition) if definition else "",
                 })
-                if len(chunk) == self.chunk_size:
+                if len(chunk) <= self.chunk_size:
                     yield chunk
                     chunk = []
             if chunk:
