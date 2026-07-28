@@ -2,6 +2,7 @@
 import logging
 from argparse import ArgumentParser  # , FileType
 from pathlib import Path
+from importlib.metadata import version
 
 from extraction_loop import extract
 from extractors import ExtractorBase
@@ -20,6 +21,9 @@ def exec():
         default="INFO",
         help="Logging level tolerated (default is INFO)",
     )
+    parser.add_argument(
+         "--version", action="version", version=f"%(prog)s {version('trawler')}"
+     )
     parser.add_argument(
         "-c",
         "--config",
