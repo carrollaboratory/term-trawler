@@ -2,8 +2,9 @@
 import logging
 from argparse import ArgumentParser  # , FileType
 from pathlib import Path
-from extractors import ExtractorBase
+
 from extraction_loop import extract
+from extractors import ExtractorBase
 from ttrawler import init_logging
 
 

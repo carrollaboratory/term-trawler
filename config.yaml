@@ -9,7 +9,6 @@ vocabularies:
     vocabulary_uri: "http://snomed.info/id/[code]"
     archive_filename: # where zip file with ontology lives in bucket
     source_type: "OMOP"
-    ## ADD HP AND LOINC
   - vocabulary_name: "EDAM - The ontology of data analysis and management"
     description: "EDAM is a comprehensive ontology of well-established, familiar concepts that are prevalent within scientific data analysis and data management (both within and beyond life sciences and imaging)."
     prefix: "edam"

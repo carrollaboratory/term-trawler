@@ -1,7 +1,4 @@
-from collections.abc import Generator
-from typing import Any, Dict
-from rdflib import Graph, RDF, RDFS, OWL, Namespace
-
+from rdflib import OWL, RDF, RDFS, Graph, Namespace
 
 from extractors import ExtractorBase
 
@@ -37,10 +34,13 @@ class OwlExtractor(ExtractorBase):
             ontology_subjects = list(g.subjects(predicate=RDF.type, object=OWL.Ontology))
             chunk = []
             for subj in ontology_subjects:
+                vocab_name = g.value(subject=subj, predicate=DC.title)
+                description = g.value(subject=subj, predicate=DC.description)
+                version = g.value(subject=subj, predicate=OWL.versionInfo)
                 chunk.append({
-                    "vocabulary_name": str(g.value(subject=subj, predicate=DC.title)),
-                    "description": str(g.value(subject=subj, predicate=DC.description)),
-                    "vocabulary_version": str(g.value(subject=subj, predicate=OWL.versionInfo)),
+                    "vocabulary_name": str(vocab_name) if vocab_name else "",
+                    "description": str(description) if description else "",
+                    "vocabulary_version": str(version) if version else "",
                 })
             yield chunk
 

@@ -2,7 +2,7 @@ import csv
 import tempfile
 import zipfile
 from collections.abc import Generator
-from typing import Any, Dict
+from typing import Any
 
 from extractors import ExtractorBase
 
@@ -42,7 +42,7 @@ class OmopExtractor(ExtractorBase):
 
     def extract_data(
         self, vocabulary_id: str, data_type: str
-    ) -> Generator[list[Dict[str, Any]], None, None]:
+    ) -> Generator[list[dict[str, Any]], None, None]:
         chunk = []
         upper_vocab = vocabulary_id.upper()
         file_path = f"{self.temp_dir}/{data_type}.csv"
