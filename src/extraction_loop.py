@@ -84,7 +84,6 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
     vocabulary_id = row.get("vocabulary_id", config.get("prefix", ""))
     concept = {
         "ontology_id": vocabulary_id,
-        # "concept_id": row["concept_code"],
         "concept_id": formatted_code,
         "concept_code": found_code(formatted_code)
     }
@@ -92,7 +91,7 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
     if config.get("source_type", "").upper() == "OMOP" and vocabulary_id and vocabulary_id.upper() == "NCIT":
         concept["definition"] = row["concept_name"]
     else:
-        concept["display"] =row.get("concept_name")
+        concept["display"] = row.get("concept_name")
 
     if row.get("invalid_reason"):
         concept["version"] = row.get("valid_end_date")

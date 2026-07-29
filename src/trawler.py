@@ -1,8 +1,8 @@
 #!/bin/env python
 import logging
 from argparse import ArgumentParser  # , FileType
-from pathlib import Path
 from importlib.metadata import version
+from pathlib import Path
 
 from extraction_loop import extract
 from extractors import ExtractorBase
