@@ -51,7 +51,7 @@ class OmopExtractor(ExtractorBase):
             for row in reader:
                 if row.get("vocabulary_id", "").upper() == upper_vocab:
                     chunk.append(row)
-                    if len(chunk) <= ExtractorBase.chunk_size:
+                    if len(chunk) == ExtractorBase.chunk_size:
                         yield chunk
                         chunk = []
             if chunk:

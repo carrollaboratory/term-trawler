@@ -9,6 +9,9 @@ import yaml
 import extractors
 from extractors import ExtractorBase
 
+logger = logging.getLogger(__name__)
+
+
 EXTRACTORS = {
     getattr(obj, "extractor_name"): obj  # OMOP: obj are your dictionary entries
     for name in extractors.__all__  # iterate over each of your __all__ strings
@@ -175,7 +178,7 @@ def extract(config_path: Path, chunk_size: int):
         source_type = vocab["source_type"]
         extractor_type = EXTRACTORS.get(source_type.upper())
         if extractor_type is None:
-            logging.warning(f"{source_type} is not a valid source type.")
+            logger.warning(f"{source_type} is not a valid source type.")
             continue
 
         vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
