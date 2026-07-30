@@ -1,5 +1,4 @@
 import logging
-import time
 
 from rdflib import OWL, RDF, RDFS, Graph, Namespace
 
@@ -12,6 +11,7 @@ class OwlExtractor(ExtractorBase):
     extractor_name = "OWL"
 
     def __enter__(self):
+        print("Parsing OWL file")
         return self
         # Entry point for the context manager
 
@@ -20,18 +20,14 @@ class OwlExtractor(ExtractorBase):
         # What happens when context manager is done
 
     def get_version(self, vocabulary_id: str) -> str | None:
-        """This function only gets the first value from the OWL file because there is only
-        one Vocabulary value.
-        """
-        rows = (
-            row
-            for chunk in self.extract_data(
+        """When extracting data_type==VOCABULARY, only one row should ever be returned
+        due to the nature of the query."""
+        first_row = next(
+            self.extract_data(
                 vocabulary_id=vocabulary_id,
                 data_type="VOCABULARY",
             )
-            for row in chunk
-        )
-        first_row = next(rows, None)
+        )[0]
         return first_row.get("vocabulary_version") if first_row else None
 
     def extract_data(self, vocabulary_id: str, data_type: str):
@@ -39,10 +35,7 @@ class OwlExtractor(ExtractorBase):
         DC = Namespace("http://purl.org/dc/elements/1.1/")
         file_path = self.config["owl_file"]
         g = Graph()
-        t0 = time.time()
         g.parse(file_path, format="application/rdf+xml")
-        if getattr(self, "debug_timing", False):
-            logger.error(f"[OwlExtractor] parsing took {time.time() - t0:.1f}s")
         if data_type == "VOCABULARY":
             ontology_subjects = list(
                 g.subjects(predicate=RDF.type, object=OWL.Ontology)

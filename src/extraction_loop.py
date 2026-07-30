@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 EXTRACTORS = {
-    getattr(obj, "extractor_name"): obj  # OMOP: obj are your dictionary entries
+    obj.extractor_name: obj  # OMOP: obj are your dictionary entries
     for name in extractors.__all__  # iterate over each of your __all__ strings
     if (obj := getattr(extractors, name))  # Unpack the class object from the module
     and issubclass(
@@ -22,11 +22,9 @@ EXTRACTORS = {
     and obj is not extractors.ExtractorBase  # Avoid capturing the parent class itself.
 }
 
-PREFIXES = {
-    "SNOMED": "snomedct",
-    "NCIT": "NCIT",
-    "EDAM": "edam"
-}
+PREFIXES = {"SNOMED": "snomedct", "NCIT": "NCIT", "EDAM": "edam"}
+
+
 def format_code(row: dict[str, str | None], config: dict):
     """Takes the concept_code in the zip files and formats it to the [prefix]:[code] format
     for the output.
@@ -62,6 +60,7 @@ def format_code(row: dict[str, str | None], config: dict):
             return f"{prefix}:{concept_id}"
     return concept_id
 
+
 def found_code(concept_code: str):
     """Takes the concept_code and extracts only the code portion after the delimiter,
     or only returns the code if no delimiter is present.
@@ -76,6 +75,7 @@ def found_code(concept_code: str):
         return concept_code.split(":")[1]
     return concept_code
 
+
 def concept_rows(row: dict[str, str | None], config: dict, version=None):
     """Takes zip file and writes the data into TermOntology format.
 
@@ -88,10 +88,14 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
     concept = {
         "ontology_id": vocabulary_id,
         "concept_id": formatted_code,
-        "concept_code": found_code(formatted_code)
+        "concept_code": found_code(formatted_code),
     }
 
-    if config.get("source_type", "").upper() == "OMOP" and vocabulary_id and vocabulary_id.upper() == "NCIT":
+    if (
+        config.get("source_type", "").upper() == "OMOP"
+        and vocabulary_id
+        and vocabulary_id.upper() == "NCIT"
+    ):
         concept["definition"] = row["concept_name"]
     else:
         concept["display"] = row.get("concept_name")
@@ -102,6 +106,7 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
         concept["version"] = version
 
     return concept
+
 
 def vocab_rows(row: dict[str, str | None], config: dict):
     """Takes zip file and writes the data into TermOntology format.
@@ -119,7 +124,7 @@ def vocab_rows(row: dict[str, str | None], config: dict):
 
     vocabulary = {
         "ontology_id": row.get("vocabulary_id") or config.get("prefix", ""),
-        "name": row["vocabulary_name"] or config.get("vocabulary_name", "")
+        "name": row["vocabulary_name"] or config.get("vocabulary_name", ""),
     }
 
     for source, dest in columns.items():
@@ -127,12 +132,16 @@ def vocab_rows(row: dict[str, str | None], config: dict):
             vocabulary[dest] = config[source]
 
     if config.get("archive_filename"):
-        vocabulary["source"] = f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
+        vocabulary["source"] = (
+            f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
+        )
 
     return vocabulary
 
 
-def write_concept(data: Generator[list[dict[str, Any]]], output_path: str, config: dict, version=None):
+def write_concept(
+    data: Generator[list[dict[str, Any]]], output_path: str, config: dict, version=None
+):
     """Takes unzipped data file and writes it to a JSON file in TermConcept format.
 
     Arguments:
@@ -144,6 +153,7 @@ def write_concept(data: Generator[list[dict[str, Any]]], output_path: str, confi
         for chunk in data:
             for row in chunk:
                 o.writelines(json.dumps(concept_rows(row, config, version)) + "\n")
+
 
 def write_vocab(data: Generator[list[dict[str, Any]]], output_path: str, config: dict):
     """Takes unzipped data file and writes it to a JSON file in TermOntology format.
@@ -157,6 +167,7 @@ def write_vocab(data: Generator[list[dict[str, Any]]], output_path: str, config:
         for chunk in data:
             for row in chunk:
                 o.writelines(json.dumps(vocab_rows(row, config)) + "\n")
+
 
 def extract(config_path: Path, chunk_size: int):
     """Iterates over the 'vocabularies' property in the config file and runs

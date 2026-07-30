@@ -5,6 +5,7 @@ from typing import Any
 
 class ExtractorBase(ABC):
     chunk_size = 5000
+    extractor_name: str
 
     def __init__(self, config: dict):
         self.config = config
@@ -32,7 +33,7 @@ class ExtractorBase(ABC):
         return False
 
 
-from .omop import OmopExtractor  # noqa: E402
-from .owl import OwlExtractor  # noqa: E402
+from .omop import OmopExtractor
+from .owl import OwlExtractor
 
 __all__ = ["ExtractorBase", "OmopExtractor", "OwlExtractor"]

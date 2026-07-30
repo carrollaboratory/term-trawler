@@ -8,6 +8,8 @@ from extraction_loop import extract
 from extractors import ExtractorBase
 from ttrawler import init_logging
 
+logger = logging.getLogger(__name__)
+
 
 def exec():
     parser = ArgumentParser(
@@ -22,8 +24,8 @@ def exec():
         help="Logging level tolerated (default is INFO)",
     )
     parser.add_argument(
-         "--version", action="version", version=f"%(prog)s {version('term-trawler')}"
-     )
+        "--version", action="version", version=f"%(prog)s {version('term-trawler')}"
+    )
     parser.add_argument(
         "-c",
         "--config",
@@ -46,7 +48,7 @@ def exec():
         parser.error(f"{config_path} file not found.")
     # Initialize the logger with whatever the user requested
     init_logging(args.log_level)
-    logging.info(f"You have chosen to use: {args}")
+    logger.info(f"You have chosen to use: {args}")
 
     extract(config_path, chunk_size=args.chunk)
 
