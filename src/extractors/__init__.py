@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 from collections.abc import Generator
-from typing import Any, Dict
+from typing import Any
 
 
 class ExtractorBase(ABC):
-    chunk_size = 100
+    chunk_size = 5000
+    extractor_name: str
 
     def __init__(self, config: dict):
         self.config = config
@@ -13,7 +14,7 @@ class ExtractorBase(ABC):
     @abstractmethod
     def extract_data(
         self, vocabulary_id: str, data_type: str
-    ) -> Generator[list[Dict[str, Any]], None, None]:
+    ) -> Generator[list[dict[str, Any]], None, None]:
         yield from ()
 
     @abstractmethod
@@ -32,7 +33,7 @@ class ExtractorBase(ABC):
         return False
 
 
-from .omop import OmopExtractor  # noqa: E402
-from .owl import OwlExtractor  # noqa: E402
+from .omop import OmopExtractor
+from .owl import OwlExtractor
 
 __all__ = ["ExtractorBase", "OmopExtractor", "OwlExtractor"]

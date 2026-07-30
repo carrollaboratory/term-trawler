@@ -1,10 +1,14 @@
 #!/bin/env python
 import logging
 from argparse import ArgumentParser  # , FileType
+from importlib.metadata import version
 from pathlib import Path
-from extractors import ExtractorBase
+
 from extraction_loop import extract
+from extractors import ExtractorBase
 from ttrawler import init_logging
+
+logger = logging.getLogger(__name__)
 
 
 def exec():
@@ -18,6 +22,9 @@ def exec():
         choices=["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         default="INFO",
         help="Logging level tolerated (default is INFO)",
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {version('term-trawler')}"
     )
     parser.add_argument(
         "-c",
@@ -41,7 +48,7 @@ def exec():
         parser.error(f"{config_path} file not found.")
     # Initialize the logger with whatever the user requested
     init_logging(args.log_level)
-    logging.info(f"You have chosen to use: {args}")
+    logger.info(f"You have chosen to use: {args}")
 
     extract(config_path, chunk_size=args.chunk)
 
