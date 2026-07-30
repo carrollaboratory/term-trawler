@@ -1,13 +1,12 @@
-import json
 import logging
-from collections.abc import Generator
 from pathlib import Path
-from typing import Any
 
 import yaml
 
 import extractors
 from extractors import ExtractorBase
+from streamer.engine import LocalSession
+from streamer.models import Concept, Vocabulary
 
 logger = logging.getLogger(__name__)
 
@@ -139,34 +138,20 @@ def vocab_rows(row: dict[str, str | None], config: dict):
     return vocabulary
 
 
-def write_concept(
-    data: Generator[list[dict[str, Any]]], output_path: str, config: dict, version=None
-):
-    """Takes unzipped data file and writes it to a JSON file in TermConcept format.
-
-    Arguments:
-        data: Unzipped data file.
-        output_path: The path to write the JSON file.
-    """
-    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w") as o:
+def load_concept(data, config: dict, version=None):
+    with LocalSession() as session:
         for chunk in data:
-            for row in chunk:
-                o.writelines(json.dumps(concept_rows(row, config, version)) + "\n")
+            concepts = [Concept(**concept_rows(row, config, version)) for row in chunk]
+            session.add_all(concepts)
+            session.commit()
 
 
-def write_vocab(data: Generator[list[dict[str, Any]]], output_path: str, config: dict):
-    """Takes unzipped data file and writes it to a JSON file in TermOntology format.
-
-    Arguments:
-        data: Unzipped data file.
-        output_path: The path to write the JSON file.
-    """
-    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w") as o:
+def load_vocab(data, config: dict):
+    with LocalSession() as session:
         for chunk in data:
-            for row in chunk:
-                o.writelines(json.dumps(vocab_rows(row, config)) + "\n")
+            vocabs = [Vocabulary(**vocab_rows(row, config)) for row in chunk]
+            session.add_all(vocabs)
+            session.commit()
 
 
 def extract(config_path: Path, chunk_size: int):
@@ -207,15 +192,13 @@ def extract(config_path: Path, chunk_size: int):
 
         version = extractor.get_version(vocabulary_id)
 
-        write_concept(
+        load_concept(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
-            f"output/{vocabulary_id}_concept.jsonl",
             config=vocab,
             version=version,
         )
-        write_vocab(
+        load_vocab(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
-            f"output/{vocabulary_id}_vocabulary.jsonl",
             config=vocab,
         )
     for extractor in dirs_to_cleanup:
