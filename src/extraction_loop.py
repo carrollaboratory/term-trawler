@@ -2,10 +2,11 @@ import logging
 from pathlib import Path
 
 import yaml
+from sqlalchemy.orm import sessionmaker
 
 import extractors
 from extractors import ExtractorBase
-from streamer.engine import LocalSession, engine
+from streamer.engine import get_engine
 from streamer.models import Base, Concept, Vocabulary
 
 logger = logging.getLogger(__name__)
@@ -138,16 +139,16 @@ def vocab_rows(row: dict[str, str | None], config: dict):
     return vocabulary
 
 
-def load_concept(data, config: dict, version=None):
-    with LocalSession() as session:
+def load_concept(data, config: dict, session_factory, version=None):
+    with session_factory() as session:
         for chunk in data:
             concepts = [Concept(**concept_rows(row, config, version)) for row in chunk]
             session.add_all(concepts)
             session.commit()
 
 
-def load_vocab(data, config: dict):
-    with LocalSession() as session:
+def load_vocab(data, config: dict, session_factory):
+    with session_factory() as session:
         for chunk in data:
             vocabs = [Vocabulary(**vocab_rows(row, config)) for row in chunk]
             session.add_all(vocabs)
@@ -163,12 +164,14 @@ def extract(config_path: Path, chunk_size: int):
     Arguments:
         config_path: The specified config file to iterate.
     """
-    Base.metadata.create_all(engine)
 
     with open(config_path) as c:
         config = yaml.safe_load(c)
 
         ExtractorBase.chunk_size = int(chunk_size)
+    db_engine = get_engine(config_path)
+    LocalSession = sessionmaker(bind=db_engine, future=True)
+    Base.metadata.create_all(db_engine)
     extracted_files = {}
     dirs_to_cleanup = []
 
@@ -197,11 +200,13 @@ def extract(config_path: Path, chunk_size: int):
         load_concept(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
             config=vocab,
+            session_factory=LocalSession,
             version=version,
         )
         load_vocab(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
             config=vocab,
+            session_factory=LocalSession,
         )
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
