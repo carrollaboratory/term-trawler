@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -12,8 +14,8 @@ class Concept(Base):
     ontology_id: Mapped[str]
     concept_id: Mapped[str]
     concept_code: Mapped[str]
-    display: Mapped[str]
-    definition: Mapped[str]
+    display: Mapped[Optional[str]]  # noqa
+    definition: Mapped[Optional[str]]  # noqa
     version: Mapped[str]
 
 
@@ -22,9 +24,9 @@ class Vocabulary(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     ontology_id: Mapped[str]
-    name: Mapped[str]
-    ontology_url: Mapped[str]
+    name: Mapped[Optional[str]]  # noqa
+    ontology_uri: Mapped[str]
     fhir_system: Mapped[str]
-    prefix: Mapped[str]
-    description: Mapped[str]
-    source: Mapped[str]
+    prefix: Mapped[Optional[str]]  # noqa
+    description: Mapped[Optional[str]]  # noqa
+    source: Mapped[Optional[str]]  # noqa

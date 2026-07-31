@@ -5,8 +5,8 @@ import yaml
 
 import extractors
 from extractors import ExtractorBase
-from streamer.engine import LocalSession
-from streamer.models import Concept, Vocabulary
+from streamer.engine import LocalSession, engine
+from streamer.models import Base, Concept, Vocabulary
 
 logger = logging.getLogger(__name__)
 
@@ -163,6 +163,8 @@ def extract(config_path: Path, chunk_size: int):
     Arguments:
         config_path: The specified config file to iterate.
     """
+    Base.metadata.create_all(engine)
+
     with open(config_path) as c:
         config = yaml.safe_load(c)
 
