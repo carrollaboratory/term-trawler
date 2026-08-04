@@ -1,5 +1,5 @@
 warehouse:
-  db_uri: "postgresql://localhost:5432/term-trawler"
+  db_uri: "postgresql+psycopg://postgres:temp_password@localhost:5432/term-trawler"
 vocabularies:
   - vocabulary_id: "SNOMED"
     vocabulary_name: "Systematic Nomenclature of Medicine - Clinical Terms"

@@ -29,7 +29,7 @@ def exec():
     parser.add_argument(
         "-c",
         "--config",
-        default="dev.yaml",
+        default="config.yaml",
         required=False,
         help="Configuration file specifying vocabularies to load and warehouse for loading.",
     )

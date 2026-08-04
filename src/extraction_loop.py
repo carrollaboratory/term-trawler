@@ -2,12 +2,12 @@ import logging
 from pathlib import Path
 
 import yaml
+from car_utils import LinkMLModelLoader
 from sqlalchemy.orm import sessionmaker
 
 import extractors
 from extractors import ExtractorBase
 from streamer.engine import get_engine
-from streamer.models import Base, Concept, Vocabulary
 
 logger = logging.getLogger(__name__)
 
@@ -139,20 +139,47 @@ def vocab_rows(row: dict[str, str | None], config: dict):
     return vocabulary
 
 
-def load_concept(data, config: dict, session_factory, version=None):
-    with session_factory() as session:
+loader = LinkMLModelLoader(
+    database_url="postgresql://postgres:temp_password@localhost:5432/term-trawler",
+    model_import_path="md_terminology_trove",  # the name you found in the wheel
+    table_prefix="tgt_{}",  # note the `{}` -- see Gotchas below
+    schema_name="staging",
+).load()
+
+Concept = loader.get_model("Concept")
+Vocabulary = loader.get_model("Vocabulary")
+
+
+def load_concept(data, config: dict, version=None):
+    with loader.create_session() as session:
         for chunk in data:
-            concepts = [Concept(**concept_rows(row, config, version)) for row in chunk]
+            concepts = [Concept(**concept_rows(row, config)) for row in chunk]
             session.add_all(concepts)
             session.commit()
 
 
-def load_vocab(data, config: dict, session_factory):
-    with session_factory() as session:
+def load_vocab(data, config: dict):
+    with loader.create_session() as session:
         for chunk in data:
             vocabs = [Vocabulary(**vocab_rows(row, config)) for row in chunk]
             session.add_all(vocabs)
             session.commit()
+
+
+# def load_concept(data, config: dict, session_factory, version=None):
+#     with session_factory() as session:
+#         for chunk in data:
+#             concepts = [Concept(**concept_rows(row, config, version)) for row in chunk]
+#             session.add_all(concepts)
+#             session.commit()
+
+
+# def load_vocab(data, config: dict, session_factory):
+#     with session_factory() as session:
+#         for chunk in data:
+#             vocabs = [Vocabulary(**vocab_rows(row, config)) for row in chunk]
+#             session.add_all(vocabs)
+#             session.commit()
 
 
 def extract(config_path: Path, chunk_size: int):
