@@ -14,10 +14,10 @@ classifiers = [
 dependencies = [
     "requests",
     "PyYAML",
-    #"oxrdflib"
+    #"oxrdflib",
     "md-terminology-trove",
     "sqlalchemy>=2.0.51",
-    "car-utils @ git+https://github.com/my-org/car-utils.git",
+    "car-utils",
 ]
 dynamic = ["version"]
 
@@ -42,7 +42,7 @@ where = ["src"]  # list of folders that contain the packages (["."] by default)
 "*" = ["*.yaml"]
 
 [tool.uv.sources]
-md-terminology-trove = { url = "https://github.com/carrollaboratory/md-terminology-trove/releases/download/v0.1.1/md_terminology_trove-0.1.1-py3-none-any.whl" }
+md-terminology-trove = { url = "https://github.com/carrollaboratory/md-terminology-trove/releases/download/v0.2.0/md_terminology_trove-0.2.0-py3-none-any.whl" }
 car-utils = { git = "https://github.com/carrollaboratory/car-utils.git" }
 
 [project.scripts]

@@ -11,7 +11,6 @@ from streamer.engine import get_engine
 
 logger = logging.getLogger(__name__)
 
-
 EXTRACTORS = {
     obj.extractor_name: obj  # OMOP: obj are your dictionary entries
     for name in extractors.__all__  # iterate over each of your __all__ strings
@@ -86,9 +85,10 @@ def concept_rows(row: dict[str, str | None], config: dict, version=None):
     formatted_code = format_code(row, config)
     vocabulary_id = row.get("vocabulary_id", config.get("prefix", ""))
     concept = {
-        "ontology_id": vocabulary_id,
-        "concept_id": formatted_code,
+        "concept_curie": formatted_code,
+        "vocabulary_id": vocabulary_id,
         "concept_code": found_code(formatted_code),
+        # "omop_concept_id": row["concept_id"],
     }
 
     if (
@@ -146,8 +146,8 @@ loader = LinkMLModelLoader(
     schema_name="staging",
 ).load()
 
-Concept = loader.get_model("Concept")
-Vocabulary = loader.get_model("Vocabulary")
+Concept = loader.get_model("concept")
+Vocabulary = loader.get_model("vocabulary")
 
 
 def load_concept(data, config: dict, version=None):
@@ -191,7 +191,6 @@ def extract(config_path: Path, chunk_size: int):
     Arguments:
         config_path: The specified config file to iterate.
     """
-
     with open(config_path) as c:
         config = yaml.safe_load(c)
 
@@ -227,13 +226,11 @@ def extract(config_path: Path, chunk_size: int):
         load_concept(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
             config=vocab,
-            session_factory=LocalSession,
             version=version,
         )
         load_vocab(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
             config=vocab,
-            session_factory=LocalSession,
         )
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
