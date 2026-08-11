@@ -30,6 +30,9 @@ class OwlExtractor(ExtractorBase):
         )[0]
         return first_row.get("vocabulary_version") if first_row else None
 
+    def get_replacement(self, config) -> dict[str, str]:
+        return {}
+
     def extract_data(self, vocabulary_id: str, data_type: str):
         OBO = Namespace("http://www.geneontology.org/formats/oboInOwl#")
         DC = Namespace("http://purl.org/dc/elements/1.1/")

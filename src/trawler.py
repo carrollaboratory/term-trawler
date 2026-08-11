@@ -49,7 +49,6 @@ def exec():
     # Initialize the logger with whatever the user requested
     init_logging(args.log_level)
     logger.info(f"You have chosen to use: {args}")
-
     extract(config_path, chunk_size=args.chunk)
 
 

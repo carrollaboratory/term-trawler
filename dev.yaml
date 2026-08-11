@@ -1,5 +1,5 @@
 warehouse:
-  db_uri: "postgresql+psycopg://postgres:temp_password@localhost:5432/term-trawler"
+  db_uri: "postgresql+psycopg2://postgres:temp_password@localhost:5432/term_trawler"
 vocabularies:
   - vocabulary_id: "SNOMED"
     vocabulary_name: "Systematic Nomenclature of Medicine - Clinical Terms"
@@ -16,6 +16,14 @@ vocabularies:
     fhir_system: "http://human-phenotype-ontology.org"
     vocabulary_uri: "http://purl.obolibrary.org/obo/[code]"
     archive_filename: "/mnt/c/Users/kerny/Documents/vocabulary_download_v5zip.zip"
+    source_type: "OMOP"
+  - vocabulary_id: "CAM"
+    vocabulary_name: "Common Access Model Concepts"
+    description: "This vocabulary defines local CURIE placeholders for Common Access Model string enumerations that currently lack standard public ontology"
+    prefix: "CAM"
+    fhir_system: "https://include-dcc.fhir/cam"
+    vocabulary_uri: "https://github.com/carrollaboratory/vocab-forge/[code]"
+    archive_filename: "/mnt/c/Users/kerny/Documents/OMOP-CAM-0.1.8.zip"
     source_type: "OMOP"
   # - vocabulary_id: "LOINC"
   #   vocabulary_name: "Logical Observation Identifiers Names and Codes"
