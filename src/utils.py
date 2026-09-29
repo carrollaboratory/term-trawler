@@ -30,7 +30,7 @@ def format_code(row: dict[str, str | None], config: dict):
             if embedded_prefix.upper() == prefix.upper():
                 return f"{prefix}:{remainder}"
         if ":" not in concept_id:
-            prefix = config.get("prefix", "") or PREFIXES.get(vocabulary_id.upper(), "")
+            prefix = PREFIXES.get(vocabulary_id) or config.get("prefix", "")
             if not prefix:
                 raise ValueError(f"Prefix not found for {vocabulary_id}")
             return f"{prefix}:{concept_id}"

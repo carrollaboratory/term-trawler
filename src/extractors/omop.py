@@ -43,7 +43,6 @@ class OmopExtractor(ExtractorBase):
 
     def get_replacement(self, config) -> dict[str, str]:
         concept_rows = {}
-
         # Build concept_id -> CONCEPT row lookup
         for chunk in self.extract_data(
             vocabulary_id="",
@@ -54,6 +53,8 @@ class OmopExtractor(ExtractorBase):
                 if concept_id:
                     concept_rows[concept_id] = row
 
+        vocab_id = (config.get("vocabulary_id") or config.get("prefix", "")).upper()
+
         replacement = {}
 
         for chunk in self.extract_data(
@@ -61,19 +62,29 @@ class OmopExtractor(ExtractorBase):
             data_type="CONCEPT_RELATIONSHIP",
         ):
             for row in chunk:
+                if row.get("relationship_id") != "Concept replaced by":
+                    continue
                 if row.get("relationship_id") == "Concept replaced by":
                     old_id = row.get("concept_id_1")
                     new_id = row.get("concept_id_2")
+                    if not (old_id and new_id):
+                        continue
+                    old_row = concept_rows.get(old_id)
+                    if (
+                        not old_row
+                        or (old_row.get("vocabulary_id") or "").upper() != vocab_id
+                    ):
+                        continue
+                    replacement_row = concept_rows.get(new_id)
+                    if not replacement_row:
+                        continue
 
-                    if old_id and new_id:
-                        replacement_row = concept_rows.get(new_id)
-
-                        if replacement_row:
-                            replacement_curie = format_code(
-                                replacement_row,
-                                config,
-                            )
-                            replacement[old_id] = replacement_curie or "OMOP:0"
+                    try:
+                        replacement_curie = format_code(replacement_row, config)
+                    except ValueError:
+                        continue
+                    else:
+                        replacement[old_id] = replacement_curie
         return replacement
 
     def extract_data(

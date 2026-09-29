@@ -32,7 +32,7 @@ def deprecated(row: dict[str, str | None]):
     return invalid is not None and invalid.upper() == "D"
 
 
-def concept_rows(row: dict[str, str | None], config: dict, replacement=None):
+def concept_rows(row: dict[str, str | None], config: dict):
     """Takes zip file and writes the data into TermOntology format.
 
     Arguments:
@@ -112,12 +112,10 @@ Concept = loader.get_model("Concept")
 Vocabulary = loader.get_model("Vocabulary")
 
 
-def load_concept(data, config: dict, replacement=None):
+def load_concept(data, config: dict):
     with loader.create_session() as session:
         for chunk in data:
-            concepts = [
-                Concept(**concept_rows(row, config, replacement)) for row in chunk
-            ]
+            concepts = [Concept(**concept_rows(row, config)) for row in chunk]
             session.add_all(concepts)
             session.commit()
 
