@@ -29,7 +29,7 @@ EXTRACTORS = {
 
 def deprecated(row: dict[str, str | None]):
     invalid = row.get("invalid_reason")
-    return invalid is not None and invalid.upper() == "D"
+    return invalid is not None and invalid.upper() in {"D", "U"}
 
 
 def concept_rows(row: dict[str, str | None], config: dict):
