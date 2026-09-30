@@ -28,7 +28,6 @@ class OmopExtractor(ExtractorBase):
             return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print("Cleaning up resource now!")
         self.temp_obj.cleanup()
         return False
 
@@ -43,11 +42,7 @@ class OmopExtractor(ExtractorBase):
 
     def get_replacement(self, config) -> dict[str, str]:
         concept_rows = {}
-        # Build concept_id -> CONCEPT row lookup
-        for chunk in self.extract_data(
-            vocabulary_id="",
-            data_type="CONCEPT",
-        ):
+        for chunk in self.extract_data(vocabulary_id="", data_type="CONCEPT"):
             for row in chunk:
                 concept_id = row.get("concept_id")
                 if concept_id:
@@ -58,33 +53,34 @@ class OmopExtractor(ExtractorBase):
         replacement = {}
 
         for chunk in self.extract_data(
-            vocabulary_id="",
-            data_type="CONCEPT_RELATIONSHIP",
+            vocabulary_id="", data_type="CONCEPT_RELATIONSHIP"
         ):
             for row in chunk:
                 if row.get("relationship_id") != "Concept replaced by":
                     continue
-                if row.get("relationship_id") == "Concept replaced by":
-                    old_id = row.get("concept_id_1")
-                    new_id = row.get("concept_id_2")
-                    if not (old_id and new_id):
-                        continue
-                    old_row = concept_rows.get(old_id)
-                    if (
-                        not old_row
-                        or (old_row.get("vocabulary_id") or "").upper() != vocab_id
-                    ):
-                        continue
-                    replacement_row = concept_rows.get(new_id)
-                    if not replacement_row:
-                        continue
 
-                    try:
-                        replacement_curie = format_code(replacement_row, config)
-                    except ValueError:
-                        continue
-                    else:
-                        replacement[old_id] = replacement_curie
+                old_id = row.get("concept_id_1")
+                new_id = row.get("concept_id_2")
+                if not (old_id and new_id):
+                    continue
+
+                old_row = concept_rows.get(old_id)
+                if (
+                    not old_row
+                    or (old_row.get("vocabulary_id") or "").upper() != vocab_id
+                ):
+                    continue
+
+                replacement_row = concept_rows.get(new_id)
+                if not replacement_row:
+                    replacement[old_id] = "OMOP:0"
+                    continue
+
+                try:
+                    replacement[old_id] = format_code(replacement_row, config)
+                except ValueError:
+                    replacement[old_id] = "OMOP:0"
+
         return replacement
 
     def extract_data(

@@ -29,7 +29,7 @@ EXTRACTORS = {
 
 def deprecated(row: dict[str, str | None]):
     invalid = row.get("invalid_reason")
-    return invalid is not None and invalid.upper() == "D"
+    return invalid is not None and invalid.upper() in ("D", "U")
 
 
 def concept_rows(row: dict[str, str | None], config: dict):
@@ -188,11 +188,6 @@ def create_omop_fallback(db_engine):
 
 
 def update_replacements(replacement, db_engine):
-    print(
-        f"Updating {len(replacement):,} replacements...",
-        flush=True,
-    )
-
     if not replacement:
         return
 
@@ -236,12 +231,21 @@ def update_replacements(replacement, db_engine):
                 END
                 FROM replacement_updates AS r
                 WHERE c.omop_concept_id = r.omop_concept_id
+                  AND c.concept_curie <> 'OMOP:0'
             """)
         )
 
-        print(
-            f"Updated {result.rowcount:,} concepts.",
-            flush=True,
+
+def apply_omop_fallback(db_engine):
+    with db_engine.begin() as connection:
+        connection.execute(
+            text("""
+                UPDATE dev_include_access.term_concept
+                SET replaced_by = 'OMOP:0'
+                WHERE deprecated
+                  AND replaced_by IS NULL
+                  AND concept_curie <> 'OMOP:0'
+            """)
         )
 
 
@@ -292,10 +296,7 @@ def extract(config_path: Path, chunk_size: int):
         replacement = extractor.get_replacement(vocab)
         if replacement:
             all_replacements.update(replacement)
-        print(
-            f"Built {len(replacement)} replacement mappings for {vocabulary_id}",
-            flush=True,
-        )
+
         load_vocab(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
             config=vocab,
@@ -309,9 +310,7 @@ def extract(config_path: Path, chunk_size: int):
         )
         print("Concept load finished.", flush=True)
 
-        print(f"Number of replacements: {len(replacement)}", flush=True)
-
-        print("Replacement update finished.", flush=True)
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
     update_replacements(all_replacements, db_engine)
+    apply_omop_fallback(db_engine)
