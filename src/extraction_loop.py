@@ -1,5 +1,6 @@
 import io
 import logging
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -101,7 +102,8 @@ def vocab_rows(row: dict[str, str | None], config: dict):
 
 
 loader = LinkMLModelLoader(
-    database_url="postgresql://postgres:temp_password@localhost:5432/term_trawler",
+    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
+    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
     model_import_path="md_terminology_trove.md_terminology_trove",  # the name you found in the wheel
     table_prefix="term_{}",  # note the `{}` -- see Gotchas below
     schema_name="dev_include_access",
