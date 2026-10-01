@@ -6,9 +6,7 @@ from pathlib import Path
 
 import yaml
 from car_utils import LinkMLModelLoader
-from sqlalchemy import case, text, update
-from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import true
+from sqlalchemy import text
 
 import extractors
 from extractors import ExtractorBase
@@ -108,7 +106,8 @@ loader = LinkMLModelLoader(
     table_prefix="term_{}",  # note the `{}` -- see Gotchas below
     schema_name="dev_include_access",
 ).load()
-
+assert loader.module is not None, "LinkML model failed to load"
+Base = loader.module.Base
 
 Concept = loader.get_model("Concept")
 Vocabulary = loader.get_model("Vocabulary")
@@ -219,7 +218,7 @@ def update_replacements(replacement, db_engine):
                 columns=("omop_concept_id", "replacement"),
             )
 
-        result = connection.execute(
+        connection.execute(
             text("""
                 UPDATE dev_include_access.term_concept AS c
                 SET replaced_by = CASE
@@ -261,7 +260,7 @@ def extract(config_path: Path, chunk_size: int):
         config_path: The specified config file to iterate.
     """
     db_engine = get_engine(config_path)
-    loader.module.Base.metadata.create_all(db_engine)
+    Base.metadata.create_all(db_engine)
 
     create_omop_fallback(db_engine)
     with open(config_path) as c:
