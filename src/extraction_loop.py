@@ -1,11 +1,14 @@
-import io
 import logging
 import os
-from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
 from car_utils import LinkMLModelLoader
+from common_access_model.datamodel.common_access_model_sqla import (
+    Concept,
+    DeprecatedConcept,
+    Vocabulary,
+)
 from sqlalchemy import text
 
 import extractors
@@ -26,11 +29,6 @@ EXTRACTORS = {
 }
 
 
-def deprecated(row: dict[str, str | None]):
-    invalid = row.get("invalid_reason")
-    return invalid is not None and invalid.upper() in ("D", "U")
-
-
 def concept_rows(row: dict[str, str | None], config: dict):
     """Takes zip file and writes the data into TermOntology format.
 
@@ -39,29 +37,44 @@ def concept_rows(row: dict[str, str | None], config: dict):
         config_prefix: The "prefix" in the config file.
     """
     formatted_code = format_code(row, config)
-    vocabulary_id = row.get("vocabulary_id", config.get("prefix", ""))
+    vocabulary_prefix = config.get("prefix", "")
     concept = {
         "concept_curie": formatted_code,
-        "vocabulary_id": vocabulary_id,
+        "vocabulary_prefix": vocabulary_prefix,
         "concept_code": found_code(formatted_code),
-        "deprecated": deprecated(row),
-        "dbt_updated_at": datetime.now(timezone.utc),
-        "dbt_valid_from": row.get("valid_start_date") or datetime.now(timezone.utc),
     }
 
     if (
         config.get("source_type", "").upper() == "OMOP"
-        and vocabulary_id
-        and vocabulary_id.upper() == "NCIT"
+        and vocabulary_prefix
+        and vocabulary_prefix.upper() == "NCIT"
     ):
         concept["definition"] = row["concept_name"]
     else:
         concept["display"] = row.get("concept_name")
 
     if config.get("source_type", "").upper() == "OMOP":
-        concept["omop_concept_id"] = row.get("concept_id")
+        concept["concept_id"] = row.get("concept_id")
 
     return concept
+
+
+def deprecated_concept_rows(row: dict[str, str | None], config: dict, replacement=None):
+    """Builds a row for the DeprecatedConcept table.
+
+    Arguments:
+        row: Row in zip file.
+        config: The config dictionary for a vocabulary.
+        replacement: Dict mapping deprecated concept_id -> replacement concept_curie.
+    """
+    formatted_code = format_code(row, config)
+    dep_concept = {
+        "concept_curie": formatted_code,
+        "deprecation_type": row.get("invalid_reason"),
+    }
+    if row.get("invalid_reason") in ("U", "D") and replacement:
+        dep_concept["replacement_curie"] = replacement.get(row.get("concept_id"))
+    return dep_concept
 
 
 def vocab_rows(row: dict[str, str | None], config: dict):
@@ -74,7 +87,7 @@ def vocab_rows(row: dict[str, str | None], config: dict):
     columns = {
         "vocabulary_uri": "vocabulary_uri",
         "fhir_system": "fhir_system",
-        "prefix": "prefix",
+        "prefix": "vocabulary_prefix",
         "description": "description",
     }
 
@@ -89,11 +102,11 @@ def vocab_rows(row: dict[str, str | None], config: dict):
             vocabulary[dest] = config[source]
 
     if config.get("archive_filename"):
-        vocabulary["source"] = (
+        vocabulary["vocabulary_source"] = (
             f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
         )
     else:
-        vocabulary["source"] = (
+        vocabulary["vocabulary_source"] = (
             f"{config.get('source_type')} - {Path(config['owl_file'])}"
         )
     return vocabulary
@@ -102,22 +115,31 @@ def vocab_rows(row: dict[str, str | None], config: dict):
 loader = LinkMLModelLoader(
     database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
     f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
-    model_import_path="md_terminology_trove.md_terminology_trove",  # the name you found in the wheel
+    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
     table_prefix="term_{}",  # note the `{}` -- see Gotchas below
     schema_name="dev_include_access",
 ).load()
 assert loader.module is not None, "LinkML model failed to load"
 Base = loader.module.Base
 
-Concept = loader.get_model("Concept")
-Vocabulary = loader.get_model("Vocabulary")
 
+def load_concept(data, config: dict, replacement=None):
+    """Loads both Concept and DeprecatedConcept tables"""
 
-def load_concept(data, config: dict):
     with loader.create_session() as session:
         for chunk in data:
-            concepts = [Concept(**concept_rows(row, config)) for row in chunk]
+            concepts = []
+            deprecated_concepts = []
+            for row in chunk:
+                concepts.append(Concept(**concept_rows(row, config)))
+                if row.get("invalid_reason"):
+                    deprecated_concepts.append(
+                        DeprecatedConcept(
+                            **deprecated_concept_rows(row, config, replacement)
+                        )
+                    )
             session.add_all(concepts)
+            session.add_all(deprecated_concepts)
             session.commit()
 
 
@@ -130,6 +152,7 @@ def load_vocab(data, config: dict):
 
 
 def create_omop_fallback(db_engine):
+    """Builds 'OMOP' vocabulary for updated codes to fall back to 'OMOP:0' if they do not have a replacement"""
     with db_engine.begin() as connection:
         # Create the OMOP fallback vocabulary
         connection.execute(
@@ -139,10 +162,10 @@ def create_omop_fallback(db_engine):
                     name,
                     vocabulary_uri,
                     fhir_system,
-                    prefix,
+                    vocabulary_prefix,
                     description,
                     version,
-                    source
+                    vocabulary_source
                 )
                 VALUES (
                     'OMOP',
@@ -154,97 +177,33 @@ def create_omop_fallback(db_engine):
                     NULL,
                     NULL
                 )
-                ON CONFLICT (vocabulary_id) DO NOTHING
+                ON CONFLICT (vocabulary_prefix) DO NOTHING
             """)
         )
 
-        # Create the fallback concept
+        # Create the fallback deprecated concept
         connection.execute(
             text("""
-                INSERT INTO dev_include_access.term_concept (
+                INSERT INTO dev_include_access.term_deprecatedconcept (
                     concept_curie,
-                    vocabulary_id,
-                    concept_code,
-                    omop_concept_id,
-                    display,
-                    deprecated,
-                    replaced_by,
-                    dbt_updated_at,
-                    dbt_valid_from
+                    deprecation_type,
+                    replacement_curie
                 )
-                VALUES (
-                    'OMOP:0',
-                    'OMOP',
-                    '0',
-                    0,
-                    'No matching concept',
-                    FALSE,
-                    NULL,
-                    NOW(),
-                    NOW()
-                )
-                ON CONFLICT (concept_curie) DO NOTHING
-            """)
-        )
-
-
-def update_replacements(replacement, db_engine):
-    if not replacement:
-        return
-
-    with db_engine.begin() as connection:
-        connection.execute(
-            text("""
-                CREATE TEMP TABLE replacement_updates (
-                    omop_concept_id INTEGER,
-                    replacement TEXT
-                ) ON COMMIT DROP
-            """)
-        )
-
-        raw_connection = connection.connection.dbapi_connection
-
-        data = io.StringIO()
-
-        for omop_concept_id, replacement_curie in replacement.items():
-            data.write(f"{int(omop_concept_id)}\t{replacement_curie}\n")
-
-        data.seek(0)
-
-        with raw_connection.cursor() as cursor:
-            cursor.copy_from(
-                data,
-                "replacement_updates",
-                columns=("omop_concept_id", "replacement"),
-            )
-
-        connection.execute(
-            text("""
-                UPDATE dev_include_access.term_concept AS c
-                SET replaced_by = CASE
-                    WHEN EXISTS (
-                        SELECT 1
-                        FROM dev_include_access.term_concept AS target
-                        WHERE target.concept_curie = r.replacement
-                    )
-                    THEN r.replacement
-                    ELSE 'OMOP:0'
-                END
-                FROM replacement_updates AS r
-                WHERE c.omop_concept_id = r.omop_concept_id
-                  AND c.concept_curie <> 'OMOP:0'
+                SELECT 'OMOP:0', NULL, NULL
+                WHERE NOT EXISTS(SELECT 1 FROM dev_include_access.term_deprecatedconcept WHERE concept_curie = 'OMOP:0')
             """)
         )
 
 
 def apply_omop_fallback(db_engine):
+    """Applies 'OMOP:0' fallback for replacement_curie for deprecated/updates codes with no replacements"""
     with db_engine.begin() as connection:
         connection.execute(
             text("""
-                UPDATE dev_include_access.term_concept
-                SET replaced_by = 'OMOP:0'
-                WHERE deprecated
-                  AND replaced_by IS NULL
+                UPDATE dev_include_access.term_deprecatedconcept
+                SET replacement_curie = 'OMOP:0'
+                WHERE deprecation_type IS NOT NULL
+                  AND replacement_curie IS NULL
                   AND concept_curie <> 'OMOP:0'
             """)
         )
@@ -308,10 +267,10 @@ def extract(config_path: Path, chunk_size: int):
         load_concept(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
             config=vocab,
+            replacement=replacement,
         )
         print("Concept load finished.", flush=True)
 
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
-    update_replacements(all_replacements, db_engine)
     apply_omop_fallback(db_engine)

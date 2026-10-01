@@ -12,7 +12,7 @@ db:
     sudo -u postgres psql -d term_trawler
 
 clear:
-    PGPASSWORD="$PGPASSWORD" psql -h localhost -U postgres -d term_trawler -c "TRUNCATE dev_include_access.term_concept, dev_include_access.term_vocabulary CASCADE;"
+    PGPASSWORD="$PGPASSWORD" psql -h localhost -U postgres -d term_trawler -c "TRUNCATE dev_include_access.term_concept, dev_include_access.term_vocabulary, dev_include_access.term_deprecatedconcept CASCADE;"
 
 drop:
     psql -c "DROP SCHEMA IF EXISTS dev_include_access CASCADE;"
