@@ -10,6 +10,7 @@ from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
 from rdflib.namespace import DCTERMS, SKOS
 
 from extractors import ExtractorBase
+from utils import format_code
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +83,46 @@ class OwlExtractor(ExtractorBase):
         return first_row.get("vocabulary_version") if first_row else None
 
     def get_replacement(self, config) -> dict[str, str]:
-        return {}
+        g = self._load_graph(self.config["owl_file"])
+        replacement = {}
+
+        replaced_by = URIRef("http://www.geneontology.org/formats/oboInOwl#replacedBy")
+
+        for subj, _, obj in g.triples((None, OWL.deprecated, None)):
+            if str(obj).lower() != "true":
+                continue
+
+            if not isinstance(subj, URIRef):
+                continue
+
+            replacement_curie = g.value(subject=subj, predicate=replaced_by)
+
+            if isinstance(replacement_curie, URIRef):
+                row = {
+                    "concept_code": str(replacement_curie),
+                    "vocabulary_prefix": config.get("prefix", ""),
+                }
+                replacement[
+                    format_code(
+                        {
+                            "concept_code": str(subj),
+                            "vocabulary_prefix": config.get("prefix", ""),
+                        },
+                        config,
+                    )
+                ] = format_code(row, config)
+            else:
+                replacement[
+                    format_code(
+                        {
+                            "concept_code": str(subj),
+                            "vocabulary_prefix": config.get("prefix", ""),
+                        },
+                        config,
+                    )
+                ] = "OMOP:0"
+
+        return replacement
 
     def _load_graph(self, url: str) -> Graph:
         g = Graph()
@@ -135,6 +175,7 @@ class OwlExtractor(ExtractorBase):
                         subjects.add(subj)
             chunk = []
             for subj in sorted(subjects):
+                deprecated = g.value(subject=subj, predicate=OWL.deprecated)
                 iri = str(subj)
                 concept_name = g.value(subject=subj, predicate=RDFS.label)
                 definition = self._get_definition(g, subj)
@@ -144,10 +185,36 @@ class OwlExtractor(ExtractorBase):
                         "concept_name": str(concept_name) if concept_name else "",
                         "vocabulary_id": self.config.get("prefix", ""),
                         "definition": definition or "",
+                        "invalid_reason": "D"
+                        if str(deprecated).lower() == "true"
+                        else None,
                     }
                 )
                 if len(chunk) == ExtractorBase.chunk_size:
                     yield chunk
                     chunk = []
+            if chunk:
+                yield chunk
+        elif data_type == "DEPRECATED_CONCEPT":
+            chunk = []
+
+            for subj, _, obj in g.triples((None, OWL.deprecated, None)):
+                if str(obj).lower() != "true":
+                    continue
+
+                if not isinstance(subj, URIRef):
+                    continue
+
+                chunk.append(
+                    {
+                        "concept_code": str(subj),
+                        "vocabulary_prefix": self.config.get("prefix", ""),
+                    }
+                )
+
+                if len(chunk) == ExtractorBase.chunk_size:
+                    yield chunk
+                    chunk = []
+
             if chunk:
                 yield chunk
