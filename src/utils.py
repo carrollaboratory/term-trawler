@@ -23,12 +23,23 @@ def format_code(row: dict[str, str | None], config: dict):
     vocabulary_id = vocabulary_id.upper() if vocabulary_id else ""
     prefix = PREFIXES.get(vocabulary_id)
     if concept_id:
+        if concept_id.startswith(("http://", "https://")):
+            local_id = concept_id.rsplit("#", 1)[-1].rsplit("/", 1)[-1]
+            config_prefix = config.get("prefix", "")
+
+            if config_prefix and local_id.upper().startswith(
+                f"{config_prefix.upper()}_"
+            ):
+                local_id = local_id[len(config_prefix) + 1 :]
+
+            return f"{config_prefix}:{local_id}"
         if config.get("source_type", "").upper() == "OMOP" and "_" in concept_id:
             return concept_id.replace("_", ":")
+        effective_prefix = prefix or config.get("prefix", "")
         if "_" in concept_id and prefix:
             embedded_prefix, _, remainder = concept_id.partition("_")
             if embedded_prefix.upper() == prefix.upper():
-                return f"{prefix}:{remainder}"
+                return f"{effective_prefix}:{remainder}"
         if ":" not in concept_id:
             prefix = PREFIXES.get(vocabulary_id) or config.get("prefix", "")
             if not prefix:
@@ -48,5 +59,5 @@ def found_code(concept_code: str):
         The code after the delimeter in the concept_code.
     """
     if ":" in concept_code:
-        return concept_code.split(":")[1]
+        return concept_code.split(":", 1)[1]
     return concept_code

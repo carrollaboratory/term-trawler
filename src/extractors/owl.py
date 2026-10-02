@@ -1,10 +1,61 @@
 import logging
+import ssl
+import urllib.error
+import urllib.request
+import xml.sax
 
-from rdflib import OWL, RDF, RDFS, Graph, Namespace
+import pyhornedowl
+import rdflib.plugin
+from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
+from rdflib.namespace import DCTERMS, SKOS
 
 from extractors import ExtractorBase
 
 logger = logging.getLogger(__name__)
+
+
+def open_fowl2owl(url: str) -> Graph:
+    ssl._create_default_https_context = ssl._create_unverified_context
+
+    with urllib.request.urlopen(url) as response:
+        data = response.read().decode("utf-8")
+
+    onto = pyhornedowl.open_ontology_from_string(data)
+
+    rdfxml = onto.save_to_string("rdf")
+
+    g = Graph()
+    g.parse(data=rdfxml, format="xml", publicID=url)
+
+    logger.info(f"Converted {url} to RDF/XML.")
+    return g
+
+
+def open_owl(url: str):
+    with urllib.request.urlopen(url) as response:
+        data = response.read()
+
+    g = Graph()
+    g.parse(data=data, format="xml", publicID=url)
+
+    return g
+
+
+ENTITY_TYPES = [
+    OWL.Class,
+    OWL.ObjectProperty,
+    OWL.DatatypeProperty,
+    OWL.AnnotationProperty,
+    OWL.NamedIndividual,
+]
+
+DEFINITION_PREDICATES = (
+    SKOS.definition,
+    URIRef("http://www.geneontology.org/formats/oboInOwl#hasDefinition"),
+    URIRef("http://purl.obolibrary.org/obo/IAO_0000115"),
+    DCTERMS.description,
+    RDFS.comment,
+)
 
 
 class OwlExtractor(ExtractorBase):
@@ -33,12 +84,29 @@ class OwlExtractor(ExtractorBase):
     def get_replacement(self, config) -> dict[str, str]:
         return {}
 
+    def _load_graph(self, url: str) -> Graph:
+        g = Graph()
+        try:
+            g.parse(url)
+        except (TimeoutError, urllib.error.URLError, rdflib.plugin.PluginException):
+            g = open_owl(url)
+        except xml.sax.SAXParseException:
+            g = open_fowl2owl(url)
+        return g
+
+    @staticmethod
+    def _get_definition(g: Graph, subj: URIRef) -> str | None:
+        for predicate in DEFINITION_PREDICATES:
+            for obj in g.objects(subj, predicate):
+                text = str(obj).strip()
+                if text:
+                    return text
+        return None
+
     def extract_data(self, vocabulary_id: str, data_type: str):
-        OBO = Namespace("http://www.geneontology.org/formats/oboInOwl#")
         DC = Namespace("http://purl.org/dc/elements/1.1/")
         file_path = self.config["owl_file"]
-        g = Graph()
-        g.parse(file_path, format="application/rdf+xml")
+        g = self._load_graph(file_path)
         if data_type == "VOCABULARY":
             ontology_subjects = list(
                 g.subjects(predicate=RDF.type, object=OWL.Ontology)
@@ -60,19 +128,22 @@ class OwlExtractor(ExtractorBase):
             yield chunk
 
         elif data_type == "CONCEPT":
+            subjects = set()
+            for entity_type in ENTITY_TYPES:
+                for subj in g.subjects(predicate=RDF.type, object=entity_type):
+                    if isinstance(subj, URIRef):
+                        subjects.add(subj)
             chunk = []
-            for subj in g.subjects(predicate=RDF.type, object=OWL.Class):
-                if not str(subj).startswith("http"):
-                    continue  # skip blank nodes
-                concept_code = str(subj).rsplit("/", 1)[-1]
+            for subj in sorted(subjects):
+                iri = str(subj)
                 concept_name = g.value(subject=subj, predicate=RDFS.label)
-                definition = g.value(subject=subj, predicate=OBO.hasDefinition)
+                definition = self._get_definition(g, subj)
                 chunk.append(
                     {
-                        "concept_code": concept_code,
+                        "concept_code": iri,
                         "concept_name": str(concept_name) if concept_name else "",
                         "vocabulary_id": self.config.get("prefix", ""),
-                        "definition": str(definition) if definition else "",
+                        "definition": definition or "",
                     }
                 )
                 if len(chunk) == ExtractorBase.chunk_size:

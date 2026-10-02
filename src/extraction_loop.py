@@ -52,6 +52,8 @@ def concept_rows(row: dict[str, str | None], config: dict):
         concept["definition"] = row["concept_name"]
     else:
         concept["display"] = row.get("concept_name")
+        if row.get("definition"):
+            concept["definition"] = row["definition"]
 
     if config.get("source_type", "").upper() == "OMOP":
         concept["concept_id"] = row.get("concept_id")
