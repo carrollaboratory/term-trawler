@@ -3,6 +3,7 @@ import ssl
 import urllib.error
 import urllib.request
 import xml.sax
+import xml.sax._exceptions
 
 import pyhornedowl
 import rdflib.plugin
@@ -15,10 +16,15 @@ from utils import format_code
 logger = logging.getLogger(__name__)
 
 
-def open_fowl2owl(url: str) -> Graph:
+def open_fowl2owl(url: str, ssl_no_verify=False) -> Graph:
     ssl._create_default_https_context = ssl._create_unverified_context
-
-    with urllib.request.urlopen(url) as response:
+    if ssl_no_verify:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+    else:
+        ctx = None
+    with urllib.request.urlopen(url, context=ctx) as response:
         data = response.read().decode("utf-8")
 
     onto = pyhornedowl.open_ontology_from_string(data)
@@ -32,8 +38,14 @@ def open_fowl2owl(url: str) -> Graph:
     return g
 
 
-def open_owl(url: str):
-    with urllib.request.urlopen(url) as response:
+def open_owl(url: str, ssl_no_verify=False):
+    if ssl_no_verify:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+    else:
+        ctx = None
+    with urllib.request.urlopen(url, context=ctx) as response:
         data = response.read()
 
     g = Graph()
@@ -83,9 +95,9 @@ class OwlExtractor(ExtractorBase):
         return first_row.get("vocabulary_version") if first_row else None
 
     def get_replacement(self, config) -> dict[str, str]:
-        g = self._load_graph(self.config["owl_file"])
+        ssl_flag = self.config.get("ssl_no_verify", False)
+        g = self._load_graph(self.config["owl_file"], ssl_no_verify=ssl_flag)
         replacement = {}
-
         replaced_by = URIRef("http://www.geneontology.org/formats/oboInOwl#replacedBy")
 
         for subj, _, obj in g.triples((None, OWL.deprecated, None)):
@@ -111,27 +123,35 @@ class OwlExtractor(ExtractorBase):
                         config,
                     )
                 ] = format_code(row, config)
-            else:
-                replacement[
-                    format_code(
-                        {
-                            "concept_code": str(subj),
-                            "vocabulary_prefix": config.get("prefix", ""),
-                        },
-                        config,
-                    )
-                ] = "OMOP:0"
+            # The code below has been commented out because replacement_curie is no longer required in
+            # the new model, common_access_model. We are keeping the code in case it is needed in the future
+            # else:
+            #     replacement[
+            #         format_code(
+            #             {
+            #                 "concept_code": str(subj),
+            #                 "vocabulary_prefix": config.get("prefix", ""),
+            #             },
+            #             config,
+            #         )
+            #     ] = "OMOP:0"
 
         return replacement
 
-    def _load_graph(self, url: str) -> Graph:
+    def _load_graph(self, url: str, ssl_no_verify=False) -> Graph:
         g = Graph()
+        if ssl_no_verify:
+            try:
+                return open_owl(url, ssl_no_verify=True)
+            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
+                return open_fowl2owl(url, ssl_no_verify=True)
         try:
             g.parse(url)
         except (TimeoutError, urllib.error.URLError, rdflib.plugin.PluginException):
-            g = open_owl(url)
-        except xml.sax.SAXParseException:
-            g = open_fowl2owl(url)
+            try:
+                g = open_owl(url, ssl_no_verify=False)
+            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
+                g = open_fowl2owl(url, ssl_no_verify=False)
         return g
 
     @staticmethod
@@ -146,7 +166,8 @@ class OwlExtractor(ExtractorBase):
     def extract_data(self, vocabulary_id: str, data_type: str):
         DC = Namespace("http://purl.org/dc/elements/1.1/")
         file_path = self.config["owl_file"]
-        g = self._load_graph(file_path)
+        ssl_flag = self.config.get("ssl_no_verify", False)
+        g = self._load_graph(file_path, ssl_no_verify=ssl_flag)
         if data_type == "VOCABULARY":
             ontology_subjects = list(
                 g.subjects(predicate=RDF.type, object=OWL.Ontology)

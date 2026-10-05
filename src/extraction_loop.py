@@ -226,7 +226,6 @@ def extract(config_path: Path, chunk_size: int):
     create_omop_fallback(db_engine)
     with open(config_path) as c:
         config = yaml.safe_load(c)
-
         ExtractorBase.chunk_size = int(chunk_size)
 
     extracted_files = {}
@@ -275,4 +274,6 @@ def extract(config_path: Path, chunk_size: int):
 
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
-    apply_omop_fallback(db_engine)
+    # The line below has been commented out because replacement_curie is no longer required in the new model,
+    # common_access_model. We are keeping the code for the OMOP:0 fallback in case it is needed in the future
+    # apply_omop_fallback(db_engine)
