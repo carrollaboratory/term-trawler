@@ -110,42 +110,78 @@ class OwlExtractor(ExtractorBase):
         g = self._get_graph()
         replacement = {}
 
-        for subj, _, obj in g.triples((None, OWL.deprecated, None)):
-            if str(obj).lower() != "true":
-                continue
+        deprecated_iris = {
+            subj
+            for subj, _, obj in g.triples((None, OWL.deprecated, None))
+            if isinstance(subj, URIRef) and str(obj).lower() == "true"
+        }
 
+        label_lookup = {}
+
+        for subj in g.subjects(predicate=RDF.type, object=OWL.Class):
             if not isinstance(subj, URIRef):
                 continue
 
-            replacement_curie = self._get_replacement_uri(g, subj)
+            for label in g.objects(subj, RDFS.label):
+                label_lookup.setdefault(
+                    str(label).strip().lower(),
+                    set(),
+                ).add(subj)
 
-            if isinstance(replacement_curie, URIRef):
-                row = {
-                    "concept_code": str(replacement_curie),
-                    "vocabulary_prefix": config.get("prefix", ""),
-                }
-                replacement[
-                    format_code(
-                        {
-                            "concept_code": str(subj),
-                            "vocabulary_prefix": config.get("prefix", ""),
-                        },
-                        config,
+        for subj in deprecated_iris:
+            replacement_uri = self._get_replacement_uri(g, subj)
+
+            if replacement_uri is None:
+                for predicate, value in g.predicate_objects(subj):
+                    if "NCIT_P98" not in str(predicate):
+                        continue
+
+                    text = str(value).strip()
+
+                    if " - See " not in text:
+                        continue
+
+                    target_name = text.split(" - See ", 1)[1].strip().strip("'\"")
+
+                    possible_matches = label_lookup.get(
+                        target_name.lower(),
+                        set(),
                     )
-                ] = format_code(row, config)
 
-            # The code below has been commented out because replacement_curie is no longer required in
-            # the new model, common_access_model. We are keeping the code in case it is needed in the future
-            # else:
-            #     replacement[
-            #         format_code(
-            #             {
-            #                 "concept_code": str(subj),
-            #                 "vocabulary_prefix": config.get("prefix", ""),
-            #             },
-            #             config,
-            #         )
-            #     ] = "OMOP:0"
+                    active_matches = [
+                        match
+                        for match in possible_matches
+                        if match not in deprecated_iris
+                    ]
+
+                    if len(active_matches) == 1:
+                        replacement_uri = active_matches[0]
+                        break
+
+            if not isinstance(replacement_uri, URIRef):
+                continue
+
+            if replacement_uri in deprecated_iris:
+                continue
+
+            old_curie = format_code(
+                {
+                    "concept_code": str(subj),
+                    "vocabulary_id": config.get("prefix", ""),
+                },
+                config,
+            )
+
+            new_curie = format_code(
+                {
+                    "concept_code": str(replacement_uri),
+                    "vocabulary_id": config.get("prefix", ""),
+                },
+                config,
+            )
+
+            replacement[old_curie] = new_curie
+
         return replacement
 
     def _load_graph(self, url: str, ssl_no_verify=False) -> Graph:
@@ -182,9 +218,6 @@ class OwlExtractor(ExtractorBase):
 
     def extract_data(self, vocabulary_id: str, data_type: str):
         DC = Namespace("http://purl.org/dc/elements/1.1/")
-        # file_path = self.config["owl_file"]
-        # ssl_flag = self.config.get("ssl_no_verify", False)
-        # g = self._load_graph(file_path, ssl_no_verify=ssl_flag)
         g = self._get_graph()
         if data_type == "VOCABULARY":
             ontology_subjects = list(
@@ -212,18 +245,27 @@ class OwlExtractor(ExtractorBase):
                 for subj in g.subjects(predicate=RDF.type, object=entity_type):
                     if isinstance(subj, URIRef):
                         subjects.add(subj)
+
+            replacement = self.get_replacement(self.config)
+
             chunk = []
             for subj in sorted(subjects):
                 deprecated_flag = g.value(subject=subj, predicate=OWL.deprecated)
                 iri = str(subj)
                 concept_name = g.value(subject=subj, predicate=RDFS.label)
                 definition = self._get_definition(g, subj)
+
                 invalid_reason = None
                 if str(deprecated_flag).lower() == "true":
-                    replacement_curie = self._get_replacement_uri(g, subj)
-                    invalid_reason = (
-                        "U" if isinstance(replacement_curie, URIRef) else "D"
+                    concept_curie = format_code(
+                        {
+                            "concept_code": iri,
+                            "vocabulary_id": self.config.get("prefix", ""),
+                        },
+                        self.config,
                     )
+                    invalid_reason = "U" if concept_curie in replacement else "D"
+
                 chunk.append(
                     {
                         "concept_code": iri,
@@ -233,42 +275,49 @@ class OwlExtractor(ExtractorBase):
                         "invalid_reason": invalid_reason,
                     }
                 )
+
                 if len(chunk) == ExtractorBase.chunk_size:
                     yield chunk
                     chunk = []
+
             if chunk:
                 yield chunk
 
         elif data_type == "DEPRECATED_CONCEPT":
+            replacement = self.get_replacement(self.config)
+
             chunk = []
+
             for subj, _, obj in g.triples((None, OWL.deprecated, None)):
                 if str(obj).lower() != "true":
                     continue
+
                 if not isinstance(subj, URIRef):
                     continue
-                replacement_curie = self._get_replacement_uri(g, subj)
-                row: dict[str, str | None] = {
-                    "concept_code": str(subj),
-                    "deprecation_type": "U"
-                    if isinstance(replacement_curie, URIRef)
-                    else "D",
+
+                concept_curie = format_code(
+                    {
+                        "concept_code": str(subj),
+                        "vocabulary_id": self.config.get("prefix", ""),
+                    },
+                    self.config,
+                )
+
+                replacement_curie = replacement.get(concept_curie)
+
+                row = {
+                    "concept_curie": concept_curie,
+                    "deprecation_type": "U" if replacement_curie else "D",
                 }
-                if isinstance(replacement_curie, URIRef):
-                    replacement_row: dict[str, str | None] = {
-                        "concept_code": str(replacement_curie),
-                        "vocabulary_prefix": self.config.get("prefix", ""),
-                    }
-                    row["replacement_curie"] = format_code(replacement_row, self.config)
-                    row["concept_curie"] = format_code(
-                        {
-                            "concept_code": str(subj),
-                            "vocabulary_id": self.config.get("prefix", ""),
-                        },
-                        self.config,
-                    )
+
+                if replacement_curie:
+                    row["replacement_curie"] = replacement_curie
+
                 chunk.append(row)
+
                 if len(chunk) == ExtractorBase.chunk_size:
                     yield chunk
                     chunk = []
+
             if chunk:
                 yield chunk

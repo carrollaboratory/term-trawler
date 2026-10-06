@@ -183,18 +183,20 @@ def create_omop_fallback(db_engine):
             """)
         )
 
-        # Create the fallback deprecated concept
-        connection.execute(
-            text("""
-                INSERT INTO dev_include_access.term_deprecatedconcept (
-                    concept_curie,
-                    deprecation_type,
-                    replacement_curie
-                )
-                SELECT 'OMOP:0', NULL, NULL
-                WHERE NOT EXISTS(SELECT 1 FROM dev_include_access.term_deprecatedconcept WHERE concept_curie = 'OMOP:0')
-            """)
-        )
+        # # Create the fallback deprecated concept
+        # # The line below has been commented out because replacement_curie is no longer required in the new model,
+        # common_access_model. We are keeping the code for the OMOP:0 fallback in case it is needed in the future
+        # connection.execute(
+        #     text("""
+        #         INSERT INTO dev_include_access.term_deprecatedconcept (
+        #             concept_curie,
+        #             deprecation_type,
+        #             replacement_curie
+        #         )
+        #         SELECT 'OMOP:0', NULL, NULL
+        #         WHERE NOT EXISTS(SELECT 1 FROM dev_include_access.term_deprecatedconcept WHERE concept_curie = 'OMOP:0')
+        #     """)
+        # )
 
 
 def apply_omop_fallback(db_engine):
