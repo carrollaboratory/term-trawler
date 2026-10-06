@@ -94,11 +94,20 @@ class OwlExtractor(ExtractorBase):
         )[0]
         return first_row.get("vocabulary_version") if first_row else None
 
+    def _get_replacement_uri(self, g: Graph, subj) -> URIRef | None:
+        """Checks both known 'replaced by' predicates and returns whichever is present."""
+        iao_term_replaced_by = URIRef("http://purl.obolibrary.org/obo/IAO_0100001")
+        oboinowl_replaced_by = URIRef(
+            "http://www.geneontology.org/formats/oboInOwl#replacedBy"
+        )
+        return g.value(subject=subj, predicate=iao_term_replaced_by) or g.value(
+            subject=subj, predicate=oboinowl_replaced_by
+        )
+
     def get_replacement(self, config) -> dict[str, str]:
         ssl_flag = self.config.get("ssl_no_verify", False)
         g = self._load_graph(self.config["owl_file"], ssl_no_verify=ssl_flag)
         replacement = {}
-        replaced_by = URIRef("http://www.geneontology.org/formats/oboInOwl#replacedBy")
 
         for subj, _, obj in g.triples((None, OWL.deprecated, None)):
             if str(obj).lower() != "true":
@@ -107,7 +116,7 @@ class OwlExtractor(ExtractorBase):
             if not isinstance(subj, URIRef):
                 continue
 
-            replacement_curie = g.value(subject=subj, predicate=replaced_by)
+            replacement_curie = self._get_replacement_uri(g, subj)
 
             if isinstance(replacement_curie, URIRef):
                 row = {
@@ -123,6 +132,7 @@ class OwlExtractor(ExtractorBase):
                         config,
                     )
                 ] = format_code(row, config)
+
             # The code below has been commented out because replacement_curie is no longer required in
             # the new model, common_access_model. We are keeping the code in case it is needed in the future
             # else:
@@ -135,7 +145,6 @@ class OwlExtractor(ExtractorBase):
             #             config,
             #         )
             #     ] = "OMOP:0"
-
         return replacement
 
     def _load_graph(self, url: str, ssl_no_verify=False) -> Graph:
@@ -196,19 +205,23 @@ class OwlExtractor(ExtractorBase):
                         subjects.add(subj)
             chunk = []
             for subj in sorted(subjects):
-                deprecated = g.value(subject=subj, predicate=OWL.deprecated)
+                deprecated_flag = g.value(subject=subj, predicate=OWL.deprecated)
                 iri = str(subj)
                 concept_name = g.value(subject=subj, predicate=RDFS.label)
                 definition = self._get_definition(g, subj)
+                invalid_reason = None
+                if str(deprecated_flag).lower() == "true":
+                    replacement_curie = self._get_replacement_uri(g, subj)
+                    invalid_reason = (
+                        "U" if isinstance(replacement_curie, URIRef) else "D"
+                    )
                 chunk.append(
                     {
                         "concept_code": iri,
                         "concept_name": str(concept_name) if concept_name else "",
                         "vocabulary_id": self.config.get("prefix", ""),
                         "definition": definition or "",
-                        "invalid_reason": "D"
-                        if str(deprecated).lower() == "true"
-                        else None,
+                        "invalid_reason": invalid_reason,
                     }
                 )
                 if len(chunk) == ExtractorBase.chunk_size:
@@ -216,26 +229,30 @@ class OwlExtractor(ExtractorBase):
                     chunk = []
             if chunk:
                 yield chunk
+
         elif data_type == "DEPRECATED_CONCEPT":
             chunk = []
-
             for subj, _, obj in g.triples((None, OWL.deprecated, None)):
                 if str(obj).lower() != "true":
                     continue
-
                 if not isinstance(subj, URIRef):
                     continue
-
-                chunk.append(
-                    {
-                        "concept_code": str(subj),
+                replacement_curie = self._get_replacement_uri(g, subj)
+                row: dict[str, str | None] = {
+                    "concept_code": str(subj),
+                    "deprecation_type": "U"
+                    if isinstance(replacement_curie, URIRef)
+                    else "D",
+                }
+                if isinstance(replacement_curie, URIRef):
+                    replacement_row: dict[str, str | None] = {
+                        "concept_code": str(replacement_curie),
                         "vocabulary_prefix": self.config.get("prefix", ""),
                     }
-                )
-
+                    row["replacement_curie"] = format_code(replacement_row, self.config)
+                chunk.append(row)
                 if len(chunk) == ExtractorBase.chunk_size:
                     yield chunk
                     chunk = []
-
             if chunk:
                 yield chunk
