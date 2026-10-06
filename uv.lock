@@ -69,9 +69,10 @@ wheels = [
 
 [[package]]
 name = "car-utils"
-version = "0.3.0"
-source = { git = "https://github.com/carrollaboratory/car-utils.git#3771e3da4ecf836b6ddf552894b223d36bd8a24a" }
+version = "0.4.1.dev1+gc24e36274"
+source = { git = "https://github.com/carrollaboratory/car-utils.git#c24e3627488a1c8b41dc27affc161cae86103237" }
 dependencies = [
+    { name = "py-horned-owl" },
     { name = "requests" },
     { name = "sqlalchemy" },
 ]
