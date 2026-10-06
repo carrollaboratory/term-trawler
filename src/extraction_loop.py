@@ -211,6 +211,29 @@ def apply_omop_fallback(db_engine):
         )
 
 
+def update_replacements_by_curie(pairs: dict[str, str], db_engine):
+    if not pairs:
+        return
+    with db_engine.begin() as connection:
+        connection.execute(
+            text("""
+                UPDATE dev_include_access.term_deprecatedconcept AS c
+                SET replacement_curie = CASE
+                    WHEN EXISTS (
+                        SELECT 1 FROM dev_include_access.term_concept AS t
+                        WHERE t.concept_curie = r.new_curie
+                    ) THEN r.new_curie
+                END
+                FROM (
+                    SELECT unnest(CAST(:olds AS text[])) AS old_curie,
+                           unnest(CAST(:news AS text[])) AS new_curie
+                ) AS r
+                WHERE c.concept_curie = r.old_curie
+            """),
+            {"olds": list(pairs), "news": list(pairs.values())},
+        )
+
+
 def extract(config_path: Path, chunk_size: int):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
@@ -231,6 +254,7 @@ def extract(config_path: Path, chunk_size: int):
     extracted_files = {}
     dirs_to_cleanup = []
     all_replacements = {}
+    owl_replacements = {}
 
     for vocab in config["vocabularies"]:
         source_type = vocab["source_type"]
@@ -271,9 +295,19 @@ def extract(config_path: Path, chunk_size: int):
             replacement=replacement,
         )
         print("Concept load finished.", flush=True)
-
+        if source_type.upper() == "OWL":
+            for chunk in extractor.extract_data(
+                vocabulary_id=vocabulary_id, data_type="DEPRECATED_CONCEPT"
+            ):
+                for row in chunk:
+                    if row.get("replacement_curie"):
+                        owl_replacements[row["concept_curie"]] = row[
+                            "replacement_curie"
+                        ]
+    update_replacements_by_curie(owl_replacements, db_engine)
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
+
     # The line below has been commented out because replacement_curie is no longer required in the new model,
     # common_access_model. We are keeping the code for the OMOP:0 fallback in case it is needed in the future
     # apply_omop_fallback(db_engine)

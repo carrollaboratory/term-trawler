@@ -9,6 +9,7 @@ import pyhornedowl
 import rdflib.plugin
 from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
 from rdflib.namespace import DCTERMS, SKOS
+from sqlalchemy.sql.expression import values
 
 from extractors import ExtractorBase
 from utils import format_code
@@ -96,17 +97,17 @@ class OwlExtractor(ExtractorBase):
 
     def _get_replacement_uri(self, g: Graph, subj) -> URIRef | None:
         """Checks both known 'replaced by' predicates and returns whichever is present."""
-        iao_term_replaced_by = URIRef("http://purl.obolibrary.org/obo/IAO_0100001")
-        oboinowl_replaced_by = URIRef(
-            "http://www.geneontology.org/formats/oboInOwl#replacedBy"
-        )
-        return g.value(subject=subj, predicate=iao_term_replaced_by) or g.value(
-            subject=subj, predicate=oboinowl_replaced_by
-        )
+        for predicate in (
+            URIRef("http://purl.obolibrary.org/obo/IAO_0100001"),
+            URIRef("http://www.geneontology.org/formats/oboInOwl#replacedBy"),
+        ):
+            value = g.value(subject=subj, predicate=predicate)
+            if isinstance(value, URIRef):
+                return value
+        return None
 
     def get_replacement(self, config) -> dict[str, str]:
-        ssl_flag = self.config.get("ssl_no_verify", False)
-        g = self._load_graph(self.config["owl_file"], ssl_no_verify=ssl_flag)
+        g = self._get_graph()
         replacement = {}
 
         for subj, _, obj in g.triples((None, OWL.deprecated, None)):
@@ -172,11 +173,19 @@ class OwlExtractor(ExtractorBase):
                     return text
         return None
 
+    def _get_graph(self):
+        if getattr(self, "_graph", None) is None:
+            file_path = self.config["owl_file"]
+            ssl_flag = self.config.get("ssl_no_verify", False)
+            self._graph = self._load_graph(file_path, ssl_no_verify=ssl_flag)
+        return self._graph
+
     def extract_data(self, vocabulary_id: str, data_type: str):
         DC = Namespace("http://purl.org/dc/elements/1.1/")
-        file_path = self.config["owl_file"]
-        ssl_flag = self.config.get("ssl_no_verify", False)
-        g = self._load_graph(file_path, ssl_no_verify=ssl_flag)
+        # file_path = self.config["owl_file"]
+        # ssl_flag = self.config.get("ssl_no_verify", False)
+        # g = self._load_graph(file_path, ssl_no_verify=ssl_flag)
+        g = self._get_graph()
         if data_type == "VOCABULARY":
             ontology_subjects = list(
                 g.subjects(predicate=RDF.type, object=OWL.Ontology)
@@ -250,6 +259,13 @@ class OwlExtractor(ExtractorBase):
                         "vocabulary_prefix": self.config.get("prefix", ""),
                     }
                     row["replacement_curie"] = format_code(replacement_row, self.config)
+                    row["concept_curie"] = format_code(
+                        {
+                            "concept_code": str(subj),
+                            "vocabulary_id": self.config.get("prefix", ""),
+                        },
+                        self.config,
+                    )
                 chunk.append(row)
                 if len(chunk) == ExtractorBase.chunk_size:
                     yield chunk
