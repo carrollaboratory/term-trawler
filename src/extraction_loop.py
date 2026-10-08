@@ -9,7 +9,6 @@ from common_access_model.datamodel.common_access_model_sqla import (
     DeprecatedConcept,
     Vocabulary,
 )
-from sqlalchemy import text
 
 import extractors
 from extractors import ExtractorBase
@@ -74,8 +73,20 @@ def deprecated_concept_rows(row: dict[str, str | None], config: dict, replacemen
         "concept_curie": formatted_code,
         "deprecation_type": row.get("invalid_reason"),
     }
-    if row.get("invalid_reason") in ("U", "D") and replacement:
-        dep_concept["replacement_curie"] = replacement.get(row.get("concept_id"))
+
+    if replacement:
+        found_replacement = (
+            replacement.get(row.get("concept_id"))
+            if config["source_type"] == "OMOP"
+            else replacement.get(formatted_code)
+        )
+
+        if found_replacement:
+            dep_concept["replacement_curie"] = found_replacement
+        # The code below is commented out because replacement_curie is not required in the new
+        # model, but we are keeping the code in case it is needed in the future
+        # else:
+        #     dep_concept["replacement_curie"] = "OMOP:0"
     return dep_concept
 
 
@@ -112,6 +123,33 @@ def vocab_rows(row: dict[str, str | None], config: dict):
             f"{config.get('source_type')} - {Path(config['owl_file'])}"
         )
     return vocabulary
+
+
+def omop_vocab_row():
+    columns = {
+        "vocabulary_uri": "https://ohdsi.org",
+        "fhir_system": "http://hl7.org/fhir/uv/omop/ImplementationGuide/hl7.fhir.uv.omop",
+        "vocabulary_prefix": "OMOP",
+        "description": "OMOP Metadata Fallback",
+        "vocabulary_id": "OMOP",
+        "name": "OMOP Metadata Fallback",
+        "version": "",
+        "vocabulary_source": "",
+    }
+
+    return columns
+
+
+def omop_concept_row():
+    columns = {
+        "concept_curie": "OMOP:0",
+        "concept_id": 0,
+        "display": "No matching concept",
+        "vocabulary_prefix": "OMOP",
+        "definition": "No matching concept",
+        "concept_code": 0,
+    }
+    return columns
 
 
 loader = LinkMLModelLoader(
@@ -153,87 +191,18 @@ def load_vocab(data, config: dict):
             session.commit()
 
 
-def create_omop_fallback(db_engine):
+def create_omop_fallback():
     """Builds 'OMOP' vocabulary for updated codes to fall back to 'OMOP:0' if they do not have a replacement"""
-    with db_engine.begin() as connection:
-        # Create the OMOP fallback vocabulary
-        connection.execute(
-            text("""
-                INSERT INTO dev_include_access.term_vocabulary (
-                    vocabulary_id,
-                    name,
-                    vocabulary_uri,
-                    fhir_system,
-                    vocabulary_prefix,
-                    description,
-                    version,
-                    vocabulary_source
-                )
-                VALUES (
-                    'OMOP',
-                    'OMOP Metadata Fallback',
-                    'https://ohdsi.org',
-                    'http://hl7.org/fhir/uv/omop/ImplementationGuide/hl7.fhir.uv.omop',
-                    'OMOP',
-                    'OMOP Metadata Fallback',
-                    NULL,
-                    NULL
-                )
-                ON CONFLICT (vocabulary_prefix) DO NOTHING
-            """)
-        )
+    with loader.create_session() as session:
+        vocab = [Vocabulary(**omop_vocab_row())]
+        session.add_all(vocab)
+        session.commit()
 
-        # # Create the fallback deprecated concept
-        # # The line below has been commented out because replacement_curie is no longer required in the new model,
-        # common_access_model. We are keeping the code for the OMOP:0 fallback in case it is needed in the future
-        # connection.execute(
-        #     text("""
-        #         INSERT INTO dev_include_access.term_deprecatedconcept (
-        #             concept_curie,
-        #             deprecation_type,
-        #             replacement_curie
-        #         )
-        #         SELECT 'OMOP:0', NULL, NULL
-        #         WHERE NOT EXISTS(SELECT 1 FROM dev_include_access.term_deprecatedconcept WHERE concept_curie = 'OMOP:0')
-        #     """)
-        # )
-
-
-def apply_omop_fallback(db_engine):
-    """Applies 'OMOP:0' fallback for replacement_curie for deprecated/updates codes with no replacements"""
-    with db_engine.begin() as connection:
-        connection.execute(
-            text("""
-                UPDATE dev_include_access.term_deprecatedconcept
-                SET replacement_curie = 'OMOP:0'
-                WHERE deprecation_type IS NOT NULL
-                  AND replacement_curie IS NULL
-                  AND concept_curie <> 'OMOP:0'
-            """)
-        )
-
-
-def update_replacements_by_curie(pairs: dict[str, str], db_engine):
-    if not pairs:
-        return
-    with db_engine.begin() as connection:
-        connection.execute(
-            text("""
-                UPDATE dev_include_access.term_deprecatedconcept AS c
-                SET replacement_curie = CASE
-                    WHEN EXISTS (
-                        SELECT 1 FROM dev_include_access.term_concept AS t
-                        WHERE t.concept_curie = r.new_curie
-                    ) THEN r.new_curie
-                END
-                FROM (
-                    SELECT unnest(CAST(:olds AS text[])) AS old_curie,
-                           unnest(CAST(:news AS text[])) AS new_curie
-                ) AS r
-                WHERE c.concept_curie = r.old_curie
-            """),
-            {"olds": list(pairs), "news": list(pairs.values())},
-        )
+        # Create the fallback deprecated concept
+    with loader.create_session() as session:
+        concept = [Concept(**omop_concept_row())]
+        session.add_all(concept)
+        session.commit()
 
 
 def extract(config_path: Path, chunk_size: int):
@@ -247,8 +216,9 @@ def extract(config_path: Path, chunk_size: int):
     """
     db_engine = get_engine(config_path)
     Base.metadata.create_all(db_engine)
-
-    create_omop_fallback(db_engine)
+    # The line below is commented out because replacement_curie is not required in the new model,
+    # so we do not need an OMOP fallback at this time. We are keeping the code in case it is needed in the future
+    # create_omop_fallback()
     with open(config_path) as c:
         config = yaml.safe_load(c)
         ExtractorBase.chunk_size = int(chunk_size)
@@ -306,10 +276,5 @@ def extract(config_path: Path, chunk_size: int):
                         owl_replacements[row["concept_curie"]] = row[
                             "replacement_curie"
                         ]
-    update_replacements_by_curie(owl_replacements, db_engine)
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
-
-    # The line below has been commented out because replacement_curie is no longer required in the new model,
-    # common_access_model. We are keeping the code for the OMOP:0 fallback in case it is needed in the future
-    # apply_omop_fallback(db_engine)
