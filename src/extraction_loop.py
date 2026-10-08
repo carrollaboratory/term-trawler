@@ -1,21 +1,16 @@
+import json
 import logging
-import os
+from collections.abc import Generator
 from pathlib import Path
+from typing import Any
 
 import yaml
-from car_utils import LinkMLModelLoader
-from common_access_model.datamodel.common_access_model_sqla import (
-    Concept,
-    DeprecatedConcept,
-    Vocabulary,
-)
 
 import extractors
 from extractors import ExtractorBase
-from streamer.engine import get_engine
-from utils import format_code, found_code
 
 logger = logging.getLogger(__name__)
+
 
 EXTRACTORS = {
     obj.extractor_name: obj  # OMOP: obj are your dictionary entries
@@ -27,8 +22,61 @@ EXTRACTORS = {
     and obj is not extractors.ExtractorBase  # Avoid capturing the parent class itself.
 }
 
+PREFIXES = {"SNOMED": "snomedct", "NCIT": "NCIT", "EDAM": "edam"}
 
-def concept_rows(row: dict[str, str | None], config: dict):
+
+def format_code(row: dict[str, str | None], config: dict):
+    """Takes the concept_code in the zip files and formats it to the [prefix]:[code] format
+    for the output.
+
+    Replaces "_" with ":" in the codes.
+    If ":" is not present in the concept_code, it first defers to the prefix in the config file,
+    then the dictionary above to build the code format.
+
+    Arguments:
+        row: Row in zip file.
+        config_prefix: The "prefix" in the config file.
+
+    Returns:
+        Returns the formatted concept_id
+    """
+    concept_id = row["concept_code"]
+    if not concept_id:
+        raise ValueError("No concept_code in row.")
+    vocabulary_id = row.get("vocabulary_id") or config.get("prefix", "")
+    vocabulary_id = vocabulary_id.upper() if vocabulary_id else ""
+    prefix = PREFIXES.get(vocabulary_id)
+    if concept_id:
+        if config.get("source_type", "").upper() == "OMOP" and "_" in concept_id:
+            return concept_id.replace("_", ":")
+        if "_" in concept_id and prefix:
+            embedded_prefix, _, remainder = concept_id.partition("_")
+            if embedded_prefix.upper() == prefix.upper():
+                return f"{prefix}:{remainder}"
+        if ":" not in concept_id:
+            prefix = config.get("prefix", "") or PREFIXES.get(vocabulary_id.upper(), "")
+            if not prefix:
+                raise ValueError(f"Prefix not found for {vocabulary_id}")
+            return f"{prefix}:{concept_id}"
+    return concept_id
+
+
+def found_code(concept_code: str):
+    """Takes the concept_code and extracts only the code portion after the delimiter,
+    or only returns the code if no delimiter is present.
+
+    Arguments:
+        concept_code: The formatted concept code in [prefix]:[code] format
+
+    Returns:
+        The code after the delimeter in the concept_code.
+    """
+    if ":" in concept_code:
+        return concept_code.split(":")[1]
+    return concept_code
+
+
+def concept_rows(row: dict[str, str | None], config: dict, version=None):
     """Takes zip file and writes the data into TermOntology format.
 
     Arguments:
@@ -36,58 +84,28 @@ def concept_rows(row: dict[str, str | None], config: dict):
         config_prefix: The "prefix" in the config file.
     """
     formatted_code = format_code(row, config)
-    vocabulary_prefix = config.get("prefix", "")
+    vocabulary_id = row.get("vocabulary_id", config.get("prefix", ""))
     concept = {
-        "concept_curie": formatted_code,
-        "vocabulary_prefix": vocabulary_prefix,
+        "ontology_id": vocabulary_id,
+        "concept_id": formatted_code,
         "concept_code": found_code(formatted_code),
     }
 
     if (
         config.get("source_type", "").upper() == "OMOP"
-        and vocabulary_prefix
-        and vocabulary_prefix.upper() == "NCIT"
+        and vocabulary_id
+        and vocabulary_id.upper() == "NCIT"
     ):
         concept["definition"] = row["concept_name"]
     else:
         concept["display"] = row.get("concept_name")
-        if row.get("definition"):
-            concept["definition"] = row["definition"]
 
-    if config.get("source_type", "").upper() == "OMOP":
-        concept["concept_id"] = row.get("concept_id")
+    if row.get("invalid_reason"):
+        concept["version"] = row.get("valid_end_date")
+    else:
+        concept["version"] = version
 
     return concept
-
-
-def deprecated_concept_rows(row: dict[str, str | None], config: dict, replacement=None):
-    """Builds a row for the DeprecatedConcept table.
-
-    Arguments:
-        row: Row in zip file.
-        config: The config dictionary for a vocabulary.
-        replacement: Dict mapping deprecated concept_id -> replacement concept_curie.
-    """
-    formatted_code = format_code(row, config)
-    dep_concept = {
-        "concept_curie": formatted_code,
-        "deprecation_type": row.get("invalid_reason"),
-    }
-
-    if replacement:
-        found_replacement = (
-            replacement.get(row.get("concept_id"))
-            if config["source_type"] == "OMOP"
-            else replacement.get(formatted_code)
-        )
-
-        if found_replacement:
-            dep_concept["replacement_curie"] = found_replacement
-        # The code below is commented out because replacement_curie is not required in the new
-        # model, but we are keeping the code in case it is needed in the future
-        # else:
-        #     dep_concept["replacement_curie"] = "OMOP:0"
-    return dep_concept
 
 
 def vocab_rows(row: dict[str, str | None], config: dict):
@@ -98,16 +116,15 @@ def vocab_rows(row: dict[str, str | None], config: dict):
         config: The config dictionary for a vocabulary.
     """
     columns = {
-        "vocabulary_uri": "vocabulary_uri",
+        "vocabulary_uri": "ontology_uri",
         "fhir_system": "fhir_system",
-        "prefix": "vocabulary_prefix",
+        "prefix": "prefix",
         "description": "description",
     }
 
     vocabulary = {
-        "vocabulary_id": row.get("vocabulary_id") or config.get("prefix", ""),
+        "ontology_id": row.get("vocabulary_id") or config.get("prefix", ""),
         "name": row["vocabulary_name"] or config.get("vocabulary_name", ""),
-        "version": row["vocabulary_version"],
     }
 
     for source, dest in columns.items():
@@ -115,94 +132,41 @@ def vocab_rows(row: dict[str, str | None], config: dict):
             vocabulary[dest] = config[source]
 
     if config.get("archive_filename"):
-        vocabulary["vocabulary_source"] = (
+        vocabulary["source"] = (
             f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
         )
-    else:
-        vocabulary["vocabulary_source"] = (
-            f"{config.get('source_type')} - {Path(config['owl_file'])}"
-        )
+
     return vocabulary
 
 
-def omop_vocab_row():
-    columns = {
-        "vocabulary_uri": "https://ohdsi.org",
-        "fhir_system": "http://hl7.org/fhir/uv/omop/ImplementationGuide/hl7.fhir.uv.omop",
-        "vocabulary_prefix": "OMOP",
-        "description": "OMOP Metadata Fallback",
-        "vocabulary_id": "OMOP",
-        "name": "OMOP Metadata Fallback",
-        "version": "",
-        "vocabulary_source": "",
-    }
+def write_concept(
+    data: Generator[list[dict[str, Any]]], output_path: str, config: dict, version=None
+):
+    """Takes unzipped data file and writes it to a JSON file in TermConcept format.
 
-    return columns
-
-
-def omop_concept_row():
-    columns = {
-        "concept_curie": "OMOP:0",
-        "concept_id": 0,
-        "display": "No matching concept",
-        "vocabulary_prefix": "OMOP",
-        "definition": "No matching concept",
-        "concept_code": 0,
-    }
-    return columns
-
-
-loader = LinkMLModelLoader(
-    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
-    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
-    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-    table_prefix="term_{}",  # note the `{}` -- see Gotchas below
-    schema_name="dev_include_access",
-).load()
-assert loader.module is not None, "LinkML model failed to load"
-Base = loader.module.Base
-
-
-def load_concept(data, config: dict, replacement=None):
-    """Loads both Concept and DeprecatedConcept tables"""
-
-    with loader.create_session() as session:
+    Arguments:
+        data: Unzipped data file.
+        output_path: The path to write the JSON file.
+    """
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w") as o:
         for chunk in data:
-            concepts = []
-            deprecated_concepts = []
             for row in chunk:
-                concepts.append(Concept(**concept_rows(row, config)))
-                if row.get("invalid_reason"):
-                    deprecated_concepts.append(
-                        DeprecatedConcept(
-                            **deprecated_concept_rows(row, config, replacement)
-                        )
-                    )
-            session.add_all(concepts)
-            session.add_all(deprecated_concepts)
-            session.commit()
+                o.writelines(json.dumps(concept_rows(row, config, version)) + "\n")
 
 
-def load_vocab(data, config: dict):
-    with loader.create_session() as session:
+def write_vocab(data: Generator[list[dict[str, Any]]], output_path: str, config: dict):
+    """Takes unzipped data file and writes it to a JSON file in TermOntology format.
+
+    Arguments:
+        data: Unzipped data file.
+        output_path: The path to write the JSON file.
+    """
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w") as o:
         for chunk in data:
-            vocabs = [Vocabulary(**vocab_rows(row, config)) for row in chunk]
-            session.add_all(vocabs)
-            session.commit()
-
-
-def create_omop_fallback():
-    """Builds 'OMOP' vocabulary for updated codes to fall back to 'OMOP:0' if they do not have a replacement"""
-    with loader.create_session() as session:
-        vocab = [Vocabulary(**omop_vocab_row())]
-        session.add_all(vocab)
-        session.commit()
-
-        # Create the fallback deprecated concept
-    with loader.create_session() as session:
-        concept = [Concept(**omop_concept_row())]
-        session.add_all(concept)
-        session.commit()
+            for row in chunk:
+                o.writelines(json.dumps(vocab_rows(row, config)) + "\n")
 
 
 def extract(config_path: Path, chunk_size: int):
@@ -214,19 +178,12 @@ def extract(config_path: Path, chunk_size: int):
     Arguments:
         config_path: The specified config file to iterate.
     """
-    db_engine = get_engine(config_path)
-    Base.metadata.create_all(db_engine)
-    # The line below is commented out because replacement_curie is not required in the new model,
-    # so we do not need an OMOP fallback at this time. We are keeping the code in case it is needed in the future
-    # create_omop_fallback()
     with open(config_path) as c:
         config = yaml.safe_load(c)
-        ExtractorBase.chunk_size = int(chunk_size)
 
+        ExtractorBase.chunk_size = int(chunk_size)
     extracted_files = {}
     dirs_to_cleanup = []
-    all_replacements = {}
-    owl_replacements = {}
 
     for vocab in config["vocabularies"]:
         source_type = vocab["source_type"]
@@ -248,33 +205,18 @@ def extract(config_path: Path, chunk_size: int):
             if filename is not None:
                 extracted_files[filename] = extractor.temp_dir
 
-        print(f"Starting vocabulary: {vocabulary_id}", flush=True)
+        version = extractor.get_version(vocabulary_id)
 
-        replacement = extractor.get_replacement(vocab)
-        if replacement:
-            all_replacements.update(replacement)
-
-        load_vocab(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
-            config=vocab,
-        )
-
-        print("Starting concept load...", flush=True)
-
-        load_concept(
+        write_concept(
             extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
+            f"output/{vocabulary_id}_concept.jsonl",
             config=vocab,
-            replacement=replacement,
+            version=version,
         )
-        print("Concept load finished.", flush=True)
-        if source_type.upper() == "OWL":
-            for chunk in extractor.extract_data(
-                vocabulary_id=vocabulary_id, data_type="DEPRECATED_CONCEPT"
-            ):
-                for row in chunk:
-                    if row.get("replacement_curie"):
-                        owl_replacements[row["concept_curie"]] = row[
-                            "replacement_curie"
-                        ]
+        write_vocab(
+            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
+            f"output/{vocabulary_id}_vocabulary.jsonl",
+            config=vocab,
+        )
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)

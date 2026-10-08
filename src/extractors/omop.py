@@ -5,7 +5,6 @@ from collections.abc import Generator
 from typing import Any
 
 from extractors import ExtractorBase
-from utils import format_code
 
 
 class OmopExtractor(ExtractorBase):
@@ -28,6 +27,7 @@ class OmopExtractor(ExtractorBase):
             return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        print("Cleaning up resource now!")
         self.temp_obj.cleanup()
         return False
 
@@ -40,62 +40,16 @@ class OmopExtractor(ExtractorBase):
                 return row.get("vocabulary_version")
         return None
 
-    def get_replacement(self, config) -> dict[str, str]:
-        concept_rows = {}
-        for chunk in self.extract_data(vocabulary_id="", data_type="CONCEPT"):
-            for row in chunk:
-                concept_id = row.get("concept_id")
-                if concept_id:
-                    concept_rows[concept_id] = row
-
-        vocab_id = (config.get("vocabulary_id") or config.get("prefix", "")).upper()
-
-        replacement = {}
-
-        for chunk in self.extract_data(
-            vocabulary_id="", data_type="CONCEPT_RELATIONSHIP"
-        ):
-            for row in chunk:
-                if row.get("relationship_id") != "Concept replaced by":
-                    continue
-
-                old_id = row.get("concept_id_1")
-                new_id = row.get("concept_id_2")
-                if not (old_id and new_id):
-                    continue
-
-                old_row = concept_rows.get(old_id)
-                if (
-                    not old_row
-                    or (old_row.get("vocabulary_id") or "").upper() != vocab_id
-                ):
-                    continue
-
-                replacement_row = concept_rows.get(new_id)
-                if not replacement_row:
-                    replacement[old_id] = "OMOP:0"
-                    continue
-
-                try:
-                    replacement[old_id] = format_code(replacement_row, config)
-                except ValueError:
-                    replacement[old_id] = "OMOP:0"
-
-        return replacement
-
     def extract_data(
         self, vocabulary_id: str, data_type: str
     ) -> Generator[list[dict[str, Any]], None, None]:
         chunk = []
-        upper_vocab = vocabulary_id.upper() if vocabulary_id else None
+        upper_vocab = vocabulary_id.upper()
         file_path = f"{self.temp_dir}/{data_type}.csv"
         with open(file_path, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
-                if (
-                    upper_vocab is None
-                    or row.get("vocabulary_id", "").upper() == upper_vocab
-                ):
+                if row.get("vocabulary_id", "").upper() == upper_vocab:
                     chunk.append(row)
                     if len(chunk) == ExtractorBase.chunk_size:
                         yield chunk

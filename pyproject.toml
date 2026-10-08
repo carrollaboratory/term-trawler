@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "term-trawler"
 description = "Terminology collection script"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
 ]
@@ -14,12 +14,7 @@ classifiers = [
 dependencies = [
     "requests",
     "PyYAML",
-    "sqlalchemy>=2.0.51",
-    "car-utils",
-    "rich>=15.0.0",
-    "psycopg2-binary>=2.9.12",
-    "common-access-model",
-    "py-horned-owl>=2.0.0",
+    #"oxrdflib"
 ]
 dynamic = ["version"]
 
@@ -42,10 +37,6 @@ where = ["src"]  # list of folders that contain the packages (["."] by default)
 
 [tool.setuptools.package-data]
 "*" = ["*.yaml"]
-
-[tool.uv.sources]
-common-access-model = { url = "https://github.com/include-dcc/common-access-model/releases/download/v0.2.0/common_access_model-0.2.0-py3-none-any.whl" }
-car-utils = { git = "https://github.com/carrollaboratory/car-utils.git" }
 
 [project.scripts]
 trawler = "trawler:exec"

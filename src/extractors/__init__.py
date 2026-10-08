@@ -22,10 +22,6 @@ class ExtractorBase(ABC):
         pass
 
     @abstractmethod
-    def get_replacement(self, config) -> dict[str, str]:
-        return {}
-
-    @abstractmethod
     def __enter__(self):
         print("Opening resource...")
         return self

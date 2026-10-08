@@ -4,10 +4,9 @@ from argparse import ArgumentParser  # , FileType
 from importlib.metadata import version
 from pathlib import Path
 
-from car_utils import setup_logging
-
 from extraction_loop import extract
 from extractors import ExtractorBase
+from ttrawler import init_logging
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +29,7 @@ def exec():
     parser.add_argument(
         "-c",
         "--config",
-        default="config.yaml",
+        default="dev.yaml",
         required=False,
         help="Configuration file specifying vocabularies to load and warehouse for loading.",
     )
@@ -48,8 +47,9 @@ def exec():
     if not config_path.exists():
         parser.error(f"{config_path} file not found.")
     # Initialize the logger with whatever the user requested
-    setup_logging(level=args.log_level)
+    init_logging(args.log_level)
     logger.info(f"You have chosen to use: {args}")
+
     extract(config_path, chunk_size=args.chunk)
 
 
