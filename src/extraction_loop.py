@@ -106,8 +106,8 @@ def vocab_rows(row: dict[str, str | None], config: dict):
 
     vocabulary = {
         "vocabulary_id": row.get("vocabulary_id") or config.get("prefix", ""),
-        "name": row["vocabulary_name"] or config.get("vocabulary_name", ""),
-        "version": row["vocabulary_version"],
+        "name": row.get("vocabulary_name") or config.get("vocabulary_name", ""),
+        "version": row.get("vocabulary_version"),
     }
 
     for source, dest in columns.items():
@@ -245,7 +245,7 @@ def extract(config_path: Path, chunk_size: int):
             extractor = extractor_type(vocab)
             extractor.__enter__()
             dirs_to_cleanup.append(extractor)
-            if filename is not None:
+            if filename is not None and extractor.temp_dir is not None:
                 extracted_files[filename] = extractor.temp_dir
 
         print(f"Starting vocabulary: {vocabulary_id}", flush=True)
