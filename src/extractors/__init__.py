@@ -9,7 +9,7 @@ class ExtractorBase(ABC):
 
     def __init__(self, config: dict):
         self.config = config
-        self.temp_dir: str
+        self.temp_dir: str | None = None
 
     @abstractmethod
     def extract_data(
@@ -37,7 +37,8 @@ class ExtractorBase(ABC):
         return False
 
 
+from .fhir import FhirExtractor
 from .omop import OmopExtractor
 from .owl import OwlExtractor
 
-__all__ = ["ExtractorBase", "OmopExtractor", "OwlExtractor"]
+__all__ = ["ExtractorBase", "FhirExtractor", "OmopExtractor", "OwlExtractor"]
