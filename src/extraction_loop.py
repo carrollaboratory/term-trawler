@@ -173,6 +173,7 @@ def load_concept(data, config: dict, replacement=None):
             for row in chunk:
                 concepts.append(Concept(**concept_rows(row, config)))
                 if row.get("invalid_reason"):
+                    print(row)
                     deprecated_concepts.append(
                         DeprecatedConcept(
                             **deprecated_concept_rows(row, config, replacement)
