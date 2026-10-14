@@ -114,9 +114,9 @@ def vocab_rows(row: dict[str, str | None], config: dict):
         if source in config:
             vocabulary[dest] = config[source]
 
-    if config.get("archive_filename"):
+    if config.get("source_filename"):
         vocabulary["vocabulary_source"] = (
-            f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
+            f"{config.get('source_type')} - {Path(config['source_filename']).name}"
         )
     else:
         vocabulary["vocabulary_source"] = (
@@ -168,47 +168,42 @@ def load_concept(data, config: dict, replacement=None):
 
     with loader.create_session() as session:
         for chunk in data:
-            concepts = []
-            deprecated_concepts = []
             for row in chunk:
-                concepts.append(Concept(**concept_rows(row, config)))
+                session.merge(Concept(**concept_rows(row, config)))
                 if row.get("invalid_reason"):
-                    deprecated_concepts.append(
+                    session.merge(
                         DeprecatedConcept(
                             **deprecated_concept_rows(row, config, replacement)
                         )
                     )
-            session.add_all(concepts)
-            session.add_all(deprecated_concepts)
+
             session.commit()
 
 
 def load_vocab(data, config: dict):
     with loader.create_session() as session:
         for chunk in data:
-            vocabs = [Vocabulary(**vocab_rows(row, config)) for row in chunk]
-            session.add_all(vocabs)
+            for row in chunk:
+                session.merge(Vocabulary(**vocab_rows(row, config)))
             session.commit()
 
 
 def create_omop_fallback():
     """Builds 'OMOP' vocabulary for updated codes to fall back to 'OMOP:0' if they do not have a replacement"""
     with loader.create_session() as session:
-        vocab = [Vocabulary(**omop_vocab_row())]
-        session.add_all(vocab)
+        session.merge(Vocabulary(**omop_vocab_row()))
         session.commit()
 
         # Create the fallback deprecated concept
     with loader.create_session() as session:
-        concept = [Concept(**omop_concept_row())]
-        session.add_all(concept)
+        session.merge(Concept(**omop_concept_row()))
         session.commit()
 
 
 def extract(config_path: Path, chunk_size: int):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
-    Creates a collection of archive filenames and only runs the extractor
+    Creates a collection of filenames and only runs the extractor
     on unique filenames to avoid duplicates.
 
     Arguments:
@@ -236,7 +231,7 @@ def extract(config_path: Path, chunk_size: int):
             continue
 
         vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
-        filename = vocab.get("archive_filename")
+        filename = vocab.get("source_filename")
 
         if filename is not None and filename in extracted_files:
             extractor = extractor_type(vocab)

@@ -1,6 +1,8 @@
 import json
 from collections.abc import Generator
 from typing import Any
+from urllib.parse import urlparse
+from urllib.request import urlopen
 
 from extractors import ExtractorBase
 from utils import format_code
@@ -11,7 +13,7 @@ class FhirExtractor(ExtractorBase):
 
     def __init__(self, config: dict):
         super().__init__(config)
-        self.filename = config["archive_filename"]
+        self.filename = config["source_filename"]
 
     def __enter__(self):
         return self
@@ -28,8 +30,12 @@ class FhirExtractor(ExtractorBase):
     def extract_data(
         self, vocabulary_id: str, data_type: str
     ) -> Generator[list[dict[str, Any]], None, None]:
-        with open(self.filename) as f:
-            j = json.load(f)
+        if urlparse(self.filename).scheme in ("http", "https"):
+            with urlopen(self.filename) as f:
+                j = json.loads(f.read().decode())
+        else:
+            with open(self.filename) as f:
+                j = json.load(f)
         if data_type == "VOCABULARY":
             yield [
                 {
