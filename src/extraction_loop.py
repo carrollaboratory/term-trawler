@@ -190,16 +190,17 @@ def load_concept(data, config: dict, replacement=None):
             for row in chunk:
                 c = concept_rows(row, config)
                 concepts[c["concept_curie"]] = c
+                # If "invalid_reason" in row, builds DeprecatedConcept dict
                 if row.get("invalid_reason"):
                     d = deprecated_concept_rows(row, config, replacement)
                     deprecated[d["concept_curie"]] = d
-
             if concepts:
                 upsert_concepts(session, concepts)
-
+            # Loads existing deprecated rows, updates them, or adds new ones
             if deprecated:
                 existing_dep = {
                     r.concept_curie: r
+                    # scalars() returns the deprecated objects directly from the row
                     for r in session.scalars(
                         select(DeprecatedConcept).where(
                             DeprecatedConcept.concept_curie.in_(list(deprecated))
@@ -208,6 +209,7 @@ def load_concept(data, config: dict, replacement=None):
                 }
                 for k, d in deprecated.items():
                     if k in existing_dep:
+                        # If a curie already exists in deprecated concepts, setattr copies the new values from d onto that row
                         for attr, value in d.items():
                             setattr(existing_dep[k], attr, value)
                     else:
