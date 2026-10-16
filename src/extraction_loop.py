@@ -9,6 +9,8 @@ from common_access_model.datamodel.common_access_model_sqla import (
     DeprecatedConcept,
     Vocabulary,
 )
+from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
 
 import extractors
 from extractors import ExtractorBase
@@ -163,19 +165,53 @@ assert loader.module is not None, "LinkML model failed to load"
 Base = loader.module.Base
 
 
-def load_concept(data, config: dict, replacement=None):
-    """Loads both Concept and DeprecatedConcept tables"""
+def upsert_concepts(session, rows: dict[str, dict]):
+    # Multi-row inserts need identical keys in every row, so fill gaps with None (e.g. display vs definition)
+    keys = {k for r in rows.values() for k in r}
+    values = [{k: r.get(k) for k in keys} for r in rows.values()]
+    # Builds INSERT with every row in the chunk
+    stmt = insert(Concept.__table__).values(values)
+    # Updates row if it already exists
+    stmt = stmt.on_conflict_do_update(
+        index_elements=["concept_curie"],
+        # Sets row excluded due to pre-existence/conflict in last step to the value of the new row
+        set_={k: stmt.excluded[k] for k in keys if k != "concept_curie"},
+    )
+    session.execute(stmt)
 
+
+def load_concept(data, config: dict, replacement=None):
+    """Loads both Concept and DeprecatedConcept tables."""
     with loader.create_session() as session:
+        # Builds one dict per concept
         for chunk in data:
+            concepts = {}
+            deprecated = {}
             for row in chunk:
-                session.merge(Concept(**concept_rows(row, config)))
+                c = concept_rows(row, config)
+                concepts[c["concept_curie"]] = c
                 if row.get("invalid_reason"):
-                    session.merge(
-                        DeprecatedConcept(
-                            **deprecated_concept_rows(row, config, replacement)
+                    d = deprecated_concept_rows(row, config, replacement)
+                    deprecated[d["concept_curie"]] = d
+
+            if concepts:
+                upsert_concepts(session, concepts)
+
+            if deprecated:
+                existing_dep = {
+                    r.concept_curie: r
+                    for r in session.scalars(
+                        select(DeprecatedConcept).where(
+                            DeprecatedConcept.concept_curie.in_(list(deprecated))
                         )
                     )
+                }
+                for k, d in deprecated.items():
+                    if k in existing_dep:
+                        for attr, value in d.items():
+                            setattr(existing_dep[k], attr, value)
+                    else:
+                        session.add(DeprecatedConcept(**d))
 
             session.commit()
 
