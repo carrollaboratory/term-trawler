@@ -9,6 +9,8 @@ from common_access_model.datamodel.common_access_model_sqla import (
     DeprecatedConcept,
     Vocabulary,
 )
+from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
 
 import extractors
 from extractors import ExtractorBase
@@ -114,9 +116,9 @@ def vocab_rows(row: dict[str, str | None], config: dict):
         if source in config:
             vocabulary[dest] = config[source]
 
-    if config.get("archive_filename"):
+    if config.get("source_filename"):
         vocabulary["vocabulary_source"] = (
-            f"{config.get('source_type')} - {Path(config['archive_filename']).name}"
+            f"{config.get('source_type')} - {Path(config['source_filename']).name}"
         )
     else:
         vocabulary["vocabulary_source"] = (
@@ -156,59 +158,90 @@ loader = LinkMLModelLoader(
     database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
     f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
     model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-    table_prefix="term_{}",  # note the `{}` -- see Gotchas below
+    table_prefix="{}",  # note the `{}` -- see Gotchas below
     schema_name="dev_include_access",
 ).load()
 assert loader.module is not None, "LinkML model failed to load"
 Base = loader.module.Base
 
 
-def load_concept(data, config: dict, replacement=None):
-    """Loads both Concept and DeprecatedConcept tables"""
+def upsert_concepts(session, rows: dict[str, dict]):
+    # Multi-row inserts need identical keys in every row, so fill gaps with None (e.g. display vs definition)
+    keys = {k for r in rows.values() for k in r}
+    values = [{k: r.get(k) for k in keys} for r in rows.values()]
+    # Builds INSERT with every row in the chunk
+    stmt = insert(Concept.__table__).values(values)
+    # Updates row if it already exists
+    stmt = stmt.on_conflict_do_update(
+        index_elements=["concept_curie"],
+        # Sets row excluded due to pre-existence/conflict in last step to the value of the new row
+        set_={k: stmt.excluded[k] for k in keys if k != "concept_curie"},
+    )
+    session.execute(stmt)
 
+
+def load_concept(data, config: dict, replacement=None):
+    """Loads both Concept and DeprecatedConcept tables."""
     with loader.create_session() as session:
+        # Builds one dict per concept
         for chunk in data:
-            concepts = []
-            deprecated_concepts = []
+            concepts = {}
+            deprecated = {}
             for row in chunk:
-                concepts.append(Concept(**concept_rows(row, config)))
+                c = concept_rows(row, config)
+                concepts[c["concept_curie"]] = c
+                # If "invalid_reason" in row, builds DeprecatedConcept dict
                 if row.get("invalid_reason"):
-                    deprecated_concepts.append(
-                        DeprecatedConcept(
-                            **deprecated_concept_rows(row, config, replacement)
+                    d = deprecated_concept_rows(row, config, replacement)
+                    deprecated[d["concept_curie"]] = d
+            if concepts:
+                upsert_concepts(session, concepts)
+            # Loads existing deprecated rows, updates them, or adds new ones
+            if deprecated:
+                existing_dep = {
+                    r.concept_curie: r
+                    # scalars() returns the deprecated objects directly from the row
+                    for r in session.scalars(
+                        select(DeprecatedConcept).where(
+                            DeprecatedConcept.concept_curie.in_(list(deprecated))
                         )
                     )
-            session.add_all(concepts)
-            session.add_all(deprecated_concepts)
+                }
+                for k, d in deprecated.items():
+                    if k in existing_dep:
+                        # If a curie already exists in deprecated concepts, setattr copies the new values from d onto that row
+                        for attr, value in d.items():
+                            setattr(existing_dep[k], attr, value)
+                    else:
+                        session.add(DeprecatedConcept(**d))
+
             session.commit()
 
 
 def load_vocab(data, config: dict):
     with loader.create_session() as session:
         for chunk in data:
-            vocabs = [Vocabulary(**vocab_rows(row, config)) for row in chunk]
-            session.add_all(vocabs)
+            for row in chunk:
+                session.merge(Vocabulary(**vocab_rows(row, config)))
             session.commit()
 
 
 def create_omop_fallback():
     """Builds 'OMOP' vocabulary for updated codes to fall back to 'OMOP:0' if they do not have a replacement"""
     with loader.create_session() as session:
-        vocab = [Vocabulary(**omop_vocab_row())]
-        session.add_all(vocab)
+        session.merge(Vocabulary(**omop_vocab_row()))
         session.commit()
 
         # Create the fallback deprecated concept
     with loader.create_session() as session:
-        concept = [Concept(**omop_concept_row())]
-        session.add_all(concept)
+        session.merge(Concept(**omop_concept_row()))
         session.commit()
 
 
 def extract(config_path: Path, chunk_size: int):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
-    Creates a collection of archive filenames and only runs the extractor
+    Creates a collection of filenames and only runs the extractor
     on unique filenames to avoid duplicates.
 
     Arguments:
@@ -236,7 +269,7 @@ def extract(config_path: Path, chunk_size: int):
             continue
 
         vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
-        filename = vocab.get("archive_filename")
+        filename = vocab.get("source_filename")
 
         if filename is not None and filename in extracted_files:
             extractor = extractor_type(vocab)
