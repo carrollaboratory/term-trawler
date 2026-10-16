@@ -1,5 +1,7 @@
+import csv
 import logging
 import os
+from datetime import datetime
 from pathlib import Path
 
 import yaml
@@ -9,7 +11,7 @@ from common_access_model.datamodel.common_access_model_sqla import (
     DeprecatedConcept,
     Vocabulary,
 )
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert
 
 import extractors
@@ -28,6 +30,8 @@ EXTRACTORS = {
     )  # Confirm that it is a child class of the ExtractorBase
     and obj is not extractors.ExtractorBase  # Avoid capturing the parent class itself.
 }
+
+REPORT_DIR = Path("count_reports")
 
 
 def concept_rows(row: dict[str, str | None], config: dict):
@@ -238,6 +242,66 @@ def create_omop_fallback():
         session.commit()
 
 
+def count_concepts(session) -> dict[str, int]:
+    """Returns {vocbulary_prefix: number of concepts} for the Concept table"""
+    rows = session.execute(
+        select(Concept.vocabulary_prefix, func.count()).group_by(
+            Concept.vocabulary_prefix
+        )
+    )
+    return {prefix: count for prefix, count in rows}
+
+
+def build_count_report(before: dict[str, int], after: dict[str, int]) -> list[dict]:
+    """Build one row per ontology comparing concept counts before and after the load"""
+    # Union of both, so ontologies that are new or deleted still get a row
+    rows = []
+    for prefix in sorted(set(before) | set(after)):
+        prev = before.get(prefix, 0)
+        curr = after.get(prefix, 0)
+        if prefix not in before:
+            note = "NEW"
+        elif prefix not in after:
+            note = "REMOVED"
+        else:
+            note = ""
+        rows.append(
+            {
+                "prefix": prefix,
+                "prev": prev,
+                "current": curr,
+                "change": curr - prev,
+                "note": note,
+            }
+        )
+    return rows
+
+
+def format_count_report(rows: list[dict]) -> str:
+    """Format the count report rows as an aligned table"""
+    lines = [f"{'Prefix':<22}{'Prev':>14}{'Current':>14}{'Change':>12}  Note"]
+    for r in rows:
+        lines.append(
+            f"{r['prefix']:<22}{r['prev']:>14,}{r['current']:>14,}"
+            f"{r['change']:>+12,}  {r['note']}"
+        )
+    return "\n".join(lines)
+
+
+def print_count_report(rows: list[dict]):
+    """Print the report as an aligned table"""
+    print(format_count_report(rows))
+
+
+def write_count_report(rows: list[dict], report_dir: Path = REPORT_DIR) -> Path:
+    """Write count report to a timestamped CSV"""
+    report_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    path = report_dir / f"concept_counts_{timestamp}.tsv"
+    path.write_text(format_count_report(rows) + "\n")
+    return path
+
+
 def extract(config_path: Path, chunk_size: int):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
@@ -249,6 +313,9 @@ def extract(config_path: Path, chunk_size: int):
     """
     db_engine = get_engine(config_path)
     Base.metadata.create_all(db_engine)
+
+    with loader.create_session() as session:
+        before = count_concepts(session)
     # The line below is commented out because replacement_curie is not required in the new model,
     # so we do not need an OMOP fallback at this time. We are keeping the code in case it is needed in the future
     # create_omop_fallback()
@@ -309,5 +376,11 @@ def extract(config_path: Path, chunk_size: int):
                         owl_replacements[row["concept_curie"]] = row[
                             "replacement_curie"
                         ]
+    with loader.create_session() as session:
+        after = count_concepts(session)
+    report = build_count_report(before, after)
+    print_count_report(report)
+    report_path = write_count_report(report)
+    logger.info(f"Wrote count report to {report_path}")
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
