@@ -158,7 +158,7 @@ loader = LinkMLModelLoader(
     database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
     f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
     model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-    table_prefix="term_{}",  # note the `{}` -- see Gotchas below
+    table_prefix="{}",  # note the `{}` -- see Gotchas below
     schema_name="dev_include_access",
 ).load()
 assert loader.module is not None, "LinkML model failed to load"
