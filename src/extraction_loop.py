@@ -1,4 +1,3 @@
-import csv
 import logging
 import os
 from datetime import datetime
@@ -297,16 +296,14 @@ def print_count_report(rows: list[dict]):
     print(format_count_report(rows))
 
 
-def write_count_report(rows: list[dict], report_dir: Path = REPORT_DIR) -> Path:
+def write_count_report(rows: list[dict], output: Path) -> Path:
     """Write count report to a timestamped CSV"""
-    report_dir.mkdir(parents=True, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    path = report_dir / f"concept_counts_{timestamp}.tsv"
-    path.write_text(format_count_report(rows) + "\n")
-    return path
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(format_count_report(rows) + "\n")
+    return output
 
 
-def extract(config_path: Path, chunk_size: int):
+def extract(config_path: Path, chunk_size: int, report_path: Path | None = None):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
     Creates a collection of filenames and only runs the extractor
@@ -384,7 +381,8 @@ def extract(config_path: Path, chunk_size: int):
         after = count_concepts(session)
     report = build_count_report(before, after)
     print_count_report(report)
-    report_path = write_count_report(report)
-    logger.info(f"Wrote count report to {report_path}")
+    if report_path:
+        write_count_report(report, report_path)
+        logger.info(f"Wrote count report to {report_path}")
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
