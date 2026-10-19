@@ -9,7 +9,7 @@ from common_access_model.datamodel.common_access_model_sqla import (
     DeprecatedConcept,
     Vocabulary,
 )
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.dialects.postgresql import insert
 
 import extractors
@@ -166,16 +166,22 @@ Base = loader.module.Base
 
 
 def upsert_concepts(session, rows: dict[str, dict]):
+    table = Concept.__table__
     # Multi-row inserts need identical keys in every row, so fill gaps with None (e.g. display vs definition)
     keys = {k for r in rows.values() for k in r}
     values = [{k: r.get(k) for k in keys} for r in rows.values()]
+    update_cols = [k for k in keys if k != "concept_curie"]
     # Builds INSERT with every row in the chunk
-    stmt = insert(Concept.__table__).values(values)
+    stmt = insert(table).values(values)
     # Updates row if it already exists
     stmt = stmt.on_conflict_do_update(
         index_elements=["concept_curie"],
-        # Sets row excluded due to pre-existence/conflict in last step to the value of the new row
-        set_={k: stmt.excluded[k] for k in keys if k != "concept_curie"},
+        # Sets row excluded due to pre-existence/conflict to the value of the new row
+        set_={k: stmt.excluded[k] for k in update_cols},
+        # Only update if the value in an existing row is different from a value in the new row
+        where=or_(
+            *[table.c[k].is_distinct_from(stmt.excluded[k]) for k in update_cols]
+        ),
     )
     session.execute(stmt)
 
