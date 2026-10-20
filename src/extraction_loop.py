@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import datetime
 from pathlib import Path
 
 import yaml
@@ -31,6 +30,43 @@ EXTRACTORS = {
 }
 
 REPORT_DIR = Path("count_reports")
+
+loader = LinkMLModelLoader(
+    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
+    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
+    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
+    table_prefix="{}",  # note the `{}` -- see Gotchas below
+    schema_name="dev_include_access",
+).load()
+assert loader.module is not None, "LinkML model failed to load"
+Base = loader.module.Base
+
+
+def select_vocabs(config: dict, extract_vocab: str | list[str] | None) -> list[dict]:
+    vocabs = config["vocabularies"]
+    if not extract_vocab:
+        return vocabs
+    if isinstance(extract_vocab, str):
+        extract_vocab = [extract_vocab]
+    wanted = {
+        part.strip().upper()
+        for item in extract_vocab
+        for part in item.split(",")
+        if part.strip()
+    }
+
+    def names(v: dict) -> set[str]:
+        return {
+            str(v.get("prefix") or "").upper(),
+            str(v.get("vocabulary_id") or "").upper(),
+        }
+
+    selected = [v for v in vocabs if wanted & names(v)]
+    matched = set().union(*(names(v) for v in selected)) if selected else set()
+    missing = sorted(wanted - matched)
+    if missing:
+        logger.error(f"No vocabulary matching '{missing}' in config")
+    return selected
 
 
 def concept_rows(row: dict[str, str | None], config: dict):
@@ -155,17 +191,6 @@ def omop_concept_row():
         "concept_code": 0,
     }
     return columns
-
-
-loader = LinkMLModelLoader(
-    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
-    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
-    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-    table_prefix="{}",  # note the `{}` -- see Gotchas below
-    schema_name="dev_include_access",
-).load()
-assert loader.module is not None, "LinkML model failed to load"
-Base = loader.module.Base
 
 
 def upsert_concepts(session, rows: dict[str, dict]):
@@ -303,7 +328,12 @@ def write_count_report(rows: list[dict], output: Path) -> Path:
     return output
 
 
-def extract(config_path: Path, chunk_size: int, report_path: Path | None = None):
+def extract(
+    config_path: Path,
+    chunk_size: int,
+    report_path: Path | None = None,
+    extract_vocab: str | None = None,
+):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
     Creates a collection of filenames and only runs the extractor
@@ -329,7 +359,7 @@ def extract(config_path: Path, chunk_size: int, report_path: Path | None = None)
     all_replacements = {}
     owl_replacements = {}
 
-    for vocab in config["vocabularies"]:
+    for vocab in select_vocabs(config, extract_vocab):
         source_type = vocab["source_type"]
         extractor_type = EXTRACTORS.get(source_type.upper())
         if extractor_type is None:
@@ -337,6 +367,11 @@ def extract(config_path: Path, chunk_size: int, report_path: Path | None = None)
             continue
 
         vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
+        if not vocabulary_id:
+            logger.warning(
+                f"Skipping vocabulary entry with no vocabulary_id or prefix: {vocab}"
+            )
+            continue
         filename = vocab.get("source_filename")
 
         if filename is not None and filename in extracted_files:

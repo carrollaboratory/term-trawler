@@ -3,8 +3,8 @@ config := "dev.yaml"
 chunk_size := "5000"
 
 
-extract report="":
-    uv run trawler -c {{config}} -ch {{chunk_size}} {{ if report != "" { "--report " + quote(report) } else { "" } }}
+extract vocab="" report="":
+    uv run trawler -c {{config}} -ch {{chunk_size}} {{ if vocab != "" { "--vocab " + quote(vocab) } else { "" } }} {{ if report != "" { "--report " + quote(report) } else { "" } }}
 
 db:
     sudo -u postgres psql -d term_trawler
