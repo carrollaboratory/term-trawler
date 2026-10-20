@@ -272,14 +272,14 @@ def create_omop_fallback():
         session.commit()
 
 
-def count_concepts(session) -> dict[str, int]:
+def count_concepts(session, vocab_ids: set[str] | None = None) -> dict[str, int]:
     """Returns {vocbulary_prefix: number of concepts} for the Concept table"""
-    rows = session.execute(
-        select(Concept.vocabulary_prefix, func.count()).group_by(
-            Concept.vocabulary_prefix
-        )
+    stmt = select(Concept.vocabulary_prefix, func.count()).group_by(
+        Concept.vocabulary_prefix
     )
-    return {prefix: count for prefix, count in rows}
+    if vocab_ids:
+        stmt = stmt.where(Concept.vocabulary_prefix.in_(vocab_ids))
+    return dict(session.execute(stmt).all())
 
 
 def build_count_report(before: dict[str, int], after: dict[str, int]) -> list[dict]:
@@ -345,21 +345,22 @@ def extract(
     db_engine = get_engine(config_path)
     Base.metadata.create_all(db_engine)
 
+    with open(config_path) as c:
+        config = yaml.safe_load(c)
+    ExtractorBase.chunk_size = int(chunk_size)
+    selected = select_vocabs(config, extract_vocab)
+    report_ids = {v["prefix"] for v in selected if v.get("prefix")}
     with loader.create_session() as session:
-        before = count_concepts(session)
+        before = count_concepts(session, report_ids)
     # The line below is commented out because replacement_curie is not required in the new model,
     # so we do not need an OMOP fallback at this time. We are keeping the code in case it is needed in the future
     # create_omop_fallback()
-    with open(config_path) as c:
-        config = yaml.safe_load(c)
-        ExtractorBase.chunk_size = int(chunk_size)
 
     extracted_files = {}
     dirs_to_cleanup = []
     all_replacements = {}
     owl_replacements = {}
-
-    for vocab in select_vocabs(config, extract_vocab):
+    for vocab in selected:
         source_type = vocab["source_type"]
         extractor_type = EXTRACTORS.get(source_type.upper())
         if extractor_type is None:
@@ -413,7 +414,7 @@ def extract(
                             "replacement_curie"
                         ]
     with loader.create_session() as session:
-        after = count_concepts(session)
+        after = count_concepts(session, report_ids)
     report = build_count_report(before, after)
     print_count_report(report)
     if report_path:
