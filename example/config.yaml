@@ -8,7 +8,7 @@ vocabularies:
     prefix: "snomedct"
     fhir_system: "http://snomed.info/sct"
     vocabulary_uri: "http://snomed.info/id/[code]"
-    archive_filename: # path to zip file with ontology
+    source_filename: # path to zip file with ontology
     source_type: "OMOP"
   - vocabulary_id: "HPO"
     vocabulary_name: "Human Phenotype Ontology"
@@ -16,7 +16,7 @@ vocabularies:
     prefix: "HP"
     fhir_system: "http://human-phenotype-ontology.org"
     vocabulary_uri: "http://purl.obolibrary.org/obo/[code]"
-    archive_filename: # path to zip file with ontology
+    source_filename: # path to zip file with ontology
     source_type: "OMOP"
   - vocabulary_id: "LOINC"
     vocabulary_name: "Logical Observation Identifiers Names and Codes"
@@ -24,7 +24,7 @@ vocabularies:
     prefix: "loinc"
     fhir_system: "http://loinc.org"
     vocabulary_uri: "http://loinc.org/rdf/[code]"
-    archive_filename: # path to zip file with ontology
+    source_filename: # path to zip file with ontology
     source_type: "OMOP"
   - vocabulary_name: "EDAM - The ontology of data analysis and management"
     description: "EDAM is a comprehensive ontology of well-established, familiar concepts that are prevalent within scientific data analysis and data management (both within and beyond life sciences and imaging)."
@@ -41,3 +41,11 @@ vocabularies:
     owl_file: "http://purl.org/ga4gh/kin.owl"
     ssl_no_verify: true # must be set for KIN ontology to open the OWL file while on VPN
     source_type: "OWL"
+  - vocabulary_id: "v3-NullFlavor"
+    vocabulary_name: "NullFlavor"
+    description: "A collection of codes specifying why a valid value is not present."
+    prefix: "v3-nullflavor"
+    fhir_system: "http://terminology.hl7.org/CodeSystem/v3-NullFlavor"
+    vocabulary_uri: "http://terminology.hl7.org/CodeSystem/v3-NullFlavor#[code]"
+    source_filename: "https://terminology.hl7.org/7.4.0/en/CodeSystem-v3-NullFlavor.json"
+    source_type: "FHIR"

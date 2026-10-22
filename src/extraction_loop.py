@@ -9,7 +9,7 @@ from common_access_model.datamodel.common_access_model_sqla import (
     DeprecatedConcept,
     Vocabulary,
 )
-from sqlalchemy import or_, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.dialects.postgresql import insert
 
 import extractors
@@ -28,6 +28,45 @@ EXTRACTORS = {
     )  # Confirm that it is a child class of the ExtractorBase
     and obj is not extractors.ExtractorBase  # Avoid capturing the parent class itself.
 }
+
+REPORT_DIR = Path("count_reports")
+
+loader = LinkMLModelLoader(
+    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
+    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
+    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
+    table_prefix="{}",  # note the `{}` -- see Gotchas below
+    schema_name="dev_include_access",
+).load()
+assert loader.module is not None, "LinkML model failed to load"
+Base = loader.module.Base
+
+
+def select_vocabs(config: dict, extract_vocab: str | list[str] | None) -> list[dict]:
+    vocabs = config["vocabularies"]
+    if not extract_vocab:
+        return vocabs
+    if isinstance(extract_vocab, str):
+        extract_vocab = [extract_vocab]
+    wanted = {
+        part.strip().upper()
+        for item in extract_vocab
+        for part in item.split(",")
+        if part.strip()
+    }
+
+    def names(v: dict) -> set[str]:
+        return {
+            str(v.get("prefix") or "").upper(),
+            str(v.get("vocabulary_id") or "").upper(),
+        }
+
+    selected = [v for v in vocabs if wanted & names(v)]
+    matched = set().union(*(names(v) for v in selected)) if selected else set()
+    missing = sorted(wanted - matched)
+    if missing:
+        logger.error(f"No vocabulary matching '{missing}' in config")
+    return selected
 
 
 def concept_rows(row: dict[str, str | None], config: dict):
@@ -154,17 +193,6 @@ def omop_concept_row():
     return columns
 
 
-loader = LinkMLModelLoader(
-    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
-    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
-    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-    table_prefix="{}",  # note the `{}` -- see Gotchas below
-    schema_name="dev_include_access",
-).load()
-assert loader.module is not None, "LinkML model failed to load"
-Base = loader.module.Base
-
-
 def upsert_concepts(session, rows: dict[str, dict]):
     table = Concept.__table__
     # Multi-row inserts need identical keys in every row, so fill gaps with None (e.g. display vs definition)
@@ -244,7 +272,68 @@ def create_omop_fallback():
         session.commit()
 
 
-def extract(config_path: Path, chunk_size: int):
+def count_concepts(session, vocab_ids: set[str] | None = None) -> dict[str, int]:
+    """Returns {vocbulary_prefix: number of concepts} for the Concept table"""
+    stmt = select(Concept.vocabulary_prefix, func.count()).group_by(
+        Concept.vocabulary_prefix
+    )
+    if vocab_ids:
+        stmt = stmt.where(Concept.vocabulary_prefix.in_(vocab_ids))
+    return dict(session.execute(stmt).all())
+
+
+def build_count_report(before: dict[str, int], after: dict[str, int]) -> list[dict]:
+    """Build one row per ontology comparing concept counts before and after the load"""
+    # Union of both, so ontologies that are new or deleted still get a row
+    rows = []
+    for prefix in sorted(set(before) | set(after)):
+        prev = before.get(prefix, 0)
+        curr = after.get(prefix, 0)
+        if prefix not in before:
+            note = "NEW"
+        else:
+            note = ""
+        rows.append(
+            {
+                "prefix": prefix,
+                "prev": prev,
+                "current": curr,
+                "change": curr - prev,
+                "note": note,
+            }
+        )
+    return rows
+
+
+def format_count_report(rows: list[dict]) -> str:
+    """Format the count report rows as an aligned table"""
+    lines = [f"{'Prefix':<22}{'Prev':>14}{'Current':>14}{'Change':>12}  Note"]
+    for r in rows:
+        lines.append(
+            f"{r['prefix']:<22}{r['prev']:>14,}{r['current']:>14,}"
+            f"{r['change']:>+12,}  {r['note']}"
+        )
+    return "\n".join(lines)
+
+
+def print_count_report(rows: list[dict]):
+    """Print the report as an aligned table"""
+    print(format_count_report(rows))
+
+
+def write_count_report(rows: list[dict], output: Path) -> Path:
+    """Write count report to a timestamped CSV"""
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(format_count_report(rows) + "\n")
+    return output
+
+
+def extract(
+    config_path: Path,
+    chunk_size: int,
+    report_path: Path | None = None,
+    extract_vocab: str | None = None,
+):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
     Creates a collection of filenames and only runs the extractor
@@ -255,19 +344,23 @@ def extract(config_path: Path, chunk_size: int):
     """
     db_engine = get_engine(config_path)
     Base.metadata.create_all(db_engine)
+
+    with open(config_path) as c:
+        config = yaml.safe_load(c)
+    ExtractorBase.chunk_size = int(chunk_size)
+    selected = select_vocabs(config, extract_vocab)
+    report_ids = {v["prefix"] for v in selected if v.get("prefix")}
+    with loader.create_session() as session:
+        before = count_concepts(session, report_ids)
     # The line below is commented out because replacement_curie is not required in the new model,
     # so we do not need an OMOP fallback at this time. We are keeping the code in case it is needed in the future
     # create_omop_fallback()
-    with open(config_path) as c:
-        config = yaml.safe_load(c)
-        ExtractorBase.chunk_size = int(chunk_size)
 
     extracted_files = {}
     dirs_to_cleanup = []
     all_replacements = {}
     owl_replacements = {}
-
-    for vocab in config["vocabularies"]:
+    for vocab in selected:
         source_type = vocab["source_type"]
         extractor_type = EXTRACTORS.get(source_type.upper())
         if extractor_type is None:
@@ -275,6 +368,11 @@ def extract(config_path: Path, chunk_size: int):
             continue
 
         vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
+        if not vocabulary_id:
+            logger.warning(
+                f"Skipping vocabulary entry with no vocabulary_id or prefix: {vocab}"
+            )
+            continue
         filename = vocab.get("source_filename")
 
         if filename is not None and filename in extracted_files:
@@ -315,5 +413,12 @@ def extract(config_path: Path, chunk_size: int):
                         owl_replacements[row["concept_curie"]] = row[
                             "replacement_curie"
                         ]
+    with loader.create_session() as session:
+        after = count_concepts(session, report_ids)
+    report = build_count_report(before, after)
+    print_count_report(report)
+    if report_path:
+        write_count_report(report, report_path)
+        logger.info(f"Wrote count report to {report_path}")
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
