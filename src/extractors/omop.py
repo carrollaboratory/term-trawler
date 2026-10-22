@@ -13,7 +13,7 @@ class OmopExtractor(ExtractorBase):
 
     def __init__(self, config: dict):
         super().__init__(config)
-        self.filename = config["archive_filename"]
+        self.filename = config["source_filename"]
 
     def __enter__(self):
         self.temp_obj = tempfile.TemporaryDirectory()

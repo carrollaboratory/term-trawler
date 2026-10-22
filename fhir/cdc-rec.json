@@ -1,0 +1,5029 @@
+{
+    "resourceType": "CodeSystem",
+    "id": "2.16.840.1.113883.6.238",
+    "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">The U.S. Centers for Disease Control and Prevention (CDC) Race and Ethnicity Code System (CDCREC) is a federal data standard for maintaining, collecting, reporting, exchanging race and ethnicity data. CDCREC is based on the U.S. Office of Management and Budget (OMB) Statistical Policy Directive No 15 (SPD 15) Revision, 1997.</div>"
+    },
+    "url": "https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238",
+    "identifier": [{ "system": "urn:oid:2.16.840.1.113883.6.238" }],
+    "version": "1.4",
+    "name": "PH_RaceAndEthnicity_CDC",
+    "title": "Race & Ethnicity - CDC",
+    "status": "active",
+    "experimental": false,
+    "publisher": "CDC NCHS (National Center for Health Statistics 3311 Toledo Road Hyattsville, Maryland 20782. Toll Free Data Inquiries 1-866-441-NCHS\r\nv1.v2.v3.1111)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.cdc.gov/nchs/about/major/dvs/icd10des.htm"
+                }
+            ]
+        }
+    ],
+    "date": "2026-05-28",
+    "description": "The U.S. Centers for Disease Control and Prevention (CDC) Race and Ethnicity Code System (CDCREC) is a federal data standard for maintaining, collecting, reporting, exchanging race and ethnicity data. CDCREC is based on the U.S. Office of Management and Budget (OMB) Statistical Policy Directive No 15 (SPD 15) Revision, 1997.",
+    "content": "complete",
+    "concept": [
+        { "code": "1000-9", "display": "Race", "definition": "NA" },
+        {
+            "code": "1002-5",
+            "display": "American Indian or Alaska Native",
+            "definition": "NA"
+        },
+        { "code": "1004-1", "display": "AMERICAN INDIAN", "definition": "NA" },
+        {
+            "code": "1006-6",
+            "display": "Abenaki Nation of Missisquoi",
+            "definition": "NA"
+        },
+        { "code": "1008-2", "display": "Algonquian", "definition": "NA" },
+        { "code": "1010-8", "display": "Apache", "definition": "NA" },
+        {
+            "code": "1011-6",
+            "display": "Chiricahua",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3169-0, Fort Sill Apache Tribe of Oklahoma"
+        },
+        {
+            "code": "1012-4",
+            "display": "Fort Sill Apache",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3169-0, Fort Sill Apache Tribe of Oklahoma"
+        },
+        {
+            "code": "1013-2",
+            "display": "Jicarilla Apache Nation, New Mexico",
+            "definition": "NA"
+        },
+        { "code": "1014-0", "display": "Lipan Apache", "definition": "NA" },
+        {
+            "code": "1015-7",
+            "display": "Mescalero Apache Tribe of the Mescalero Reservation, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1016-5",
+            "display": "Apache Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1017-3",
+            "display": "Tonto Apache Tribe of Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "1018-1",
+            "display": "San Carlos Apache Tribe of the San Carlos Reservation, Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "1019-9",
+            "display": "White Mountain Apache Tribe of the Fort Apache Reservation, Arizona",
+            "definition": "NA"
+        },
+        { "code": "1021-5", "display": "Arapaho", "definition": "NA" },
+        {
+            "code": "1022-3",
+            "display": "Northern Arapaho Tribe",
+            "definition": "NA"
+        },
+        { "code": "1023-1", "display": "Southern Arapaho", "definition": "NA" },
+        {
+            "code": "1024-9",
+            "display": "Northern Arapaho Tribe of the Wind River Reservation, Wyoming",
+            "definition": "NA"
+        },
+        {
+            "code": "1026-4",
+            "display": "Arikara (Sahnish)",
+            "definition": "NA"
+        },
+        { "code": "1028-0", "display": "Assiniboine", "definition": "NA" },
+        {
+            "code": "1030-6",
+            "display": "Assiniboine Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3024-7, Assiniboine & Sioux Tribes of the Fort Peck Indian Reservation, Montana"
+        },
+        {
+            "code": "1031-4",
+            "display": "Fort Peck Assiniboine Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3024-7, Assiniboine & Sioux Tribes of the Fort Peck Indian Reservation, Montana"
+        },
+        { "code": "1033-0", "display": "Bannock", "definition": "NA" },
+        {
+            "code": "1035-5",
+            "display": "Blackfeet Tribe of the Blackfeet Indian Reservation of Montana",
+            "definition": "NA"
+        },
+        { "code": "1037-1", "display": "Brotherton", "definition": "NA" },
+        {
+            "code": "1039-7",
+            "display": "Burt Lake Band",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3051-0, Burt Lake Band of Ottawa and Chippewa Indians"
+        },
+        { "code": "1041-3", "display": "Caddo", "definition": "NA" },
+        {
+            "code": "1042-1",
+            "display": "Caddo Nation of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1044-7", "display": "Cahuilla", "definition": "NA" },
+        {
+            "code": "1045-4",
+            "display": "Agua Caliente Band of Cahuilla Indians of the Agua Caliente Indian Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1046-2",
+            "display": "Augustine Band of Cahuilla Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1047-0",
+            "display": "Cabazon Band of Cahuilla Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1048-8",
+            "display": "Los Coyotes Band of Cahuilla and Cupeno Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1049-6",
+            "display": "Morongo Band of Mission Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1050-4",
+            "display": "Santa Rosa Band of Cahuilla Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1051-2",
+            "display": "Torres Martinez Desert Cahuilla Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1053-8",
+            "display": "California Tribes",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        {
+            "code": "1054-6",
+            "display": "Cahto Tribe of the Laytonville Rancheria",
+            "definition": "NA"
+        },
+        { "code": "1055-3", "display": "Chimariko", "definition": "NA" },
+        {
+            "code": "1056-1",
+            "display": "Federated Indians of Graton Rancheria, California",
+            "definition": "NA"
+        },
+        { "code": "1057-9", "display": "Digger", "definition": "NA" },
+        {
+            "code": "1058-7",
+            "display": "Kawaiisu",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3222-7, Kern Valley Indian Community"
+        },
+        {
+            "code": "1059-5",
+            "display": "Kern River",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3222-7, Kern Valley Indian Community"
+        },
+        {
+            "code": "1060-3",
+            "display": "Bear River Band of the Rohnerville Rancheria, California",
+            "definition": "NA"
+        },
+        { "code": "1061-1", "display": "Red Wood", "definition": "NA" },
+        {
+            "code": "1062-9",
+            "display": "Santa Rosa Indian Community of the Santa Rosa Rancheria, California",
+            "definition": "NA"
+        },
+        { "code": "1063-7", "display": "Takelma", "definition": "NA" },
+        { "code": "1064-5", "display": "Wappo", "definition": "NA" },
+        { "code": "1065-2", "display": "Yana", "definition": "NA" },
+        { "code": "1066-0", "display": "Yuki", "definition": "NA" },
+        {
+            "code": "1068-6",
+            "display": "Canadian and Latin American Indian",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1069-4 CANADIAN INDIAN; 4085-7 LATIN AMERICAN INDIAN"
+        },
+        { "code": "1069-4", "display": "CANADIAN INDIAN", "definition": "NA" },
+        {
+            "code": "1070-2",
+            "display": "Central American Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "1071-0",
+            "display": "French Canadian/French American Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "1072-8",
+            "display": "Mexican American Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "1073-6",
+            "display": "South American Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "1074-4",
+            "display": "Spanish American Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "1076-9",
+            "display": "Catawba Indian Nation (aka Catawba Indian Tribe of South Carolina)",
+            "definition": "NA"
+        },
+        { "code": "1078-5", "display": "Cayuse", "definition": "NA" },
+        {
+            "code": "1080-1",
+            "display": "Confederated Tribes of the Chehalis Reservation",
+            "definition": "NA"
+        },
+        { "code": "1082-7", "display": "Chemakuan", "definition": "NA" },
+        { "code": "1083-5", "display": "Hoh Indian Tribe", "definition": "NA" },
+        {
+            "code": "1084-3",
+            "display": "Quileute Tribe of the Quileute Reservation",
+            "definition": "NA"
+        },
+        {
+            "code": "1086-8",
+            "display": "Chemehuevi Indian Tribe of the Chemehuevi Reservation, California",
+            "definition": "NA"
+        },
+        { "code": "1088-4", "display": "Cherokee", "definition": "NA" },
+        { "code": "1089-2", "display": "Cherokee Alabama", "definition": "NA" },
+        {
+            "code": "1090-0",
+            "display": "Cherokee Tribe of Northeast Alabama",
+            "definition": "NA"
+        },
+        {
+            "code": "1091-8",
+            "display": "Cherokees of Southeast Alabama",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        {
+            "code": "1092-6",
+            "display": "Eastern Band of Cherokee Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1093-4",
+            "display": "Echota Cherokee Tribe of Alabama",
+            "definition": "NA"
+        },
+        {
+            "code": "1094-2",
+            "display": "Etowah Cherokee",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        {
+            "code": "1095-9",
+            "display": "Northern Cherokee Nation of Missouri and Arkansas",
+            "definition": "NA"
+        },
+        { "code": "1096-7", "display": "Tuscola", "definition": "NA" },
+        {
+            "code": "1097-5",
+            "display": "United Keetowah Band of Cherokee Indians in Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1098-3",
+            "display": "Western Cherokee",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3080-9, Cherokee Nation"
+        },
+        { "code": "1100-7", "display": "Shawnee Tribe", "definition": "NA" },
+        { "code": "1102-3", "display": "Cheyenne", "definition": "NA" },
+        {
+            "code": "1103-1",
+            "display": "Northern Cheyenne Tribe of the Northern Cheyenne Indian Reservation, Montana",
+            "definition": "NA"
+        },
+        {
+            "code": "1104-9",
+            "display": "Southern Cheyenne",
+            "definition": "NA"
+        },
+        {
+            "code": "1106-4",
+            "display": "Cheyenne and Arapaho Tribes, Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1108-0",
+            "display": "Chickahominy",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3086-6, Chickahominy Indian Tribe"
+        },
+        {
+            "code": "1109-8",
+            "display": "Chickahominy Indian Tribe - Eastern Division",
+            "definition": "NA"
+        },
+        {
+            "code": "1110-6",
+            "display": "Western Chickahominy",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3086-6, Chickahominy Indian Tribe"
+        },
+        {
+            "code": "1112-2",
+            "display": "The Chickasaw Nation",
+            "definition": "NA"
+        },
+        { "code": "1114-8", "display": "Chinook", "definition": "NA" },
+        { "code": "1115-5", "display": "Clatsop", "definition": "NA" },
+        {
+            "code": "1116-3",
+            "display": "Columbia River Chinook",
+            "definition": "NA"
+        },
+        { "code": "1117-1", "display": "Kathlamet", "definition": "NA" },
+        { "code": "1118-9", "display": "Upper Chinook", "definition": "NA" },
+        { "code": "1119-7", "display": "Wakiakum Chinook", "definition": "NA" },
+        { "code": "1120-5", "display": "Willapa Chinook", "definition": "NA" },
+        { "code": "1121-3", "display": "Wishram", "definition": "NA" },
+        { "code": "1123-9", "display": "Chippewa", "definition": "NA" },
+        {
+            "code": "1124-7",
+            "display": "Bad River Band of the Lake Superior Tribe of Chippewa Indians of the Bad River Reservation, Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1125-4",
+            "display": "Bay Mills Indian Community, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "1126-2",
+            "display": "Minnesota Chippewa Tribe, Minnesota",
+            "definition": "NA"
+        },
+        {
+            "code": "1127-0",
+            "display": "Burt Lake Chippewa",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3051-0, Burt Lake Band of Ottawa and Chippewa Indians"
+        },
+        {
+            "code": "1128-8",
+            "display": "Minnesota Chippewa Tribe - Fond du Lac Band",
+            "definition": "NA"
+        },
+        {
+            "code": "1129-6",
+            "display": "Minnesota Chippewa Tribe - Grand Portage Band",
+            "definition": "NA"
+        },
+        {
+            "code": "1130-4",
+            "display": "Grand Traverse Band of Ottawa and Chippewa Indians, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "1131-2",
+            "display": "Keweenaw",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3224-3, Keweenaw Bay Indian Community, Michigan"
+        },
+        {
+            "code": "1132-0",
+            "display": "Lac Courte Oreilles Band of Lake Superior Chippewa Indians of Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1133-8",
+            "display": "Lac du Flambeau Band of Lake Superior Chippewa Indians of the Lac du Flambeau Reservation of Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1134-6",
+            "display": "Lac Vieux Desert Band of Lake Superior Chippewa Indians of Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "1135-3",
+            "display": "Lake Superior Chippewa",
+            "definition": "NA"
+        },
+        {
+            "code": "1136-1",
+            "display": "Minnesota Chippewa Tribe - Leech Lake Band",
+            "definition": "NA"
+        },
+        {
+            "code": "1137-9",
+            "display": "Little Shell Tribe of Chippewa Indians of Montana",
+            "definition": "NA"
+        },
+        {
+            "code": "1138-7",
+            "display": "Minnesota Chippewa Tribe - Mille Lacs Band",
+            "definition": "NA"
+        },
+        {
+            "code": "1139-5",
+            "display": "Minnesota Chippewa",
+            "definition": "NA"
+        },
+        {
+            "code": "1140-3",
+            "display": "Ontonagon",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3224-3, Keweenaw Bay Indian Community, Michigan"
+        },
+        {
+            "code": "1141-1",
+            "display": "Red Cliff Band of Lake Superior Chippewa Indians of Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1142-9",
+            "display": "Red Lake Band of Chippewa Indians, Minnesota",
+            "definition": "NA"
+        },
+        {
+            "code": "1143-7",
+            "display": "Saginaw Chippewa Indian Tribe of Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "1144-5",
+            "display": "St. Croix Chippewa Indians of Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1145-2",
+            "display": "Sault Ste. Marie Tribe of Chippewa Indians, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "1146-0",
+            "display": "Sokaogon Chippewa Community, Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1147-8",
+            "display": "Turtle Mountain Band of Chippewa Indians of North Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "1148-6",
+            "display": "Minnesota Chippewa Tribe - White Earth Band",
+            "definition": "NA"
+        },
+        {
+            "code": "1150-2",
+            "display": "Chippewa Cree",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3092-4, Chippewa Cree Indians of the Rocky Boy's Reservation, Montana"
+        },
+        {
+            "code": "1151-0",
+            "display": "Rocky Boy's Chippewa Cree",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3092-4, Chippewa Cree Indians of the Rocky Boy's Reservation, Montana"
+        },
+        {
+            "code": "1153-6",
+            "display": "Chitimacha Tribe of Louisiana",
+            "definition": "NA"
+        },
+        { "code": "1155-1", "display": "Choctaw", "definition": "NA" },
+        {
+            "code": "1156-9",
+            "display": "Clifton Choctaw Tribe of Louisiana",
+            "definition": "NA"
+        },
+        {
+            "code": "1157-7",
+            "display": "Jena Band of Choctaw Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1158-5",
+            "display": "Mississippi Band of Choctaw Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1159-3",
+            "display": "Mowa Band of Choctaw Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1160-1",
+            "display": "The Choctaw Nation of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1162-7", "display": "Chumash", "definition": "NA" },
+        {
+            "code": "1163-5",
+            "display": "Santa Ynez Band of Chumash Mission Indians of the Santa Ynez Reservation, California",
+            "definition": "NA"
+        },
+        { "code": "1165-0", "display": "Clear Lake", "definition": "NA" },
+        {
+            "code": "1167-6",
+            "display": "Coeur D'Alene Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1169-2",
+            "display": "Coharie Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1171-8",
+            "display": "Colorado River Indian Tribes of the Colorado River Indian Reservation, Arizona and California",
+            "definition": "NA"
+        },
+        {
+            "code": "1173-4",
+            "display": "Confederated Tribes of the Colville Reservation",
+            "definition": "NA"
+        },
+        {
+            "code": "1175-9",
+            "display": "Comanche",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3109-6, Comanche Nation, Oklahoma"
+        },
+        {
+            "code": "1176-7",
+            "display": "Oklahoma Comanche",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3109-6, Comanche Nation, Oklahoma"
+        },
+        {
+            "code": "1178-3",
+            "display": "Confederated Tribes of the Coos, Lower Umpqua and Siuslaw Indians",
+            "definition": "NA"
+        },
+        { "code": "1180-9", "display": "Coos", "definition": "NA" },
+        {
+            "code": "1182-5",
+            "display": "Coquille Indian Tribe",
+            "definition": "NA"
+        },
+        { "code": "1184-1", "display": "Costanoan", "definition": "NA" },
+        { "code": "1186-6", "display": "Coushatta", "definition": "NA" },
+        {
+            "code": "1187-4",
+            "display": "Alabama-Coushatta Tribe of Texas",
+            "definition": "NA"
+        },
+        {
+            "code": "1189-0",
+            "display": "Cowlitz Indian Tribe",
+            "definition": "NA"
+        },
+        { "code": "1191-6", "display": "Cree", "definition": "NA" },
+        {
+            "code": "1193-2",
+            "display": "The Muscogee (Creek) Nation",
+            "definition": "NA"
+        },
+        { "code": "1194-0", "display": "Alabama Creek", "definition": "NA" },
+        {
+            "code": "1195-7",
+            "display": "Alabama-Quassarte Tribal Town",
+            "definition": "NA"
+        },
+        { "code": "1196-5", "display": "Eastern Creek", "definition": "NA" },
+        { "code": "1197-3", "display": "Eastern Muscogee", "definition": "NA" },
+        {
+            "code": "1198-1",
+            "display": "Kialegee Tribal Town",
+            "definition": "NA"
+        },
+        {
+            "code": "1199-9",
+            "display": "Lower Muskogee Creek Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1200-5",
+            "display": "Ma-Chis Lower Creek Indian Tribe of Alabama",
+            "definition": "NA"
+        },
+        {
+            "code": "1201-3",
+            "display": "Poarch Band of Creek Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1202-1",
+            "display": "Principal Creek Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1203-9",
+            "display": "The Southeastern Mvskoke Nation, Inc.",
+            "definition": "NA"
+        },
+        {
+            "code": "1204-7",
+            "display": "Thlopthlocco Tribal Town",
+            "definition": "NA"
+        },
+        { "code": "1205-4", "display": "Tuckabachee", "definition": "NA" },
+        { "code": "1207-0", "display": "Croatan", "definition": "NA" },
+        {
+            "code": "1209-6",
+            "display": "Crow Tribe of Montana",
+            "definition": "NA"
+        },
+        { "code": "1211-2", "display": "Cupeno", "definition": "NA" },
+        { "code": "1212-0", "display": "Agua Caliente", "definition": "NA" },
+        {
+            "code": "1214-6",
+            "display": "Delaware",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3134-4, Delaware (Lenni-Lenape)"
+        },
+        {
+            "code": "1215-3",
+            "display": "Eastern Delaware",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3136-9, Delaware Tribe of Indians"
+        },
+        {
+            "code": "1216-1",
+            "display": "Lenni-Lenape",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3134-4, Delaware (Lenni-Lenape)"
+        },
+        { "code": "1217-9", "display": "Munsee", "definition": "NA" },
+        {
+            "code": "1218-7",
+            "display": "Oklahoma Delaware",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3136-9, Delaware Tribe of Indians"
+        },
+        {
+            "code": "1219-5",
+            "display": "Ramapough Lenape Nation (Ramapough Mountain)",
+            "definition": "NA"
+        },
+        {
+            "code": "1220-3",
+            "display": "New Jersey Sand Hill Band of Indians, Inc",
+            "definition": "NA"
+        },
+        {
+            "code": "1222-9",
+            "display": "Kumeyaay (Diegueno)",
+            "definition": "NA"
+        },
+        {
+            "code": "1223-7",
+            "display": "Campo Band of Diegueno Mission Indians of the Campo Indian Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1224-5",
+            "display": "Capitan Grande Band of Diegueno Mission Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "1225-2",
+            "display": "Ewiiaapaayp Band of Kumeyaay Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1226-0",
+            "display": "La Posta Band of Diegueno Mission Indians of the La Posta Indian Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1227-8",
+            "display": "Manzanita Band of Diegueno Mission Indians of the Manzanita Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1228-6",
+            "display": "Mesa Grande Band of Diegueno Mission Indians of the Mesa Grande Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1229-4",
+            "display": "San Pasqual Band of Diegueno Mission Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "1230-2",
+            "display": "Iipay Nation of Santa Ysabel, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1231-0",
+            "display": "Sycuan Band of the Kumeyaay Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1233-6",
+            "display": "Eastern Tribes",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        { "code": "1234-4", "display": "Atakapa", "definition": "NA" },
+        { "code": "1235-1", "display": "Biloxi", "definition": "NA" },
+        { "code": "1236-9", "display": "Georgetown", "definition": "NA" },
+        { "code": "1237-7", "display": "Moor Indian", "definition": "NA" },
+        {
+            "code": "1238-5",
+            "display": "Nansemond Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1239-3",
+            "display": "Edisto Natchez-Kusso Tribe of South Carolina (Natchez Indian Tribe)",
+            "definition": "NA"
+        },
+        { "code": "1240-1", "display": "Nausu Waiwash", "definition": "NA" },
+        { "code": "1241-9", "display": "Nipmuc", "definition": "NA" },
+        {
+            "code": "1242-7",
+            "display": "Golden Hill Paugussett",
+            "definition": "NA"
+        },
+        {
+            "code": "1243-5",
+            "display": "Pocomoke Acohonock",
+            "definition": "NA"
+        },
+        {
+            "code": "1244-3",
+            "display": "Southeastern Indians",
+            "definition": "NA"
+        },
+        { "code": "1245-0", "display": "Susquehanock", "definition": "NA" },
+        {
+            "code": "1246-8",
+            "display": "Tunica-Biloxi Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1247-6",
+            "display": "Waccamaw Siouan Indian Tribe",
+            "definition": "NA"
+        },
+        { "code": "1248-4", "display": "Wicomico", "definition": "NA" },
+        { "code": "1250-0", "display": "Esselen", "definition": "NA" },
+        {
+            "code": "1252-6",
+            "display": "Fort Belknap Indian Community of the Fort Belknap Reservation of Montana",
+            "definition": "NA"
+        },
+        {
+            "code": "1254-2",
+            "display": "Three Affiliated Tribes of the Fort Berthold Reservation, North Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "1256-7",
+            "display": "Fort McDowell Yavapai Nation, Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "1258-3",
+            "display": "Shoshone-Bannock Tribes of the Fort Hall Reservation",
+            "definition": "NA"
+        },
+        { "code": "1260-9", "display": "Gabrieleno", "definition": "NA" },
+        {
+            "code": "1262-5",
+            "display": "Confederated Tribes of the Grand Ronde Community of Oregon",
+            "definition": "NA"
+        },
+        { "code": "1264-1", "display": "Gros Ventres", "definition": "NA" },
+        { "code": "1265-8", "display": "Atsina", "definition": "NA" },
+        {
+            "code": "1267-4",
+            "display": "Haliwa-Saponi Indian Tribe",
+            "definition": "NA"
+        },
+        { "code": "1269-0", "display": "Hidatsa", "definition": "NA" },
+        {
+            "code": "1271-6",
+            "display": "Hoopa Valley Tribe, California",
+            "definition": "NA"
+        },
+        { "code": "1272-4", "display": "Trinity", "definition": "NA" },
+        { "code": "1273-2", "display": "Whilkut", "definition": "NA" },
+        { "code": "1275-7", "display": "Hoopa Extension", "definition": "NA" },
+        {
+            "code": "1277-3",
+            "display": "United Houma Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1279-9",
+            "display": "Inaja Band of Diegueno Mission Indians of the Inaja and Cosmit Reservation, California",
+            "definition": "NA"
+        },
+        { "code": "1281-5", "display": "Iowa (Tribe)", "definition": "NA" },
+        {
+            "code": "1282-3",
+            "display": "Iowa Tribe of Kansas and Nebraska",
+            "definition": "NA"
+        },
+        {
+            "code": "1283-1",
+            "display": "Iowa Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1285-6", "display": "Iroquois", "definition": "NA" },
+        { "code": "1286-4", "display": "Cayuga Nation", "definition": "NA" },
+        { "code": "1287-2", "display": "Mohawk", "definition": "NA" },
+        { "code": "1288-0", "display": "Oneida", "definition": "NA" },
+        { "code": "1289-8", "display": "Onondaga Nation", "definition": "NA" },
+        {
+            "code": "1290-6",
+            "display": "Seneca",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3472-8, Seneca Nation of Indians"
+        },
+        {
+            "code": "1291-4",
+            "display": "Seneca Nation",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3472-8, Seneca Nation of Indians"
+        },
+        {
+            "code": "1292-2",
+            "display": "Seneca-Cayuga Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1293-0",
+            "display": "Tonawanda Band of Seneca",
+            "definition": "NA"
+        },
+        { "code": "1294-8", "display": "Tuscarora Nation", "definition": "NA" },
+        { "code": "1295-5", "display": "Wyandotte Nation", "definition": "NA" },
+        {
+            "code": "1297-1",
+            "display": "Juaneno (Acjachemem)",
+            "definition": "NA"
+        },
+        {
+            "code": "1299-7",
+            "display": "Kalispel Indian Community of the Kalispel Reservation",
+            "definition": "NA"
+        },
+        { "code": "1301-1", "display": "Karuk Tribe", "definition": "NA" },
+        {
+            "code": "1303-7",
+            "display": "Kaw Nation, Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1305-2", "display": "Kickapoo", "definition": "NA" },
+        {
+            "code": "1306-0",
+            "display": "Kickapoo Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1307-8",
+            "display": "Kickapoo Traditional Tribe of Texas",
+            "definition": "NA"
+        },
+        { "code": "1309-4", "display": "Kiowa", "definition": "NA" },
+        {
+            "code": "1310-2",
+            "display": "Kiowa Indian Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1312-8", "display": "Klallam", "definition": "NA" },
+        {
+            "code": "1313-6",
+            "display": "Jamestown S'Klallam Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1314-4",
+            "display": "Lower Elwha Tribal Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1315-1",
+            "display": "Port Gamble S'Klallam Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1317-7",
+            "display": "Klamath",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3234-2, Klamath Tribes"
+        },
+        { "code": "1319-3", "display": "Konkow", "definition": "NA" },
+        {
+            "code": "1321-9",
+            "display": "Kootenai Tribe of Idaho",
+            "definition": "NA"
+        },
+        { "code": "1323-5", "display": "Lassik", "definition": "NA" },
+        {
+            "code": "1325-0",
+            "display": "Long Island",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        { "code": "1326-8", "display": "Matinecock", "definition": "NA" },
+        { "code": "1327-6", "display": "Montauk", "definition": "NA" },
+        { "code": "1328-4", "display": "Poospatuck", "definition": "NA" },
+        {
+            "code": "1329-2",
+            "display": "Setalcott Indians",
+            "definition": "NA"
+        },
+        { "code": "1331-8", "display": "Luiseno", "definition": "NA" },
+        {
+            "code": "1332-6",
+            "display": "La Jolla Band of Luiseno Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1333-4",
+            "display": "Pala Band of Mission Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1334-2",
+            "display": "Pauma Band of Luiseno Mission Indians of the Pauma and Yuima Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1335-9",
+            "display": "Pechanga Band of Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "1336-7",
+            "display": "Soboba Band of Luiseno Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1337-5",
+            "display": "Twenty-Nine Palms Band of Mission Indians of California",
+            "definition": "NA"
+        },
+        { "code": "1338-3", "display": "Temecula", "definition": "NA" },
+        {
+            "code": "1340-9",
+            "display": "Lumbee Tribe of North Carolina",
+            "definition": "NA"
+        },
+        {
+            "code": "1342-5",
+            "display": "Lummi Tribe of the Lummi Reservation",
+            "definition": "NA"
+        },
+        { "code": "1344-1", "display": "Maidu", "definition": "NA" },
+        { "code": "1345-8", "display": "Mountain Maidu", "definition": "NA" },
+        { "code": "1346-6", "display": "Nisenen", "definition": "NA" },
+        {
+            "code": "1348-2",
+            "display": "Makah Indian Tribe of the Makah Indian Reservation",
+            "definition": "NA"
+        },
+        { "code": "1350-8", "display": "Maliseet", "definition": "NA" },
+        { "code": "1352-4", "display": "Mandan", "definition": "NA" },
+        {
+            "code": "1354-0",
+            "display": "Mattaponi Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1356-5",
+            "display": "Menominee Indian Tribe of Wisconsin",
+            "definition": "NA"
+        },
+        { "code": "1358-1", "display": "Miami (Tribe)", "definition": "NA" },
+        { "code": "1359-9", "display": "Illinois Miami", "definition": "NA" },
+        { "code": "1360-7", "display": "Indiana Miami", "definition": "NA" },
+        {
+            "code": "1361-5",
+            "display": "Miami Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1363-1",
+            "display": "Miccosukee Tribe of Indians",
+            "definition": "NA"
+        },
+        { "code": "1365-6", "display": "Micmac", "definition": "NA" },
+        { "code": "1366-4", "display": "Mi'kmaq Nation", "definition": "NA" },
+        { "code": "1368-0", "display": "Mission Indians", "definition": "NA" },
+        { "code": "1370-6", "display": "Miwok/Me-Wuk", "definition": "NA" },
+        { "code": "1372-2", "display": "Modoc Nation", "definition": "NA" },
+        {
+            "code": "1374-8",
+            "display": "Mohegan Tribe of Indians of Connecticut",
+            "definition": "NA"
+        },
+        { "code": "1376-3", "display": "Mono", "definition": "NA" },
+        { "code": "1378-9", "display": "Nanticoke", "definition": "NA" },
+        {
+            "code": "1380-5",
+            "display": "Narragansett Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1382-1",
+            "display": "Navajo",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3321-7, Navajo Nation, Arizona, New Mexico & Utah"
+        },
+        {
+            "code": "1383-9",
+            "display": "Alamo Navajo",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3321-7, Navajo Nation, Arizona, New Mexico & Utah"
+        },
+        {
+            "code": "1384-7",
+            "display": "Canoncito Navajo",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3321-7, Navajo Nation, Arizona, New Mexico & Utah"
+        },
+        {
+            "code": "1385-4",
+            "display": "Ramah Navajo",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3321-7, Navajo Nation, Arizona, New Mexico & Utah"
+        },
+        { "code": "1387-0", "display": "Nez Perce Tribe", "definition": "NA" },
+        { "code": "1389-6", "display": "Nomlaki", "definition": "NA" },
+        {
+            "code": "1391-2",
+            "display": "Northwest Tribes",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        { "code": "1392-0", "display": "Alsea", "definition": "NA" },
+        { "code": "1393-8", "display": "Celilo", "definition": "NA" },
+        { "code": "1394-6", "display": "Columbia", "definition": "NA" },
+        { "code": "1395-3", "display": "Kalapuya", "definition": "NA" },
+        { "code": "1396-1", "display": "Molalla", "definition": "NA" },
+        { "code": "1397-9", "display": "Talakamish", "definition": "NA" },
+        { "code": "1398-7", "display": "Tenino", "definition": "NA" },
+        { "code": "1399-5", "display": "Tillamook", "definition": "NA" },
+        { "code": "1400-1", "display": "Wenatchee", "definition": "NA" },
+        {
+            "code": "1401-9",
+            "display": "Yahooskin",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3234-2, Klamath Tribes"
+        },
+        {
+            "code": "1403-5",
+            "display": "Omaha Tribe of Nebraska",
+            "definition": "NA"
+        },
+        {
+            "code": "1405-0",
+            "display": "Oregon Athabascan",
+            "definition": "NA"
+        },
+        { "code": "1407-6", "display": "The Osage Nation", "definition": "NA" },
+        {
+            "code": "1409-2",
+            "display": "Otoe-Missouria Tribe of Indians, Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1411-8", "display": "Ottawa", "definition": "NA" },
+        {
+            "code": "1412-6",
+            "display": "Burt Lake Ottawa",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3051-0, Burt Lake Band of Ottawa and Chippewa Indians"
+        },
+        {
+            "code": "1413-4",
+            "display": "Michigan Ottawa",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1411-8, Ottawa"
+        },
+        {
+            "code": "1414-2",
+            "display": "Ottawa Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1416-7", "display": "Paiute", "definition": "NA" },
+        {
+            "code": "1417-5",
+            "display": "Bishop Paiute Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1418-3",
+            "display": "Bridgeport Indian Colony",
+            "definition": "NA"
+        },
+        {
+            "code": "1419-1",
+            "display": "Burns Paiute Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1420-9",
+            "display": "Cedarville Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1421-7",
+            "display": "Fort Bidwell Indian Community of the Fort Bidwell Reservation of California",
+            "definition": "NA"
+        },
+        {
+            "code": "1422-5",
+            "display": "Fort Independence Indian Community of Paiute Indians of the Fort Independence Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1423-3",
+            "display": "Kaibab Band of Paiute Indians of the Kaibab Indian Reservation, Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "1424-1",
+            "display": "Las Vegas Tribe of Paiute Indians of the Las Vegas Indian Colony, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1425-8",
+            "display": "Lone Pine Paiute-Shoshone Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1426-6",
+            "display": "Lovelock Paiute Tribe of the Lovelock Indian Colony, Nevada",
+            "definition": "NA"
+        },
+        { "code": "1427-4", "display": "Malheur Paiute", "definition": "NA" },
+        {
+            "code": "1428-2",
+            "display": "Moapa Band of Paiute Indians of the Moapa River Indian Reservation, Nevada",
+            "definition": "NA"
+        },
+        { "code": "1429-0", "display": "Northern Paiute", "definition": "NA" },
+        {
+            "code": "1430-8",
+            "display": "Big Pine Paiute Tribe of the Owens Valley",
+            "definition": "NA"
+        },
+        {
+            "code": "1431-6",
+            "display": "Pyramid Lake Paiute Tribe of the Pyramid Lake Reservation, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1432-4",
+            "display": "San Juan Southern Paiute Tribe of Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "1433-2",
+            "display": "Paiute Indian Tribe of Utah (Cedar Band of Paiutes, Kanosh Band of Paiutes, Koosharem Band of Paiutes, Indian Peaks Band of Paiutes, and Shivwits Band of Paiutes)",
+            "definition": "NA"
+        },
+        {
+            "code": "1434-0",
+            "display": "Summit Lake Paiute Tribe of Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1435-7",
+            "display": "Utu Utu Gwaitu Paiute Tribe of the Benton Paiute Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1436-5",
+            "display": "Walker River Paiute Tribe of the Walker River Reservation, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1437-3",
+            "display": "Yerington Paiute Tribe of the Yerington Colony and Campbell Ranch, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1439-9",
+            "display": "Pamunkey Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1441-5",
+            "display": "Passamaquoddy Tribe",
+            "definition": "NA"
+        },
+        { "code": "1442-3", "display": "Indian Township", "definition": "NA" },
+        {
+            "code": "1443-1",
+            "display": "Pleasant Point Passamaquoddy",
+            "definition": "NA"
+        },
+        { "code": "1445-6", "display": "Pawnee", "definition": "NA" },
+        {
+            "code": "1446-4",
+            "display": "Pawnee Nation of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1448-0", "display": "Penobscot Nation", "definition": "NA" },
+        {
+            "code": "1450-6",
+            "display": "Peoria",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3368-8, Peoria Tribe of Indians of Oklahoma"
+        },
+        {
+            "code": "1451-4",
+            "display": "Oklahoma Peoria",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3368-8, Peoria Tribe of Indians of Oklahoma"
+        },
+        { "code": "1453-0", "display": "Pequot", "definition": "NA" },
+        {
+            "code": "1454-8",
+            "display": "Mashantucket Pequot Indian Tribe",
+            "definition": "NA"
+        },
+        { "code": "1456-3", "display": "Pima", "definition": "NA" },
+        {
+            "code": "1457-1",
+            "display": "Gila River Pima-Maricopa",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3174-0, Gila River Indian Community of the Gila River Indian Reservation, Arizona"
+        },
+        {
+            "code": "1458-9",
+            "display": "Salt River Pima-Maricopa Indian Community of the Salt River Reservation, Arizona",
+            "definition": "NA"
+        },
+        { "code": "1460-5", "display": "Piscataway", "definition": "NA" },
+        {
+            "code": "1462-1",
+            "display": "Pit River Tribe, California (includes XL Ranch, Big Bend, Likely, Lookout, Montgomery Creek, and Roaring Creek Rancherias)",
+            "definition": "NA"
+        },
+        { "code": "1464-7", "display": "Pomo", "definition": "NA" },
+        { "code": "1465-4", "display": "Central Pomo", "definition": "NA" },
+        {
+            "code": "1466-2",
+            "display": "Dry Creek Rancheria Band of Pomo Indians, California",
+            "definition": "NA"
+        },
+        { "code": "1467-0", "display": "Eastern Pomo", "definition": "NA" },
+        {
+            "code": "1468-8",
+            "display": "Kashia Band of Pomo Indians of the Stewarts Point Rancheria, California",
+            "definition": "NA"
+        },
+        { "code": "1469-6", "display": "Northern Pomo", "definition": "NA" },
+        {
+            "code": "1470-4",
+            "display": "Scotts Valley Band of Pomo Indians of California",
+            "definition": "NA"
+        },
+        { "code": "1471-2", "display": "Stonyford", "definition": "NA" },
+        {
+            "code": "1472-0",
+            "display": "Elem Indian Colony of Pomo Indians of the Sulphur Bank Rancheria, California",
+            "definition": "NA"
+        },
+        { "code": "1474-6", "display": "Ponca", "definition": "NA" },
+        {
+            "code": "1475-3",
+            "display": "Ponca Tribe of Nebraska",
+            "definition": "NA"
+        },
+        {
+            "code": "1476-1",
+            "display": "Ponca Tribe of Indians of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1478-7", "display": "Potawatomi", "definition": "NA" },
+        {
+            "code": "1479-5",
+            "display": "Citizen Potawatomi Nation, Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1480-3",
+            "display": "Forest County",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3162-5, Forest County Potawatomi Community, Wisconsin"
+        },
+        {
+            "code": "1481-1",
+            "display": "Hannahville Indian Community, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "1482-9",
+            "display": "Nottawaseppi Huron Band of the Potawatomi, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "1483-7",
+            "display": "Pokagon Band of Potawatomi Indians, Michigan and Indiana",
+            "definition": "NA"
+        },
+        {
+            "code": "1484-5",
+            "display": "Prairie Band Potawatomi Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1485-2",
+            "display": "Wisconsin Potawatomi",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3162-5, Forest County Potawatomi Community, Wisconsin"
+        },
+        { "code": "1487-8", "display": "Powhatan", "definition": "NA" },
+        { "code": "1489-4", "display": "Pueblo", "definition": "NA" },
+        {
+            "code": "1490-2",
+            "display": "Pueblo of Acoma, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1491-0",
+            "display": "Arizona Tewa",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3195-5, Hopi Tribe of Arizona"
+        },
+        {
+            "code": "1492-8",
+            "display": "Pueblo of Cochiti, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1493-6",
+            "display": "Hopi",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3195-5, Hopi Tribe of Arizona"
+        },
+        {
+            "code": "1494-4",
+            "display": "Pueblo of Isleta, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1495-1",
+            "display": "Pueblo of Jemez, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1496-9",
+            "display": "Keres",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1489-4, Pueblo"
+        },
+        {
+            "code": "1497-7",
+            "display": "Pueblo of Laguna, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1498-5",
+            "display": "Pueblo of Nambe, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1499-3",
+            "display": "Pueblo of Picuris, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1500-8",
+            "display": "Piro Manso Tiwa Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1501-6",
+            "display": "Pueblo of Pojoaque, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1502-4",
+            "display": "Pueblo of San Felipe, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1503-2",
+            "display": "Pueblo of San Ildefonso, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1504-0",
+            "display": "San Juan Pueblo",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3341-5, Ohkay Owingeh, New Mexico"
+        },
+        {
+            "code": "1505-7",
+            "display": "San Juan De",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3341-5, Ohkay Owingeh, New Mexico"
+        },
+        { "code": "1506-5", "display": "San Juan", "definition": "NA" },
+        {
+            "code": "1507-3",
+            "display": "Pueblo of Sandia, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1508-1",
+            "display": "Pueblo of Santa Ana, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1509-9",
+            "display": "Pueblo of Santa Clara, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1510-7",
+            "display": "Kewa Pueblo, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1511-5",
+            "display": "Pueblo of Taos, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1512-3",
+            "display": "Pueblo of Tesuque, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1513-1",
+            "display": "Tewa",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1489-4, Pueblo"
+        },
+        {
+            "code": "1514-9",
+            "display": "Ysleta del Sur Pueblo",
+            "definition": "NA"
+        },
+        {
+            "code": "1515-6",
+            "display": "Pueblo of Zia, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1516-4",
+            "display": "Zuni Tribe of the Zuni Reservation, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "1518-0",
+            "display": "Puget Sound Salish",
+            "definition": "NA"
+        },
+        { "code": "1519-8", "display": "Duwamish", "definition": "NA" },
+        { "code": "1520-6", "display": "Kikiallus", "definition": "NA" },
+        { "code": "1521-4", "display": "Lower Skagit", "definition": "NA" },
+        {
+            "code": "1522-2",
+            "display": "Muckleshoot Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1523-0",
+            "display": "Nisqually Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1524-8",
+            "display": "Nooksack Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1525-5",
+            "display": "Port Madison",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3535-2, Suquamish Indian Tribe of the Port Madison Reservation"
+        },
+        {
+            "code": "1526-3",
+            "display": "Puyallup Tribe of the Puyallup Reservation",
+            "definition": "NA"
+        },
+        {
+            "code": "1527-1",
+            "display": "Samish Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1528-9",
+            "display": "Sauk-Suiattle Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1529-7",
+            "display": "Skokomish Indian Tribe",
+            "definition": "NA"
+        },
+        { "code": "1530-5", "display": "Skykomish", "definition": "NA" },
+        { "code": "1531-3", "display": "Snohomish", "definition": "NA" },
+        {
+            "code": "1532-1",
+            "display": "Snoqualmie Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1533-9",
+            "display": "Squaxin Island Tribe of the Squaxin Island Reservation",
+            "definition": "NA"
+        },
+        { "code": "1534-7", "display": "Steilacoom", "definition": "NA" },
+        {
+            "code": "1535-4",
+            "display": "Stillaguamish Tribe of Indians of Washington",
+            "definition": "NA"
+        },
+        {
+            "code": "1536-2",
+            "display": "Suquamish",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3535-2, Suquamish Indian Tribe of the Port Madison Reservation"
+        },
+        {
+            "code": "1537-0",
+            "display": "Swinomish Indian Tribal Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1538-8",
+            "display": "Tulalip Tribes of Washington",
+            "definition": "NA"
+        },
+        {
+            "code": "1539-6",
+            "display": "Upper Skagit Indian Tribe",
+            "definition": "NA"
+        },
+        { "code": "1541-2", "display": "Quapaw Nation", "definition": "NA" },
+        {
+            "code": "1543-8",
+            "display": "Quinault Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1545-3",
+            "display": "Rappahannock Tribe, Inc.",
+            "definition": "NA"
+        },
+        {
+            "code": "1547-9",
+            "display": "Reno-Sparks Indian Colony, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1549-5",
+            "display": "Round Valley Indian Tribes, Round Valley Reservation, California",
+            "definition": "NA"
+        },
+        { "code": "1551-1", "display": "Sac and Fox", "definition": "NA" },
+        {
+            "code": "1552-9",
+            "display": "Sac and Fox Tribe of the Mississippi in Iowa",
+            "definition": "NA"
+        },
+        {
+            "code": "1553-7",
+            "display": "Sac and Fox Nation of Missouri in Kansas and Nebraska",
+            "definition": "NA"
+        },
+        {
+            "code": "1554-5",
+            "display": "Sac and Fox Nation, Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1556-0", "display": "Salinan", "definition": "NA" },
+        { "code": "1558-6", "display": "Salish", "definition": "NA" },
+        {
+            "code": "1560-2",
+            "display": "Confederated Salish and Kootenai Tribes of the Flathead Reservation",
+            "definition": "NA"
+        },
+        { "code": "1562-8", "display": "Schaghticoke", "definition": "NA" },
+        {
+            "code": "1564-4",
+            "display": "Scott Valley",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        { "code": "1566-9", "display": "Seminole", "definition": "NA" },
+        {
+            "code": "1567-7",
+            "display": "Big Cypress",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3471-0, Seminole Tribe of Florida"
+        },
+        {
+            "code": "1568-5",
+            "display": "Brighton",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3471-0, Seminole Tribe of Florida"
+        },
+        {
+            "code": "1569-3",
+            "display": "Florida Seminole",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3471-0, Seminole Tribe of Florida"
+        },
+        {
+            "code": "1570-1",
+            "display": "Hollywood Seminole",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3471-0, Seminole Tribe of Florida"
+        },
+        {
+            "code": "1571-9",
+            "display": "The Seminole Nation of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1573-5", "display": "Serrano", "definition": "NA" },
+        {
+            "code": "1574-3",
+            "display": "Yuhaaviatam of San Manuel Nation",
+            "definition": "NA"
+        },
+        { "code": "1576-8", "display": "Shasta", "definition": "NA" },
+        { "code": "1578-4", "display": "Shawnee", "definition": "NA" },
+        {
+            "code": "1579-2",
+            "display": "Absentee-Shawnee Tribe of Indians of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1580-0",
+            "display": "Eastern Shawnee Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "1582-6",
+            "display": "Shinnecock Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1584-2",
+            "display": "Shoalwater Bay Indian Tribe of the Shoalwater Bay Indian Reservation",
+            "definition": "NA"
+        },
+        { "code": "1586-7", "display": "Shoshone", "definition": "NA" },
+        {
+            "code": "1587-5",
+            "display": "Battle Mountain",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3525-3, Te-Moak Tribe of Western Shoshone Indians of Nevada (Four constituent bands: Battle Mountain Band; Elko Band; South Fork Band and Wells Band)"
+        },
+        {
+            "code": "1588-3",
+            "display": "Duckwater Shoshone Tribe of the Duckwater Reservation, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1589-1",
+            "display": "Elko",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3525-3, Te-Moak Tribe of Western Shoshone Indians of Nevada (Four constituent bands: Battle Mountain Band; Elko Band; South Fork Band and Wells Band)"
+        },
+        {
+            "code": "1590-9",
+            "display": "Ely Shoshone Tribe of Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1591-7",
+            "display": "Confederated Tribes of the Goshute Reservation, Nevada and Utah",
+            "definition": "NA"
+        },
+        {
+            "code": "1592-5",
+            "display": "Panamint",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3540-2, Timbisha Shoshone Tribe"
+        },
+        {
+            "code": "1593-3",
+            "display": "Ruby Valley",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3525-3, Te-Moak Tribe of Western Shoshone Indians of Nevada (Four constituent bands: Battle Mountain Band; Elko Band; South Fork Band and Wells Band)"
+        },
+        {
+            "code": "1594-1",
+            "display": "Skull Valley Band of Goshute Indians of Utah",
+            "definition": "NA"
+        },
+        {
+            "code": "1595-8",
+            "display": "South Fork Shoshone",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3525-3, Te-Moak Tribe of Western Shoshone Indians of Nevada (Four constituent bands: Battle Mountain Band; Elko Band; South Fork Band and Wells Band)"
+        },
+        {
+            "code": "1596-6",
+            "display": "Te-Moak Western Shoshone",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3525-3, Te-Moak Tribe of Western Shoshone Indians of Nevada (Four constituent bands: Battle Mountain Band; Elko Band; South Fork Band and Wells Band)"
+        },
+        {
+            "code": "1597-4",
+            "display": "Timbi-Sha Shoshone",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3540-2, Timbisha Shoshone Tribe"
+        },
+        {
+            "code": "1598-2",
+            "display": "Northwestern Band of the Shoshone Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "1599-0",
+            "display": "Eastern Shoshone Tribe of the Wind River Reservation, Wyoming",
+            "definition": "NA"
+        },
+        {
+            "code": "1600-6",
+            "display": "Yomba Shoshone Tribe of the Yomba Reservation, Nevada",
+            "definition": "NA"
+        },
+        { "code": "1602-2", "display": "Shoshone Paiute", "definition": "NA" },
+        {
+            "code": "1603-0",
+            "display": "Shoshone-Paiute Tribes of the Duck Valley Reservation, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1604-8",
+            "display": "Paiute-Shoshone Tribe of the Fallon Reservation and Colony, Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1605-5",
+            "display": "Fort McDermitt Paiute and Shoshone Tribes of the Fort McDermitt Indian Reservation, Nevada and Oregon",
+            "definition": "NA"
+        },
+        {
+            "code": "1607-1",
+            "display": "Confederated Tribes of Siletz Indians of Oregon",
+            "definition": "NA"
+        },
+        { "code": "1609-7", "display": "Sioux", "definition": "NA" },
+        {
+            "code": "1610-5",
+            "display": "Blackfoot Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3085-8, Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota"
+        },
+        { "code": "1611-3", "display": "Brule Sioux", "definition": "NA" },
+        {
+            "code": "1612-1",
+            "display": "Cheyenne River Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3085-8, Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota"
+        },
+        {
+            "code": "1613-9",
+            "display": "Crow Creek Sioux Tribe of the Crow Creek Reservation, South Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "1614-7",
+            "display": "Dakota Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1609-7, Sioux"
+        },
+        {
+            "code": "1615-4",
+            "display": "Flandreau Santee Sioux Tribe of South Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "1616-2",
+            "display": "Fort Peck",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3024-7, Assiniboine & Sioux Tribes of the Fort Peck Indian Reservation, Montana"
+        },
+        {
+            "code": "1617-0",
+            "display": "Lake Traverse Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3490-0, Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota"
+        },
+        {
+            "code": "1618-8",
+            "display": "Lower Brule Sioux Tribe of the Lower Brule Reservation, South Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "1619-6",
+            "display": "Lower Sioux Indian Community in the State of Minnesota",
+            "definition": "NA"
+        },
+        {
+            "code": "1620-4",
+            "display": "Mdewakanton Sioux",
+            "definition": "NA"
+        },
+        {
+            "code": "1621-2",
+            "display": "Miniconjou",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3085-8, Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota"
+        },
+        {
+            "code": "1622-0",
+            "display": "Oglala Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3340-7, Oglala Sioux Tribe"
+        },
+        {
+            "code": "1623-8",
+            "display": "Pine Ridge Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3340-7, Oglala Sioux Tribe"
+        },
+        { "code": "1624-6", "display": "Pipestone Sioux", "definition": "NA" },
+        {
+            "code": "1625-3",
+            "display": "Prairie Island Indian Community in the State of Minnesota",
+            "definition": "NA"
+        },
+        {
+            "code": "1626-1",
+            "display": "Shakopee Mdewakanton Sioux Community of Minnesota",
+            "definition": "NA"
+        },
+        {
+            "code": "1627-9",
+            "display": "Rosebud Sioux Tribe of the Rosebud Indian Reservation, South Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "1628-7",
+            "display": "Sans Arc Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3085-8, Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota"
+        },
+        {
+            "code": "1629-5",
+            "display": "Santee Sioux Nation, Nebraska",
+            "definition": "NA"
+        },
+        {
+            "code": "1630-3",
+            "display": "Sisseton-Wahpeton",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3490-0, Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota"
+        },
+        {
+            "code": "1631-1",
+            "display": "Sisseton Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3490-0, Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota"
+        },
+        {
+            "code": "1632-9",
+            "display": "Spirit Lake Tribe, North Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "1633-7",
+            "display": "Standing Rock Sioux Tribe of North and South Dakota",
+            "definition": "NA"
+        },
+        { "code": "1634-5", "display": "Teton Sioux", "definition": "NA" },
+        {
+            "code": "1635-2",
+            "display": "Two Kettle Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3085-8, Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota"
+        },
+        {
+            "code": "1636-0",
+            "display": "Upper Sioux Community, Minnesota",
+            "definition": "NA"
+        },
+        { "code": "1637-8", "display": "Wahpekute Sioux", "definition": "NA" },
+        {
+            "code": "1638-6",
+            "display": "Wahpeton Sioux",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3490-0, Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota"
+        },
+        { "code": "1639-4", "display": "Wazhaza Sioux", "definition": "NA" },
+        {
+            "code": "1640-2",
+            "display": "Yankton Sioux Tribe of South Dakota",
+            "definition": "NA"
+        },
+        { "code": "1641-0", "display": "Yanktonai Sioux", "definition": "NA" },
+        { "code": "1643-6", "display": "Siuslaw", "definition": "NA" },
+        {
+            "code": "1645-1",
+            "display": "Spokane Tribe of the Spokane Reservation",
+            "definition": "NA"
+        },
+        {
+            "code": "1647-7",
+            "display": "Stewart",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3583-2, Washoe Tribe of Nevada & California (Carson Colony, Dresslerville Colony, Woodfords Community, Stewart Community, & Washoe Ranches)"
+        },
+        {
+            "code": "1649-3",
+            "display": "Stockbridge Munsee Community, Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1651-9",
+            "display": "Susanville Indian Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1653-5",
+            "display": "Tohono O'Odham",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3541-0, Tohono O'odham Nation of Arizona"
+        },
+        {
+            "code": "1654-3",
+            "display": "Ak-Chin Indian Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1655-0",
+            "display": "Gila Bend",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3541-0, Tohono O'odham Nation of Arizona"
+        },
+        {
+            "code": "1656-8",
+            "display": "San Xavier",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3541-0, Tohono O'odham Nation of Arizona"
+        },
+        {
+            "code": "1657-6",
+            "display": "Sells",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3541-0, Tohono O'odham Nation of Arizona"
+        },
+        { "code": "1659-2", "display": "Tolowa", "definition": "NA" },
+        {
+            "code": "1661-8",
+            "display": "Tonkawa Tribe of Indians of Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1663-4", "display": "Tygh", "definition": "NA" },
+        {
+            "code": "1665-9",
+            "display": "Confederated Tribes of the Umatilla Indian Reservation",
+            "definition": "NA"
+        },
+        { "code": "1667-5", "display": "Umpqua", "definition": "NA" },
+        {
+            "code": "1668-3",
+            "display": "Cow Creek Band of Umpqua Tribe of Indians",
+            "definition": "NA"
+        },
+        { "code": "1670-9", "display": "Ute", "definition": "NA" },
+        {
+            "code": "1671-7",
+            "display": "Allen Canyon",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3570-9, Ute Mountain Ute Tribe"
+        },
+        {
+            "code": "1672-5",
+            "display": "Ute Indian Tribe of the Uintah and Ouray Reservation, Utah",
+            "definition": "NA"
+        },
+        {
+            "code": "1673-3",
+            "display": "Ute Mountain Ute",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3570-9, Ute Mountain Ute Tribe"
+        },
+        { "code": "1675-8", "display": "Wailaki", "definition": "NA" },
+        { "code": "1677-4", "display": "Walla Walla", "definition": "NA" },
+        { "code": "1679-0", "display": "Wampanoag", "definition": "NA" },
+        {
+            "code": "1680-8",
+            "display": "Wampanoag Tribe of Gay Head (Aquinnah)",
+            "definition": "NA"
+        },
+        {
+            "code": "1681-6",
+            "display": "Mashpee Wampanoag Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1683-2",
+            "display": "Confederated Tribes of the Warm Springs Reservation of Oregon",
+            "definition": "NA"
+        },
+        { "code": "1685-7", "display": "Wasco", "definition": "NA" },
+        {
+            "code": "1687-3",
+            "display": "Washoe",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3583-2, Washoe Tribe of Nevada & California (Carson Colony, Dresslerville Colony, Woodfords Community, Stewart Community, & Washoe Ranches)"
+        },
+        { "code": "1688-1", "display": "Alpine", "definition": "NA" },
+        {
+            "code": "1689-9",
+            "display": "Carson",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3583-2, Washoe Tribe of Nevada & California (Carson Colony, Dresslerville Colony, Woodfords Community, Stewart Community, & Washoe Ranches)"
+        },
+        {
+            "code": "1690-7",
+            "display": "Dresslerville",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3583-2, Washoe Tribe of Nevada & California (Carson Colony, Dresslerville Colony, Woodfords Community, Stewart Community, & Washoe Ranches)"
+        },
+        {
+            "code": "1692-3",
+            "display": "Wichita and Affiliated Tribes (Wichita, Keechi, Waco and Tawakonie), Oklahoma",
+            "definition": "NA"
+        },
+        { "code": "1694-9", "display": "Wind River", "definition": "NA" },
+        { "code": "1696-4", "display": "Winnebago", "definition": "NA" },
+        {
+            "code": "1697-2",
+            "display": "Ho-Chunk Nation of Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "1698-0",
+            "display": "Winnebago Tribe of Nebraska",
+            "definition": "NA"
+        },
+        {
+            "code": "1700-4",
+            "display": "Winnemucca Indian Colony of Nevada",
+            "definition": "NA"
+        },
+        { "code": "1702-0", "display": "Wintun", "definition": "NA" },
+        {
+            "code": "1704-6",
+            "display": "Wiyot",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3601-2, Wiyot Tribe, California"
+        },
+        {
+            "code": "1705-3",
+            "display": "Table Bluff",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3601-2, Wiyot Tribe, California"
+        },
+        {
+            "code": "1707-9",
+            "display": "Confederated Tribes and Bands of the Yakama Nation",
+            "definition": "NA"
+        },
+        { "code": "1709-5", "display": "Yakama Cowlitz", "definition": "NA" },
+        { "code": "1711-1", "display": "Yaqui", "definition": "NA" },
+        {
+            "code": "1712-9",
+            "display": "Barrio Libre",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3356-3, Pascua Yaqui Tribe of Arizona"
+        },
+        {
+            "code": "1713-7",
+            "display": "Pascua Yaqui",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3356-3, Pascua Yaqui Tribe of Arizona"
+        },
+        {
+            "code": "1715-2",
+            "display": "Yavapai-Apache Nation of the Camp Verde Indian Reservation, Arizona",
+            "definition": "NA"
+        },
+        { "code": "1717-8", "display": "Yokuts", "definition": "NA" },
+        {
+            "code": "1718-6",
+            "display": "Picayune Rancheria of Chukchansi Indians of California",
+            "definition": "NA"
+        },
+        { "code": "1719-4", "display": "Tachi", "definition": "NA" },
+        {
+            "code": "1720-2",
+            "display": "Tule River Indian Tribe of the Tule River Reservation, California",
+            "definition": "NA"
+        },
+        { "code": "1722-8", "display": "Yuchi", "definition": "NA" },
+        {
+            "code": "1724-4",
+            "display": "Yuman",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3423-1, Quechan Tribe Of The Fort Yuma Indian Reservation, California & Arizona"
+        },
+        {
+            "code": "1725-1",
+            "display": "Cocopah Tribe of Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "1726-9",
+            "display": "Havasupai Tribe of the Havasupai Reservation, Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "1727-7",
+            "display": "Hualapai Indian Tribe of the Hualapai Indian Reservation, Arizona",
+            "definition": "NA"
+        },
+        { "code": "1728-5", "display": "Maricopa", "definition": "NA" },
+        {
+            "code": "1729-3",
+            "display": "Fort Mojave Indian Tribe of Arizona, California and Nevada",
+            "definition": "NA"
+        },
+        {
+            "code": "1730-1",
+            "display": "Quechan",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3423-1, Quechan Tribe Of The Fort Yuma Indian Reservation, California & Arizona"
+        },
+        {
+            "code": "1731-9",
+            "display": "Yavapai-Prescott Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1732-7",
+            "display": "Yurok Tribe of the Yurok Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "1733-5",
+            "display": "Resighini Rancheria, California",
+            "definition": "NA"
+        },
+        { "code": "1735-0", "display": "ALASKA NATIVE", "definition": "NA" },
+        { "code": "1737-6", "display": "Alaska Indian", "definition": "NA" },
+        {
+            "code": "1739-2",
+            "display": "Alaskan Athabascan",
+            "definition": "NA"
+        },
+        {
+            "code": "1740-0",
+            "display": "Ahtna, Inc. Corporation",
+            "definition": "NA"
+        },
+        { "code": "1741-8", "display": "Alatna Village", "definition": "NA" },
+        { "code": "1742-6", "display": "Alexander", "definition": "NA" },
+        {
+            "code": "1743-4",
+            "display": "Allakaket Village",
+            "definition": "NA"
+        },
+        { "code": "1744-2", "display": "Alanvik", "definition": "NA" },
+        { "code": "1745-9", "display": "Anvik Village", "definition": "NA" },
+        {
+            "code": "1746-7",
+            "display": "Arctic",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, No replacement"
+        },
+        { "code": "1747-5", "display": "Beaver Village", "definition": "NA" },
+        {
+            "code": "1748-3",
+            "display": "Birch Creek Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1749-1",
+            "display": "Native Village of Cantwell",
+            "definition": "NA"
+        },
+        {
+            "code": "1750-9",
+            "display": "Chalkyitsik Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1751-7",
+            "display": "Chickaloon Native Village",
+            "definition": "NA"
+        },
+        { "code": "1752-5", "display": "Cheesh-Na Tribe", "definition": "NA" },
+        {
+            "code": "1753-3",
+            "display": "Native Village of Chitina",
+            "definition": "NA"
+        },
+        {
+            "code": "1754-1",
+            "display": "Circle Native Community",
+            "definition": "NA"
+        },
+        { "code": "1755-8", "display": "Cook Inlet", "definition": "NA" },
+        {
+            "code": "1756-6",
+            "display": "Copper Center",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1774-9, Native Village of Kluti Kaah (aka Copper Center)"
+        },
+        { "code": "1757-4", "display": "Copper River", "definition": "NA" },
+        {
+            "code": "1758-2",
+            "display": "Village of Dot Lake",
+            "definition": "NA"
+        },
+        { "code": "1759-0", "display": "Doyon", "definition": "NA" },
+        {
+            "code": "1760-8",
+            "display": "Native Village of Eagle",
+            "definition": "NA"
+        },
+        {
+            "code": "1761-6",
+            "display": "Eklutna Native Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1762-4",
+            "display": "Evansville Village (aka Bettles Field)",
+            "definition": "NA"
+        },
+        {
+            "code": "1763-2",
+            "display": "Native Village of Fort Yukon",
+            "definition": "NA"
+        },
+        {
+            "code": "1764-0",
+            "display": "Native Village of Gakona",
+            "definition": "NA"
+        },
+        {
+            "code": "1765-7",
+            "display": "Louden Tribe (previously listed as Galena Village (aka Louden Village))",
+            "definition": "NA"
+        },
+        {
+            "code": "1766-5",
+            "display": "Organized Village of Grayling (aka Holikachuk)",
+            "definition": "NA"
+        },
+        {
+            "code": "1767-3",
+            "display": "Gulkana Village Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1768-1",
+            "display": "Healy Lake Village",
+            "definition": "NA"
+        },
+        { "code": "1769-9", "display": "Holy Cross Tribe", "definition": "NA" },
+        { "code": "1770-7", "display": "Hughes Village", "definition": "NA" },
+        { "code": "1771-5", "display": "Huslia Village", "definition": "NA" },
+        {
+            "code": "1772-3",
+            "display": "Village of Iliamna",
+            "definition": "NA"
+        },
+        {
+            "code": "1773-1",
+            "display": "Village of Kaltag",
+            "definition": "NA"
+        },
+        {
+            "code": "1774-9",
+            "display": "Native Village of Kluti Kaah (aka Copper Center)",
+            "definition": "NA"
+        },
+        { "code": "1775-6", "display": "Knik Tribe", "definition": "NA" },
+        {
+            "code": "1776-4",
+            "display": "Koyukuk Native Village",
+            "definition": "NA"
+        },
+        { "code": "1777-2", "display": "Lake Minchumina", "definition": "NA" },
+        { "code": "1778-0", "display": "Lime Village", "definition": "NA" },
+        {
+            "code": "1779-8",
+            "display": "McGrath Native Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1780-6",
+            "display": "Manley Hot Springs Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1781-4",
+            "display": "Mentasta Traditional Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1782-2",
+            "display": "Native Village of Minto",
+            "definition": "NA"
+        },
+        {
+            "code": "1783-0",
+            "display": "Nenana Native Association",
+            "definition": "NA"
+        },
+        { "code": "1784-8", "display": "Nikolai Village", "definition": "NA" },
+        {
+            "code": "1785-5",
+            "display": "Ninilchik Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1786-3",
+            "display": "Nondalton Village",
+            "definition": "NA"
+        },
+        { "code": "1787-1", "display": "Northway Village", "definition": "NA" },
+        { "code": "1788-9", "display": "Nulato Village", "definition": "NA" },
+        {
+            "code": "1789-7",
+            "display": "Pedro Bay Village",
+            "definition": "NA"
+        },
+        { "code": "1790-5", "display": "Rampart Village", "definition": "NA" },
+        {
+            "code": "1791-3",
+            "display": "Native Village of Ruby",
+            "definition": "NA"
+        },
+        { "code": "1792-1", "display": "Salamatof Tribe", "definition": "NA" },
+        {
+            "code": "1793-9",
+            "display": "Seldovia Village Tribe",
+            "definition": "NA"
+        },
+        { "code": "1794-7", "display": "Slana", "definition": "NA" },
+        {
+            "code": "1795-4",
+            "display": "Shageluk Native Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1796-2",
+            "display": "Native Village of Stevens",
+            "definition": "NA"
+        },
+        {
+            "code": "1797-0",
+            "display": "Village of Stony River",
+            "definition": "NA"
+        },
+        { "code": "1798-8", "display": "Takotna Village", "definition": "NA" },
+        {
+            "code": "1799-6",
+            "display": "Native Village of Tanacross",
+            "definition": "NA"
+        },
+        {
+            "code": "1800-2",
+            "display": "Tanaina",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1739-2, Alaskan Athabascan"
+        },
+        {
+            "code": "1801-0",
+            "display": "Native Village of Tanana",
+            "definition": "NA"
+        },
+        { "code": "1802-8", "display": "Tanana Chiefs", "definition": "NA" },
+        {
+            "code": "1803-6",
+            "display": "Native Village of Tazlina",
+            "definition": "NA"
+        },
+        { "code": "1804-4", "display": "Telida Village", "definition": "NA" },
+        {
+            "code": "1805-1",
+            "display": "Native Village of Tetlin",
+            "definition": "NA"
+        },
+        { "code": "1806-9", "display": "Tok", "definition": "NA" },
+        {
+            "code": "1807-7",
+            "display": "Native Village of Tyonek",
+            "definition": "NA"
+        },
+        {
+            "code": "1808-5",
+            "display": "Village of Venetie (See Native Village of Venetie Tribal Government)",
+            "definition": "NA"
+        },
+        { "code": "1809-3", "display": "Wiseman", "definition": "NA" },
+        {
+            "code": "1811-9",
+            "display": "Sealaska Corporation",
+            "definition": "NA"
+        },
+        {
+            "code": "1813-5",
+            "display": "Tlingit-Haida",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3861-2, Central Council of the Tlingit & Haida Indian Tribes"
+        },
+        {
+            "code": "1814-3",
+            "display": "Angoon Community Association",
+            "definition": "NA"
+        },
+        {
+            "code": "1815-0",
+            "display": "Central Council of Tlingit and Haida Tribes",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3861-2, Central Council of the Tlingit & Haida Indian Tribes"
+        },
+        {
+            "code": "1816-8",
+            "display": "Chilkat Indian Village (Klukwan)",
+            "definition": "NA"
+        },
+        {
+            "code": "1817-6",
+            "display": "Chilkoot Indian Association (Haines)",
+            "definition": "NA"
+        },
+        {
+            "code": "1818-4",
+            "display": "Craig Tribal Association",
+            "definition": "NA"
+        },
+        {
+            "code": "1819-2",
+            "display": "Douglas Indian Association",
+            "definition": "NA"
+        },
+        { "code": "1820-0", "display": "Haida", "definition": "NA" },
+        {
+            "code": "1821-8",
+            "display": "Hoonah Indian Association",
+            "definition": "NA"
+        },
+        {
+            "code": "1822-6",
+            "display": "Hydaburg Cooperative Association",
+            "definition": "NA"
+        },
+        {
+            "code": "1823-4",
+            "display": "Organized Village of Kake",
+            "definition": "NA"
+        },
+        {
+            "code": "1824-2",
+            "display": "Organized Village of Kasaan",
+            "definition": "NA"
+        },
+        {
+            "code": "1825-9",
+            "display": "Kenaitze Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1826-7",
+            "display": "Ketchikan Indian Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1827-5",
+            "display": "Klawock Cooperative Association",
+            "definition": "NA"
+        },
+        { "code": "1828-3", "display": "Pelican", "definition": "NA" },
+        {
+            "code": "1829-1",
+            "display": "Petersburg Indian Association",
+            "definition": "NA"
+        },
+        {
+            "code": "1830-9",
+            "display": "Organized Village of Saxman",
+            "definition": "NA"
+        },
+        {
+            "code": "1831-7",
+            "display": "Sitka Tribe of Alaska",
+            "definition": "NA"
+        },
+        { "code": "1832-5", "display": "Tenakee Springs", "definition": "NA" },
+        { "code": "1833-3", "display": "Tlingit", "definition": "NA" },
+        {
+            "code": "1834-1",
+            "display": "Wrangell Cooperative Association",
+            "definition": "NA"
+        },
+        {
+            "code": "1835-8",
+            "display": "Yakutat Tlingit Tribe",
+            "definition": "NA"
+        },
+        { "code": "1837-4", "display": "Tsimshian", "definition": "NA" },
+        {
+            "code": "1838-2",
+            "display": "Metlakatla Indian Community, Annette Island Reserve",
+            "definition": "NA"
+        },
+        { "code": "1840-8", "display": "Eskimo", "definition": "NA" },
+        { "code": "1842-4", "display": "Greenland Inuit", "definition": "NA" },
+        {
+            "code": "1844-0",
+            "display": "Inupiat Eskimo",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1840-8 Eskimo; 3745-7 Inupiat (inupiaq)"
+        },
+        {
+            "code": "1845-7",
+            "display": "Native Village of Ambler",
+            "definition": "NA"
+        },
+        {
+            "code": "1846-5",
+            "display": "Anaktuvuk",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3788-7, Village of Anaktuvuk Pass"
+        },
+        {
+            "code": "1847-3",
+            "display": "Anaktuvuk Pass",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3788-7, Village of Anaktuvuk Pass"
+        },
+        {
+            "code": "1848-1",
+            "display": "Inupiat Community of the Arctic Slope",
+            "definition": "NA"
+        },
+        {
+            "code": "1849-9",
+            "display": "Arctic Slope Corporation",
+            "definition": "NA"
+        },
+        {
+            "code": "1850-7",
+            "display": "Atqasuk Village (Atkasook)",
+            "definition": "NA"
+        },
+        {
+            "code": "1851-5",
+            "display": "Native Village of Barrow Inupiat Traditional Government",
+            "definition": "NA"
+        },
+        {
+            "code": "1852-3",
+            "display": "Bering Straits Inupiat",
+            "definition": "NA"
+        },
+        {
+            "code": "1853-1",
+            "display": "Native Village of Brevig Mission",
+            "definition": "NA"
+        },
+        {
+            "code": "1854-9",
+            "display": "Native Village of Buckland",
+            "definition": "NA"
+        },
+        {
+            "code": "1855-6",
+            "display": "Chinik",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3751-5, Chinik Eskimo Community (Golovin)"
+        },
+        {
+            "code": "1856-4",
+            "display": "Native Village of Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1857-2",
+            "display": "Native Village of Deering",
+            "definition": "NA"
+        },
+        {
+            "code": "1858-0",
+            "display": "Native Village of Elim",
+            "definition": "NA"
+        },
+        {
+            "code": "1859-8",
+            "display": "Golovin",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3751-5, Chinik Eskimo Community (Golovin)"
+        },
+        {
+            "code": "1860-6",
+            "display": "Native Village of Diomede (aka Inalik)",
+            "definition": "NA"
+        },
+        {
+            "code": "1861-4",
+            "display": "Inupiaq",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3745-7, Inupiat (inupiaq)"
+        },
+        {
+            "code": "1862-2",
+            "display": "Kaktovik Village (aka Barter Island)",
+            "definition": "NA"
+        },
+        { "code": "1863-0", "display": "Kawerak", "definition": "NA" },
+        {
+            "code": "1864-8",
+            "display": "Native Village of Kiana",
+            "definition": "NA"
+        },
+        {
+            "code": "1865-5",
+            "display": "Native Village of Kivalina",
+            "definition": "NA"
+        },
+        {
+            "code": "1866-3",
+            "display": "Native Village of Kobuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1867-1",
+            "display": "Native Village of Kotzebue",
+            "definition": "NA"
+        },
+        {
+            "code": "1868-9",
+            "display": "Native Village of Koyuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1869-7",
+            "display": "Kwiguk",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3826-5, Emmonak Village"
+        },
+        {
+            "code": "1870-5",
+            "display": "Mauneluk Inupiat",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3745-7, Inupiat (inupiaq)"
+        },
+        { "code": "1871-3", "display": "Nana Inupiat", "definition": "NA" },
+        {
+            "code": "1872-1",
+            "display": "Native Village of Noatak",
+            "definition": "NA"
+        },
+        {
+            "code": "1873-9",
+            "display": "Nome Eskimo Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1874-7",
+            "display": "Noorvik Native Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1875-4",
+            "display": "Native Village of Nuiqsut (aka Nooiksut)",
+            "definition": "NA"
+        },
+        {
+            "code": "1876-2",
+            "display": "Native Village of Point Hope",
+            "definition": "NA"
+        },
+        {
+            "code": "1877-0",
+            "display": "Native Village of Point Lay",
+            "definition": "NA"
+        },
+        {
+            "code": "1878-8",
+            "display": "Native Village of Selawik",
+            "definition": "NA"
+        },
+        {
+            "code": "1879-6",
+            "display": "Native Village of Shaktoolik",
+            "definition": "NA"
+        },
+        {
+            "code": "1880-4",
+            "display": "Native Village of Shishmaref",
+            "definition": "NA"
+        },
+        {
+            "code": "1881-2",
+            "display": "Native Village of Shungnak",
+            "definition": "NA"
+        },
+        {
+            "code": "1882-0",
+            "display": "Village of Solomon",
+            "definition": "NA"
+        },
+        {
+            "code": "1883-8",
+            "display": "Native Village of Teller",
+            "definition": "NA"
+        },
+        {
+            "code": "1884-6",
+            "display": "Native Village of Unalakleet",
+            "definition": "NA"
+        },
+        {
+            "code": "1885-3",
+            "display": "Village of Wainwright",
+            "definition": "NA"
+        },
+        {
+            "code": "1886-1",
+            "display": "Native Village of Wales",
+            "definition": "NA"
+        },
+        {
+            "code": "1887-9",
+            "display": "White Mountain",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3785-3, Native Village of White Mountain"
+        },
+        {
+            "code": "1888-7",
+            "display": "White Mountain Inupiat",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3785-3, Native Village of White Mountain"
+        },
+        {
+            "code": "1889-5",
+            "display": "Native Village of Mary's Igloo",
+            "definition": "NA"
+        },
+        {
+            "code": "1891-1",
+            "display": "Siberian Eskimo",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1894-5, Siberian Yupik"
+        },
+        {
+            "code": "1892-9",
+            "display": "Native Village of Gambell",
+            "definition": "NA"
+        },
+        {
+            "code": "1893-7",
+            "display": "Native Village of Savoonga",
+            "definition": "NA"
+        },
+        { "code": "1894-5", "display": "Siberian Yupik", "definition": "NA" },
+        {
+            "code": "1896-0",
+            "display": "Yup’ik (Yup’ik Eskimo)",
+            "definition": "NA"
+        },
+        {
+            "code": "1897-8",
+            "display": "Akiachak Native Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1898-6",
+            "display": "Akiak Native Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1899-4",
+            "display": "Village of Alakanuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1900-0",
+            "display": "Native Village of Aleknagik",
+            "definition": "NA"
+        },
+        {
+            "code": "1901-8",
+            "display": "Yupiit of Andreafski",
+            "definition": "NA"
+        },
+        { "code": "1902-6", "display": "Village of Aniak", "definition": "NA" },
+        {
+            "code": "1903-4",
+            "display": "Village of Atmautluak",
+            "definition": "NA"
+        },
+        {
+            "code": "1904-2",
+            "display": "Orutsararmiut Traditional Native Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1905-9",
+            "display": "Village of Bill Moore's Slough",
+            "definition": "NA"
+        },
+        { "code": "1906-7", "display": "Bristol Bay", "definition": "NA" },
+        { "code": "1907-5", "display": "Calista", "definition": "NA" },
+        {
+            "code": "1908-3",
+            "display": "Village of Chefornak",
+            "definition": "NA"
+        },
+        {
+            "code": "1909-1",
+            "display": "Chevak Native Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1910-9",
+            "display": "Native Village of Atqasuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1911-7",
+            "display": "Village of Clarks Point",
+            "definition": "NA"
+        },
+        {
+            "code": "1912-5",
+            "display": "Village of Crooked Creek",
+            "definition": "NA"
+        },
+        {
+            "code": "1913-3",
+            "display": "Curyung Tribal Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1914-1",
+            "display": "Native Village of Eek",
+            "definition": "NA"
+        },
+        {
+            "code": "1915-8",
+            "display": "Native Village of Ekuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1916-6",
+            "display": "Native Village of Ekwok",
+            "definition": "NA"
+        },
+        {
+            "code": "1917-4",
+            "display": "Emmonak",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3826-5, Emmonak Village"
+        },
+        {
+            "code": "1918-2",
+            "display": "Native Village of Goodnews Bay",
+            "definition": "NA"
+        },
+        {
+            "code": "1919-0",
+            "display": "Native Village of Hooper Bay",
+            "definition": "NA"
+        },
+        {
+            "code": "1920-8",
+            "display": "Iqugmiut Traditional Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1921-6",
+            "display": "Village of Kalskag",
+            "definition": "NA"
+        },
+        {
+            "code": "1922-4",
+            "display": "Kasigluk Traditional Elders Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1923-2",
+            "display": "Native Village of Kipnuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1924-0",
+            "display": "New Koliganek Village Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1925-7",
+            "display": "Native Village of Kongiganak",
+            "definition": "NA"
+        },
+        {
+            "code": "1926-5",
+            "display": "Village of Kotlik",
+            "definition": "NA"
+        },
+        {
+            "code": "1927-3",
+            "display": "Organized Village of Kwethluk",
+            "definition": "NA"
+        },
+        {
+            "code": "1928-1",
+            "display": "Native Village of Kwigillingok",
+            "definition": "NA"
+        },
+        { "code": "1929-9", "display": "Levelock Village", "definition": "NA" },
+        {
+            "code": "1930-7",
+            "display": "Village of Lower Kalskag",
+            "definition": "NA"
+        },
+        {
+            "code": "1931-5",
+            "display": "Manokotak Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1932-3",
+            "display": "Native Village of Marshall (aka Fortuna Ledge)",
+            "definition": "NA"
+        },
+        {
+            "code": "1933-1",
+            "display": "Native Village of Mekoryuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1934-9",
+            "display": "Asa'carsarmiut Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1935-6",
+            "display": "Naknek Native Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1936-4",
+            "display": "Native Village of Napaimute",
+            "definition": "NA"
+        },
+        {
+            "code": "1937-2",
+            "display": "Native Village of Napakiak",
+            "definition": "NA"
+        },
+        {
+            "code": "1938-0",
+            "display": "Native Village of Napaskiak",
+            "definition": "NA"
+        },
+        { "code": "1939-8", "display": "Newhalen Village", "definition": "NA" },
+        {
+            "code": "1940-6",
+            "display": "New Stuyahok Village",
+            "definition": "NA"
+        },
+        { "code": "1941-4", "display": "Newtok Village", "definition": "NA" },
+        {
+            "code": "1942-2",
+            "display": "Native Village of Nightmute",
+            "definition": "NA"
+        },
+        {
+            "code": "1943-0",
+            "display": "Native Village of Nunapitchuk",
+            "definition": "NA"
+        },
+        {
+            "code": "1944-8",
+            "display": "Oscarville Traditional Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1945-5",
+            "display": "Pilot Station Traditional Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1946-3",
+            "display": "Pitka's Point Traditional Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1947-1",
+            "display": "Platinum Traditional Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1948-9",
+            "display": "Portage Creek Village (aka Ohgsenakale)",
+            "definition": "NA"
+        },
+        {
+            "code": "1949-7",
+            "display": "Native Village of Kwinhagak (aka Quinhagak)",
+            "definition": "NA"
+        },
+        {
+            "code": "1950-5",
+            "display": "Village of Red Devil",
+            "definition": "NA"
+        },
+        {
+            "code": "1951-3",
+            "display": "Native Village of Saint Michael",
+            "definition": "NA"
+        },
+        {
+            "code": "1952-1",
+            "display": "Native Village of Scammon Bay",
+            "definition": "NA"
+        },
+        {
+            "code": "1953-9",
+            "display": "Native Village of Nunam Iqua",
+            "definition": "NA"
+        },
+        {
+            "code": "1954-7",
+            "display": "Village of Sleetmute",
+            "definition": "NA"
+        },
+        {
+            "code": "1955-4",
+            "display": "Stebbins Community Association",
+            "definition": "NA"
+        },
+        {
+            "code": "1956-2",
+            "display": "Traditional Village of Togiak",
+            "definition": "NA"
+        },
+        {
+            "code": "1957-0",
+            "display": "Nunakauyarmiut Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "1958-8",
+            "display": "Tuluksak Native Community",
+            "definition": "NA"
+        },
+        {
+            "code": "1959-6",
+            "display": "Native Village of Tuntutuliak",
+            "definition": "NA"
+        },
+        {
+            "code": "1960-4",
+            "display": "Native Village of Tununak",
+            "definition": "NA"
+        },
+        {
+            "code": "1961-2",
+            "display": "Twin Hills Village",
+            "definition": "NA"
+        },
+        {
+            "code": "1962-0",
+            "display": "Native Village of Georgetown",
+            "definition": "NA"
+        },
+        {
+            "code": "1963-8",
+            "display": "Algaaciq Native Village (St. Mary's)",
+            "definition": "NA"
+        },
+        {
+            "code": "1964-6",
+            "display": "Umkumiut Native Village",
+            "definition": "NA"
+        },
+        { "code": "1966-1", "display": "Aleut", "definition": "NA" },
+        {
+            "code": "1968-7",
+            "display": "Alutiiq Aleut",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1966-1 Aleut; 4187-1 Alutiiq"
+        },
+        {
+            "code": "1969-5",
+            "display": "Native Village of Tatitlek",
+            "definition": "NA"
+        },
+        { "code": "1970-3", "display": "Ugashik Village", "definition": "NA" },
+        {
+            "code": "1972-9",
+            "display": "Bristol Bay Aleut",
+            "definition": "NA"
+        },
+        {
+            "code": "1973-7",
+            "display": "Chignik Bay Tribal Council",
+            "definition": "NA"
+        },
+        {
+            "code": "1974-5",
+            "display": "Chignik Lake Village",
+            "definition": "NA"
+        },
+        { "code": "1975-2", "display": "Egegik Village", "definition": "NA" },
+        { "code": "1976-0", "display": "Igiugig Village", "definition": "NA" },
+        { "code": "1977-8", "display": "Ivanof Bay Tribe", "definition": "NA" },
+        {
+            "code": "1978-6",
+            "display": "King Salmon Tribe",
+            "definition": "NA"
+        },
+        { "code": "1979-4", "display": "Kokhanok Village", "definition": "NA" },
+        {
+            "code": "1980-2",
+            "display": "Native Village of Perryville",
+            "definition": "NA"
+        },
+        {
+            "code": "1981-0",
+            "display": "Native Village of Pilot Point",
+            "definition": "NA"
+        },
+        {
+            "code": "1982-8",
+            "display": "Native Village of Port Heiden",
+            "definition": "NA"
+        },
+        { "code": "1984-4", "display": "Chugach Aleut", "definition": "NA" },
+        {
+            "code": "1985-1",
+            "display": "Native Village of Chenega (aka Chanega)",
+            "definition": "NA"
+        },
+        {
+            "code": "1986-9",
+            "display": "Chugach Corporation",
+            "definition": "NA"
+        },
+        {
+            "code": "1987-7",
+            "display": "Native Village of Nanwalek (aka English Bay)",
+            "definition": "NA"
+        },
+        {
+            "code": "1988-5",
+            "display": "Native Village of Port Graham",
+            "definition": "NA"
+        },
+        {
+            "code": "1990-1",
+            "display": "Native Village of Eyak (Cordova)",
+            "definition": "NA"
+        },
+        { "code": "1992-7", "display": "Koniag Aleut", "definition": "NA" },
+        {
+            "code": "1993-5",
+            "display": "Native Village of Akhiok",
+            "definition": "NA"
+        },
+        {
+            "code": "1994-3",
+            "display": "Agdaagux Tribe of King Cove",
+            "definition": "NA"
+        },
+        {
+            "code": "1995-0",
+            "display": "Native Village of Karluk",
+            "definition": "NA"
+        },
+        { "code": "1996-8", "display": "Kodiak", "definition": "NA" },
+        {
+            "code": "1997-6",
+            "display": "Native Village of Larsen Bay",
+            "definition": "NA"
+        },
+        {
+            "code": "1998-4",
+            "display": "Alutiiq Tribe of Old Harbor",
+            "definition": "NA"
+        },
+        {
+            "code": "1999-2",
+            "display": "Native Village of Ouzinkie",
+            "definition": "NA"
+        },
+        {
+            "code": "2000-8",
+            "display": "Native Village of Port Lions",
+            "definition": "NA"
+        },
+        { "code": "2002-4", "display": "Sugpiaq", "definition": "NA" },
+        {
+            "code": "2004-0",
+            "display": "Suqpigaq",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 2002-4, Sugpiaq"
+        },
+        {
+            "code": "2006-5",
+            "display": "Unangan Aleut",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1966-1 Aleut; 3743-2 Unangan (Unalaska)"
+        },
+        {
+            "code": "2007-3",
+            "display": "Native Village of Akutan",
+            "definition": "NA"
+        },
+        {
+            "code": "2008-1",
+            "display": "Aleut Corporation",
+            "definition": "NA"
+        },
+        {
+            "code": "2009-9",
+            "display": "Aleutian",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1966-1, Aleut"
+        },
+        {
+            "code": "2010-7",
+            "display": "Aleutian Islander",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 1966-1, Aleut"
+        },
+        {
+            "code": "2011-5",
+            "display": "Native Village of Atka",
+            "definition": "NA"
+        },
+        {
+            "code": "2012-3",
+            "display": "Native Village of Belkofski",
+            "definition": "NA"
+        },
+        {
+            "code": "2013-1",
+            "display": "Native Village of Chignik Lagoon",
+            "definition": "NA"
+        },
+        { "code": "2014-9", "display": "King Cove", "definition": "NA" },
+        {
+            "code": "2015-6",
+            "display": "Native Village of False Pass",
+            "definition": "NA"
+        },
+        {
+            "code": "2016-4",
+            "display": "Native Village of Nelson Lagoon",
+            "definition": "NA"
+        },
+        {
+            "code": "2017-2",
+            "display": "Native Village of Nikolski",
+            "definition": "NA"
+        },
+        {
+            "code": "2018-0",
+            "display": "Pauloff Harbor Village",
+            "definition": "NA"
+        },
+        {
+            "code": "2019-8",
+            "display": "Qagan Toyagungin",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3735-8, Qagan Tayagungin Tribe of Sand Point"
+        },
+        {
+            "code": "2020-6",
+            "display": "Qawalangin Tribe of Unalaska",
+            "definition": "NA"
+        },
+        { "code": "2021-4", "display": "Saint George", "definition": "NA" },
+        { "code": "2022-2", "display": "Saint Paul", "definition": "NA" },
+        {
+            "code": "2023-0",
+            "display": "Sand Point",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3735-8, Qagan Tayagungin Tribe of Sand Point"
+        },
+        {
+            "code": "2024-8",
+            "display": "South Naknek Village",
+            "definition": "NA"
+        },
+        {
+            "code": "2025-5",
+            "display": "Unalaska",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA. Retired, V1.3, Superseded by 3743-2, Unangan (Unalaska)"
+        },
+        {
+            "code": "2026-3",
+            "display": "Native Village of Unga",
+            "definition": "NA"
+        },
+        { "code": "2028-9", "display": "Asian", "definition": "NA" },
+        { "code": "2029-7", "display": "Asian Indian", "definition": "NA" },
+        { "code": "2030-5", "display": "Bangladeshi", "definition": "NA" },
+        { "code": "2031-3", "display": "Bhutanese", "definition": "NA" },
+        { "code": "2032-1", "display": "Burmese", "definition": "NA" },
+        { "code": "2033-9", "display": "Cambodian", "definition": "NA" },
+        { "code": "2034-7", "display": "Chinese", "definition": "NA" },
+        { "code": "2035-4", "display": "Taiwanese", "definition": "NA" },
+        { "code": "2036-2", "display": "Filipino", "definition": "NA" },
+        { "code": "2037-0", "display": "Hmong", "definition": "NA" },
+        { "code": "2038-8", "display": "Indonesian", "definition": "NA" },
+        { "code": "2039-6", "display": "Japanese", "definition": "NA" },
+        { "code": "2040-4", "display": "Korean", "definition": "NA" },
+        { "code": "2041-2", "display": "Laotian", "definition": "NA" },
+        { "code": "2042-0", "display": "Malaysian", "definition": "NA" },
+        { "code": "2043-8", "display": "Okinawan", "definition": "NA" },
+        { "code": "2044-6", "display": "Pakistani", "definition": "NA" },
+        { "code": "2045-3", "display": "Sri Lankan", "definition": "NA" },
+        { "code": "2046-1", "display": "Thai", "definition": "NA" },
+        { "code": "2047-9", "display": "Vietnamese", "definition": "NA" },
+        { "code": "2048-7", "display": "Iwo Jiman", "definition": "NA" },
+        { "code": "2049-5", "display": "Maldivian", "definition": "NA" },
+        { "code": "2050-3", "display": "Nepalese", "definition": "NA" },
+        { "code": "2051-1", "display": "Singaporean", "definition": "NA" },
+        { "code": "2052-9", "display": "Madagascar", "definition": "NA" },
+        {
+            "code": "2054-5",
+            "display": "Black or African American",
+            "definition": "NA"
+        },
+        { "code": "2056-0", "display": "Black", "definition": "NA" },
+        { "code": "2058-6", "display": "African American", "definition": "NA" },
+        { "code": "2060-2", "display": "African", "definition": "NA" },
+        { "code": "2061-0", "display": "Botswanan", "definition": "NA" },
+        { "code": "2062-8", "display": "Ethiopian", "definition": "NA" },
+        { "code": "2063-6", "display": "Liberian", "definition": "NA" },
+        { "code": "2064-4", "display": "Namibian", "definition": "NA" },
+        { "code": "2065-1", "display": "Nigerian", "definition": "NA" },
+        { "code": "2066-9", "display": "Zairean", "definition": "NA" },
+        { "code": "2067-7", "display": "Bahamian", "definition": "NA" },
+        { "code": "2068-5", "display": "Barbadian", "definition": "NA" },
+        { "code": "2069-3", "display": "Dominican", "definition": "NA" },
+        {
+            "code": "2070-1",
+            "display": "Dominica Islander",
+            "definition": "NA"
+        },
+        { "code": "2071-9", "display": "Haitian", "definition": "NA" },
+        { "code": "2072-7", "display": "Jamaican", "definition": "NA" },
+        { "code": "2073-5", "display": "Tobagoan", "definition": "NA" },
+        { "code": "2074-3", "display": "Trinidadian", "definition": "NA" },
+        { "code": "2075-0", "display": "West Indian", "definition": "NA" },
+        {
+            "code": "2076-8",
+            "display": "Native Hawaiian or Other Pacific Islander",
+            "definition": "NA"
+        },
+        { "code": "2078-4", "display": "Polynesian", "definition": "NA" },
+        { "code": "2079-2", "display": "Native Hawaiian", "definition": "NA" },
+        { "code": "2080-0", "display": "Samoan", "definition": "NA" },
+        { "code": "2081-8", "display": "Tahitian", "definition": "NA" },
+        { "code": "2082-6", "display": "Tongan", "definition": "NA" },
+        { "code": "2083-4", "display": "Tokelauan", "definition": "NA" },
+        { "code": "2085-9", "display": "Micronesian", "definition": "NA" },
+        {
+            "code": "2086-7",
+            "display": "Guamanian or Chamorro",
+            "definition": "NA"
+        },
+        { "code": "2087-5", "display": "Guamanian", "definition": "NA" },
+        { "code": "2088-3", "display": "Chamorro", "definition": "NA" },
+        { "code": "2089-1", "display": "Mariana Islander", "definition": "NA" },
+        { "code": "2090-9", "display": "Marshallese", "definition": "NA" },
+        { "code": "2091-7", "display": "Palauan", "definition": "NA" },
+        { "code": "2092-5", "display": "Carolinian", "definition": "NA" },
+        { "code": "2093-3", "display": "Kosraean", "definition": "NA" },
+        { "code": "2094-1", "display": "Pohnpeian", "definition": "NA" },
+        { "code": "2095-8", "display": "Saipanese", "definition": "NA" },
+        { "code": "2096-6", "display": "Kiribati", "definition": "NA" },
+        { "code": "2097-4", "display": "Chuukese", "definition": "NA" },
+        { "code": "2098-2", "display": "Yapese", "definition": "NA" },
+        { "code": "2100-6", "display": "Melanesian", "definition": "NA" },
+        { "code": "2101-4", "display": "Fijian", "definition": "NA" },
+        {
+            "code": "2102-2",
+            "display": "Papua New Guinean",
+            "definition": "NA"
+        },
+        { "code": "2103-0", "display": "Solomon Islander", "definition": "NA" },
+        { "code": "2104-8", "display": "New Hebrides", "definition": "NA" },
+        { "code": "2106-3", "display": "White", "definition": "NA" },
+        { "code": "2108-9", "display": "European", "definition": "NA" },
+        { "code": "2109-7", "display": "Armenian", "definition": "NA" },
+        { "code": "2110-5", "display": "English", "definition": "NA" },
+        { "code": "2111-3", "display": "French", "definition": "NA" },
+        { "code": "2112-1", "display": "German", "definition": "NA" },
+        { "code": "2113-9", "display": "Irish", "definition": "NA" },
+        { "code": "2114-7", "display": "Italian", "definition": "NA" },
+        { "code": "2115-4", "display": "Polish", "definition": "NA" },
+        { "code": "2116-2", "display": "Scottish", "definition": "NA" },
+        {
+            "code": "2118-8",
+            "display": "Middle Eastern or North African",
+            "definition": "NA"
+        },
+        { "code": "2119-6", "display": "Assyrian", "definition": "NA" },
+        { "code": "2120-4", "display": "Egyptian", "definition": "NA" },
+        { "code": "2121-2", "display": "Iranian", "definition": "NA" },
+        { "code": "2122-0", "display": "Iraqi", "definition": "NA" },
+        { "code": "2123-8", "display": "Lebanese", "definition": "NA" },
+        { "code": "2124-6", "display": "Palestinian", "definition": "NA" },
+        { "code": "2125-3", "display": "Syrian", "definition": "NA" },
+        { "code": "2126-1", "display": "Afghanistani", "definition": "NA" },
+        { "code": "2127-9", "display": "Israeli", "definition": "NA" },
+        { "code": "2129-5", "display": "Arab", "definition": "NA" },
+        { "code": "2131-1", "display": "Other Race", "definition": "NA" },
+        {
+            "code": "2133-7",
+            "display": "Ethnicity",
+            "definition": "BIA Federal Recognition Status: NA. BIA Directory File Date: NA."
+        },
+        {
+            "code": "2135-2",
+            "display": "Hispanic or Latino",
+            "definition": "NA"
+        },
+        { "code": "2137-8", "display": "Spaniard", "definition": "NA" },
+        { "code": "2138-6", "display": "Andalusian", "definition": "NA" },
+        { "code": "2139-4", "display": "Asturian", "definition": "NA" },
+        { "code": "2140-2", "display": "Castillian", "definition": "NA" },
+        { "code": "2141-0", "display": "Catalonian", "definition": "NA" },
+        {
+            "code": "2142-8",
+            "display": "Belearic Islander",
+            "definition": "NA"
+        },
+        { "code": "2143-6", "display": "Gallego", "definition": "NA" },
+        { "code": "2144-4", "display": "Valencian", "definition": "NA" },
+        { "code": "2145-1", "display": "Canarian", "definition": "NA" },
+        { "code": "2146-9", "display": "Spanish Basque", "definition": "NA" },
+        { "code": "2148-5", "display": "Mexican", "definition": "NA" },
+        { "code": "2149-3", "display": "Mexican American", "definition": "NA" },
+        { "code": "2150-1", "display": "Mexicano", "definition": "NA" },
+        { "code": "2151-9", "display": "Chicano", "definition": "NA" },
+        { "code": "2152-7", "display": "La Raza", "definition": "NA" },
+        {
+            "code": "2153-5",
+            "display": "Mexican American Indian",
+            "definition": "NA"
+        },
+        { "code": "2155-0", "display": "Central American", "definition": "NA" },
+        { "code": "2156-8", "display": "Costa Rican", "definition": "NA" },
+        { "code": "2157-6", "display": "Guatemalan", "definition": "NA" },
+        { "code": "2158-4", "display": "Honduran", "definition": "NA" },
+        { "code": "2159-2", "display": "Nicaraguan", "definition": "NA" },
+        { "code": "2160-0", "display": "Panamanian", "definition": "NA" },
+        { "code": "2161-8", "display": "Salvadoran", "definition": "NA" },
+        {
+            "code": "2162-6",
+            "display": "Central American Indian",
+            "definition": "NA"
+        },
+        { "code": "2163-4", "display": "Canal Zone", "definition": "NA" },
+        { "code": "2165-9", "display": "South American", "definition": "NA" },
+        { "code": "2166-7", "display": "Argentinean", "definition": "NA" },
+        { "code": "2167-5", "display": "Bolivian", "definition": "NA" },
+        { "code": "2168-3", "display": "Chilean", "definition": "NA" },
+        { "code": "2169-1", "display": "Colombian", "definition": "NA" },
+        { "code": "2170-9", "display": "Ecuadorian", "definition": "NA" },
+        { "code": "2171-7", "display": "Paraguayan", "definition": "NA" },
+        { "code": "2172-5", "display": "Peruvian", "definition": "NA" },
+        { "code": "2173-3", "display": "Uruguayan", "definition": "NA" },
+        { "code": "2174-1", "display": "Venezuelan", "definition": "NA" },
+        {
+            "code": "2175-8",
+            "display": "South American Indian",
+            "definition": "NA"
+        },
+        { "code": "2176-6", "display": "Criollo", "definition": "NA" },
+        { "code": "2178-2", "display": "Latin American", "definition": "NA" },
+        { "code": "2180-8", "display": "Puerto Rican", "definition": "NA" },
+        { "code": "2182-4", "display": "Cuban", "definition": "NA" },
+        { "code": "2184-0", "display": "Dominican", "definition": "NA" },
+        {
+            "code": "2186-5",
+            "display": "Not Hispanic or Latino",
+            "definition": "NA"
+        },
+        {
+            "code": "2500-7",
+            "display": "Other Pacific Islander",
+            "definition": "NA"
+        },
+        { "code": "3012-2", "display": "Allegheny Lenape", "definition": "NA" },
+        {
+            "code": "3015-5",
+            "display": "Alturas Indian Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3016-3",
+            "display": "Ani-stohini/Unami",
+            "definition": "NA"
+        },
+        {
+            "code": "3024-7",
+            "display": "Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana",
+            "definition": "NA"
+        },
+        {
+            "code": "3025-4",
+            "display": "Assonet Band of the Wampanoag Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3031-2",
+            "display": "Barona Group of Capitan Grande Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3034-6",
+            "display": "Beaver Creek Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3035-3",
+            "display": "Berry Creek Rancheria of Maidu Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3036-1",
+            "display": "Big Lagoon Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3038-7",
+            "display": "Big Sandy Rancheria of Western Mono Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3039-5",
+            "display": "Big Valley Band of Pomo Indians of the Big Valley Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3041-1",
+            "display": "Biloxi-Chitimacha Confederation",
+            "definition": "NA"
+        },
+        {
+            "code": "3044-5",
+            "display": "Blue Lake Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3049-4",
+            "display": "Buena Vista Rancheria of Me-Wuk Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3051-0",
+            "display": "Burt Lake Band of Ottawa and Chippewa Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3053-6",
+            "display": "Cachil DeHe Band of Wintun Indians of the Colusa Indian Community of the Colusa Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3055-1",
+            "display": "Adai Caddo Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3059-3",
+            "display": "Cahuilla Band of Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3060-1",
+            "display": "California Valley Miwok Tribe, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3069-2",
+            "display": "Chaloklowa Chickasaw",
+            "definition": "NA"
+        },
+        {
+            "code": "3070-0",
+            "display": "Chappaquiddick Tribe of the Wampanoag Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3071-8",
+            "display": "Chaubunagungamaug Nipmuck",
+            "definition": "NA"
+        },
+        {
+            "code": "3074-2",
+            "display": "Cher-Ae Heights Indian Community of the Trinidad Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3075-9",
+            "display": "Cher-O-Creek Intratribal Indians",
+            "definition": "NA"
+        },
+        { "code": "3076-7", "display": "Cheroenhaka", "definition": "NA" },
+        {
+            "code": "3079-1",
+            "display": "Cherokee Bear Clan of South Carolina",
+            "definition": "NA"
+        },
+        { "code": "3080-9", "display": "Cherokee Nation", "definition": "NA" },
+        {
+            "code": "3081-7",
+            "display": "Cherokee of Georgia",
+            "definition": "NA"
+        },
+        {
+            "code": "3085-8",
+            "display": "Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "3086-6",
+            "display": "Chickahominy Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3088-2",
+            "display": "Chicken Ranch Rancheria of Me-Wuk Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3092-4",
+            "display": "Chippewa Cree Indians of the Rocky Boy's Reservation, Montana",
+            "definition": "NA"
+        },
+        {
+            "code": "3095-7",
+            "display": "Choctaw-Apache Community of Ebarb",
+            "definition": "NA"
+        },
+        {
+            "code": "3101-3",
+            "display": "Cloverdale Rancheria of Pomo Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3105-4",
+            "display": "Cold Springs Rancheria of Mono Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3109-6",
+            "display": "Comanche Nation, Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "3124-5",
+            "display": "Coushatta Tribe of Louisiana",
+            "definition": "NA"
+        },
+        {
+            "code": "3127-8",
+            "display": "Coyote Valley Band of Pomo Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3132-8",
+            "display": "Cumberland County Association for Indian People",
+            "definition": "NA"
+        },
+        {
+            "code": "3134-4",
+            "display": "Delaware (Lenni-Lenape)",
+            "definition": "NA"
+        },
+        {
+            "code": "3135-1",
+            "display": "Delaware Nation, Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "3136-9",
+            "display": "Delaware Tribe of Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3141-9",
+            "display": "East of the River Shawnee",
+            "definition": "NA"
+        },
+        { "code": "3145-0", "display": "Eastern Pequot", "definition": "NA" },
+        {
+            "code": "3152-6",
+            "display": "Elk Valley Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3153-4",
+            "display": "Elnu Abenaki Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3155-9",
+            "display": "Enterprise Rancheria of Maidu Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3159-1",
+            "display": "Fernandeno Tataviam Band of Mission Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3162-5",
+            "display": "Forest County Potawatomi Community, Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "3169-0",
+            "display": "Fort Sill Apache Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "3170-8",
+            "display": "Four Winds Cherokee",
+            "definition": "NA"
+        },
+        {
+            "code": "3173-2",
+            "display": "Georgia Eastern Cherokee",
+            "definition": "NA"
+        },
+        {
+            "code": "3174-0",
+            "display": "Gila River Indian Community of the Gila River Indian Reservation, Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "3177-3",
+            "display": "Grand River Band of Ottawa Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3179-9",
+            "display": "Greenville Rancheria",
+            "definition": "NA"
+        },
+        {
+            "code": "3180-7",
+            "display": "Grindstone Indian Rancheria of Wintun-Wailaki Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3182-3",
+            "display": "Guidiville Rancheria of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3183-1",
+            "display": "Guilford Native American Association",
+            "definition": "NA"
+        },
+        {
+            "code": "3184-9",
+            "display": "Habematolel Pomo of Upper Lake, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3187-2",
+            "display": "Hassanamisco Band of the Nipmuc Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3189-8",
+            "display": "Herring Pond Wampanoag Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3195-5",
+            "display": "Hopi Tribe of Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "3196-3",
+            "display": "Hopland Band of Pomo Indians, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3197-1",
+            "display": "Houlton Band of Maliseet Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3204-5",
+            "display": "Ione Band of Miwok Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3209-4",
+            "display": "Jackson Band of Miwuk Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3211-0",
+            "display": "Jamul Indian Village of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3222-7",
+            "display": "Kern Valley Indian Community",
+            "definition": "NA"
+        },
+        {
+            "code": "3224-3",
+            "display": "Keweenaw Bay Indian Community, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "3228-4",
+            "display": "Kickapoo Tribe of Indians of the Kickapoo Reservation in Kansas",
+            "definition": "NA"
+        },
+        { "code": "3234-2", "display": "Klamath Tribes", "definition": "NA" },
+        {
+            "code": "3235-9",
+            "display": "Kletsel Dehe Wintun Nation of the Cortina Rancheria",
+            "definition": "NA"
+        },
+        {
+            "code": "3236-7",
+            "display": "Koasek (Cowasuck) Traditional Band of the Sovereign Abenaki Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3237-5",
+            "display": "Koi Nation of Northern California",
+            "definition": "NA"
+        },
+        { "code": "3250-8", "display": "Lemhi-Shoshone", "definition": "NA" },
+        {
+            "code": "3252-4",
+            "display": "Little River Band of Ottawa Indians, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "3254-0",
+            "display": "Little Traverse Bay Bands of Odawa Indians, Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "3257-3",
+            "display": "Louisiana Choctaw Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3267-2",
+            "display": "Lytton Rancheria of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3273-0",
+            "display": "Manchester Band of Pomo Indians of the Manchester Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3277-1",
+            "display": "Marietta Band of Nooksack",
+            "definition": "NA"
+        },
+        {
+            "code": "3280-5",
+            "display": "Match-e-be-nash-she-wish Band of Pottawatomi Indians of Michigan",
+            "definition": "NA"
+        },
+        {
+            "code": "3284-7",
+            "display": "Mechoopda Indian Tribe of Chico Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3285-4",
+            "display": "Meherrin Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3289-6",
+            "display": "Metrolina Native American Association",
+            "definition": "NA"
+        },
+        {
+            "code": "3294-6",
+            "display": "Middletown Rancheria of Pomo Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3305-0",
+            "display": "Monacan Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3309-2",
+            "display": "Mooretown Rancheria of Maidu Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3317-5",
+            "display": "Nanticoke Lenni-Lenape",
+            "definition": "NA"
+        },
+        {
+            "code": "3319-1",
+            "display": "Natchitoches Tribe of Louisiana",
+            "definition": "NA"
+        },
+        {
+            "code": "3321-7",
+            "display": "Navajo Nation, Arizona, New Mexico and Utah",
+            "definition": "NA"
+        },
+        {
+            "code": "3329-0",
+            "display": "Northfork Rancheria of Mono Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3337-3",
+            "display": "Nottoway Indian Tribe of Virginia",
+            "definition": "NA"
+        },
+        {
+            "code": "3338-1",
+            "display": "Nulhegan Band of the Coosuk Abenaki Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3339-9",
+            "display": "Occaneechi Band of the Saponi Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3340-7",
+            "display": "Oglala Sioux Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3341-5",
+            "display": "Ohkay Owingeh, New Mexico",
+            "definition": "NA"
+        },
+        {
+            "code": "3344-9",
+            "display": "Oneida Indian Nation, New York",
+            "definition": "NA"
+        },
+        {
+            "code": "3345-6",
+            "display": "Oneida Nation, Wisconsin",
+            "definition": "NA"
+        },
+        {
+            "code": "3356-3",
+            "display": "Pascua Yaqui Tribe of Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "3357-1",
+            "display": "Paskenta Band of Nomlaki Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3359-7",
+            "display": "Patawomeck Indian Tribe of Virginia",
+            "definition": "NA"
+        },
+        {
+            "code": "3360-5",
+            "display": "Paucatuck Eastern Pequot",
+            "definition": "NA"
+        },
+        {
+            "code": "3365-4",
+            "display": "Pee Dee Indian Nation of Upper South Carolina",
+            "definition": "NA"
+        },
+        {
+            "code": "3366-2",
+            "display": "Pee Dee Indian Tribe of South Carolina",
+            "definition": "NA"
+        },
+        {
+            "code": "3368-8",
+            "display": "Peoria Tribe of Indians of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "3371-2",
+            "display": "Piedmont American Indian Association-Lower Eastern Cherokee Nation SC (PAIA)",
+            "definition": "NA"
+        },
+        {
+            "code": "3373-8",
+            "display": "Pinoleville Pomo Nation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3375-3",
+            "display": "Piqua Shawnee Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3378-7",
+            "display": "Piscataway Conoy Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3379-5",
+            "display": "Piscataway Indian Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3383-7",
+            "display": "Pocasset Wampanoag",
+            "definition": "NA"
+        },
+        {
+            "code": "3385-2",
+            "display": "Pointe Au-Chien Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3387-8",
+            "display": "Pokanoket (Royal House of Pokanoket)",
+            "definition": "NA"
+        },
+        { "code": "3392-8", "display": "Ponkapoag", "definition": "NA" },
+        {
+            "code": "3396-9",
+            "display": "Potter Valley Tribe, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3422-3",
+            "display": "Quartz Valley Indian Community of the Quartz Valley Reservation of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3423-1",
+            "display": "Quechan Tribe Of The Fort Yuma Indian Reservation, California and Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "3427-2",
+            "display": "Ramona Band of Cahuilla, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3432-2",
+            "display": "Redding Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3433-0",
+            "display": "Redwood Valley or Little River Band of Pomo Indians of the Redwood Valley Rancheria California",
+            "definition": "NA"
+        },
+        {
+            "code": "3436-3",
+            "display": "Rincon Band of Luiseno Mission Indians of Rincon Reservation, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3437-1",
+            "display": "Robinson Rancheria",
+            "definition": "NA"
+        },
+        {
+            "code": "3444-7",
+            "display": "Sac River Band of the Chickamauga-Cherokee",
+            "definition": "NA"
+        },
+        {
+            "code": "3446-2",
+            "display": "Saint Regis Mohawk Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3454-6",
+            "display": "San Luis Rey Mission Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "3460-3",
+            "display": "Santee Indian Nation of South Carolina",
+            "definition": "NA"
+        },
+        {
+            "code": "3461-1",
+            "display": "Santee Indian Organization",
+            "definition": "NA"
+        },
+        { "code": "3463-7", "display": "Saponi", "definition": "NA" },
+        { "code": "3464-5", "display": "Sappony", "definition": "NA" },
+        {
+            "code": "3469-4",
+            "display": "Seaconke Wampanoag",
+            "definition": "NA"
+        },
+        {
+            "code": "3471-0",
+            "display": "Seminole Tribe of Florida",
+            "definition": "NA"
+        },
+        {
+            "code": "3472-8",
+            "display": "Seneca Nation of Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3479-3",
+            "display": "Shawnee Nation United Remnant Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3481-9",
+            "display": "Sherwood Valley Rancheria of Pomo Indians of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3482-7",
+            "display": "Shingle Springs Band of Miwok Indians, Shingle Springs Rancheria (Verona Tract), California",
+            "definition": "NA"
+        },
+        {
+            "code": "3490-0",
+            "display": "Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota",
+            "definition": "NA"
+        },
+        {
+            "code": "3499-1",
+            "display": "Southeastern Cherokee Council",
+            "definition": "NA"
+        },
+        {
+            "code": "3503-0",
+            "display": "Southern Ute Indian Tribe of the Southern Ute Reservation, Colorado",
+            "definition": "NA"
+        },
+        {
+            "code": "3516-2",
+            "display": "Swan Creek Black River Confederate Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3519-6",
+            "display": "Table Mountain Rancheria",
+            "definition": "NA"
+        },
+        {
+            "code": "3523-8",
+            "display": "Tejon Indian Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3525-3",
+            "display": "Te-Moak Tribe of Western Shoshone Indians of Nevada (Four constituent bands: Battle Mountain Band; Elko Band; South Fork Band and Wells Band)",
+            "definition": "NA"
+        },
+        {
+            "code": "3530-3",
+            "display": "The Modoc Tribe of Oklahoma",
+            "definition": "NA"
+        },
+        {
+            "code": "3535-2",
+            "display": "Suquamish Indian Tribe of the Port Madison Reservation",
+            "definition": "NA"
+        },
+        {
+            "code": "3536-0",
+            "display": "The Waccamaw Indian People",
+            "definition": "NA"
+        },
+        {
+            "code": "3540-2",
+            "display": "Timbisha Shoshone Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3541-0",
+            "display": "Tohono O'odham Nation of Arizona",
+            "definition": "NA"
+        },
+        {
+            "code": "3543-6",
+            "display": "Tolowa Dee-ni' Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3553-5",
+            "display": "Tuolumne Band of Me-Wuk Indians of the Tuolumne Rancheria of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3560-0",
+            "display": "United Auburn Indian Community of the Auburn Rancheria of California",
+            "definition": "NA"
+        },
+        {
+            "code": "3561-8",
+            "display": "United Cherokee Ani-Yun-Wiya Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3565-9",
+            "display": "Upper Mattaponi Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3570-9",
+            "display": "Ute Mountain Ute Tribe",
+            "definition": "NA"
+        },
+        {
+            "code": "3572-5",
+            "display": "Viejas (Baron Long) Group of Capitan Grande Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3583-2",
+            "display": "Washoe Tribe of Nevada and California (Carson Colony, Dresslerville Colony, Woodfords Community, Stewart Community, and Washoe Ranches)",
+            "definition": "NA"
+        },
+        {
+            "code": "3584-0",
+            "display": "Wassamasaw Tribe of Varnertown Indians",
+            "definition": "NA"
+        },
+        {
+            "code": "3590-7",
+            "display": "White River Band of the Chickamauga-Cherokee",
+            "definition": "NA"
+        },
+        {
+            "code": "3594-9",
+            "display": "Wilton Rancheria, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3601-2",
+            "display": "Wiyot Tribe, California",
+            "definition": "NA"
+        },
+        {
+            "code": "3611-1",
+            "display": "Yocha Dehe Wintun Nation, California",
+            "definition": "NA"
+        },
+        { "code": "3628-5", "display": "Arctic Village", "definition": "NA" },
+        { "code": "3704-4", "display": "Kaguyak Village", "definition": "NA" },
+        {
+            "code": "3710-1",
+            "display": "Tangirnaq Native Village",
+            "definition": "NA"
+        },
+        {
+            "code": "3711-9",
+            "display": "Native Village of Afognak",
+            "definition": "NA"
+        },
+        {
+            "code": "3720-0",
+            "display": "Native Village of Kanatak",
+            "definition": "NA"
+        },
+        {
+            "code": "3735-8",
+            "display": "Qagan Tayagungin Tribe of Sand Point",
+            "definition": "NA"
+        },
+        {
+            "code": "3741-6",
+            "display": "Sun'aq Tribe of Kodiak",
+            "definition": "NA"
+        },
+        {
+            "code": "3743-2",
+            "display": "Unangan (Unalaska)",
+            "definition": "NA"
+        },
+        {
+            "code": "3745-7",
+            "display": "Inupiat (inupiaq)",
+            "definition": "NA"
+        },
+        { "code": "3746-5", "display": "American Eskimo", "definition": "NA" },
+        {
+            "code": "3751-5",
+            "display": "Chinik Eskimo Community (Golovin)",
+            "definition": "NA"
+        },
+        { "code": "3753-1", "display": "Inuit", "definition": "NA" },
+        {
+            "code": "3757-2",
+            "display": "King Island Native Community",
+            "definition": "NA"
+        },
+        {
+            "code": "3785-3",
+            "display": "Native Village of White Mountain",
+            "definition": "NA"
+        },
+        {
+            "code": "3788-7",
+            "display": "Village of Anaktuvuk Pass",
+            "definition": "NA"
+        },
+        { "code": "3809-1", "display": "Skagway Village", "definition": "NA" },
+        {
+            "code": "3823-2",
+            "display": "Chuloonawick Native Village",
+            "definition": "NA"
+        },
+        { "code": "3826-5", "display": "Emmonak Village", "definition": "NA" },
+        {
+            "code": "3838-0",
+            "display": "Native Village of Hamilton",
+            "definition": "NA"
+        },
+        {
+            "code": "3861-2",
+            "display": "Central Council of the Tlingit and Haida Indian Tribes",
+            "definition": "NA"
+        },
+        {
+            "code": "3885-1",
+            "display": "Village of Ohogamiut",
+            "definition": "NA"
+        },
+        {
+            "code": "3889-3",
+            "display": "Native Village of Paimiut",
+            "definition": "NA"
+        },
+        { "code": "3891-9", "display": "Abenaki Canadian", "definition": "NA" },
+        { "code": "3892-7", "display": "Acadia Band", "definition": "NA" },
+        { "code": "3893-5", "display": "Ache Dene Koe", "definition": "NA" },
+        { "code": "3894-3", "display": "Ahousaht", "definition": "NA" },
+        {
+            "code": "3895-0",
+            "display": "Alderville First Nation",
+            "definition": "NA"
+        },
+        { "code": "3896-8", "display": "Alexandria Band", "definition": "NA" },
+        {
+            "code": "3897-6",
+            "display": "Algonquins of Barriere Lake",
+            "definition": "NA"
+        },
+        {
+            "code": "3898-4",
+            "display": "Batchewana First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3899-2",
+            "display": "Beardys and Okemasis Band",
+            "definition": "NA"
+        },
+        { "code": "3900-8", "display": "Beausoleil", "definition": "NA" },
+        { "code": "3901-6", "display": "Beecher Bay", "definition": "NA" },
+        {
+            "code": "3902-4",
+            "display": "Bella Coola (Nuxalk Nation)",
+            "definition": "NA"
+        },
+        { "code": "3903-2", "display": "Beothuk", "definition": "NA" },
+        { "code": "3904-0", "display": "Big Cove", "definition": "NA" },
+        { "code": "3905-7", "display": "Big Grassy", "definition": "NA" },
+        {
+            "code": "3906-5",
+            "display": "Bigstone Cree Nation",
+            "definition": "NA"
+        },
+        { "code": "3907-3", "display": "Bonaparte Band", "definition": "NA" },
+        {
+            "code": "3908-1",
+            "display": "Boston Bar First Nation",
+            "definition": "NA"
+        },
+        { "code": "3909-9", "display": "Bridge River", "definition": "NA" },
+        {
+            "code": "3910-7",
+            "display": "Brokenhead Ojibway Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3911-5",
+            "display": "Buffalo Point Band",
+            "definition": "NA"
+        },
+        { "code": "3912-3", "display": "Caldwell", "definition": "NA" },
+        {
+            "code": "3913-1",
+            "display": "Campbell River Band",
+            "definition": "NA"
+        },
+        { "code": "3914-9", "display": "Cape Mudge Band", "definition": "NA" },
+        {
+            "code": "3915-6",
+            "display": "Carcross/Tagish First Nation",
+            "definition": "NA"
+        },
+        { "code": "3916-4", "display": "Caribou", "definition": "NA" },
+        { "code": "3917-2", "display": "Carrier Nation", "definition": "NA" },
+        {
+            "code": "3918-0",
+            "display": "Carry the Kettle Band",
+            "definition": "NA"
+        },
+        { "code": "3919-8", "display": "Cheam Band", "definition": "NA" },
+        {
+            "code": "3920-6",
+            "display": "Chemainus First Nation",
+            "definition": "NA"
+        },
+        { "code": "3921-4", "display": "Chilcotin Nation", "definition": "NA" },
+        {
+            "code": "3922-2",
+            "display": "Chippewa of Sarnia",
+            "definition": "NA"
+        },
+        {
+            "code": "3923-0",
+            "display": "Chippewa of the Thames",
+            "definition": "NA"
+        },
+        {
+            "code": "3924-8",
+            "display": "Chippewa/Ojibwe Canadian",
+            "definition": "NA"
+        },
+        { "code": "3925-5", "display": "Clayoquot", "definition": "NA" },
+        {
+            "code": "3926-3",
+            "display": "Cold Lake First Nations",
+            "definition": "NA"
+        },
+        { "code": "3927-1", "display": "Coldwater Band", "definition": "NA" },
+        { "code": "3928-9", "display": "Comox Band", "definition": "NA" },
+        {
+            "code": "3929-7",
+            "display": "Coquitlam Band (Kwikwetlem First Nation)",
+            "definition": "NA"
+        },
+        {
+            "code": "3930-5",
+            "display": "Cote First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3931-3",
+            "display": "Couchiching First Nation",
+            "definition": "NA"
+        },
+        { "code": "3932-1", "display": "Cowessess Band", "definition": "NA" },
+        { "code": "3933-9", "display": "Cowichan", "definition": "NA" },
+        { "code": "3934-7", "display": "Cree Canadian", "definition": "NA" },
+        {
+            "code": "3935-4",
+            "display": "Cross Lake First Nation",
+            "definition": "NA"
+        },
+        { "code": "3936-2", "display": "Curve Lake Band", "definition": "NA" },
+        {
+            "code": "3937-0",
+            "display": "Dene Band Nwt (NW Territory)",
+            "definition": "NA"
+        },
+        { "code": "3938-8", "display": "Dene Canadian", "definition": "NA" },
+        { "code": "3939-6", "display": "Ditidaht Band", "definition": "NA" },
+        { "code": "3940-4", "display": "Dogrib", "definition": "NA" },
+        { "code": "3941-2", "display": "Eagle Lake Band", "definition": "NA" },
+        { "code": "3942-0", "display": "Eastern Cree", "definition": "NA" },
+        {
+            "code": "3943-8",
+            "display": "Ebb and Flow Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3944-6",
+            "display": "English River First Nation",
+            "definition": "NA"
+        },
+        { "code": "3945-3", "display": "Eskasoni", "definition": "NA" },
+        { "code": "3946-1", "display": "Esquimalt", "definition": "NA" },
+        { "code": "3947-9", "display": "Fisher River", "definition": "NA" },
+        { "code": "3948-7", "display": "Five Nations", "definition": "NA" },
+        {
+            "code": "3949-5",
+            "display": "Fort Alexander Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3951-1",
+            "display": "Garden River Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3952-9",
+            "display": "Gibson Band (Wahta Mohawk)",
+            "definition": "NA"
+        },
+        { "code": "3953-7", "display": "Gitksan", "definition": "NA" },
+        {
+            "code": "3954-5",
+            "display": "Grassy Narrows First Nation",
+            "definition": "NA"
+        },
+        { "code": "3955-2", "display": "Gull Bay Band", "definition": "NA" },
+        { "code": "3956-0", "display": "Gwichya Gwich'in", "definition": "NA" },
+        { "code": "3957-8", "display": "Heiltsuk Band", "definition": "NA" },
+        { "code": "3958-6", "display": "Hesquiaht Band", "definition": "NA" },
+        {
+            "code": "3959-4",
+            "display": "Hiawatha First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3960-2",
+            "display": "Hope Band (Chawathil Nation)",
+            "definition": "NA"
+        },
+        { "code": "3961-0", "display": "Huron", "definition": "NA" },
+        {
+            "code": "3962-8",
+            "display": "Huron of Lorretteville",
+            "definition": "NA"
+        },
+        {
+            "code": "3963-6",
+            "display": "Innu (Montagnais)",
+            "definition": "NA"
+        },
+        { "code": "3964-4", "display": "Interior Salish", "definition": "NA" },
+        { "code": "3965-1", "display": "James Bay Cree", "definition": "NA" },
+        {
+            "code": "3966-9",
+            "display": "James Smith Cree Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3967-7",
+            "display": "Kahkewistahaw First Nation",
+            "definition": "NA"
+        },
+        { "code": "3968-5", "display": "Kamloops Band", "definition": "NA" },
+        { "code": "3969-3", "display": "Kanaka Bar", "definition": "NA" },
+        { "code": "3970-1", "display": "Kaska Dena", "definition": "NA" },
+        { "code": "3971-9", "display": "Keeseekoose Band", "definition": "NA" },
+        { "code": "3972-7", "display": "Kingsclear Band", "definition": "NA" },
+        { "code": "3973-5", "display": "Kitamaat", "definition": "NA" },
+        {
+            "code": "3974-3",
+            "display": "Kitigan Zibi Anishinabeg",
+            "definition": "NA"
+        },
+        {
+            "code": "3975-0",
+            "display": "Klahoose First Nation",
+            "definition": "NA"
+        },
+        { "code": "3976-8", "display": "Kwakiutl", "definition": "NA" },
+        { "code": "3977-6", "display": "Kyuquot Band", "definition": "NA" },
+        { "code": "3978-4", "display": "Lakahahmen Band", "definition": "NA" },
+        {
+            "code": "3979-2",
+            "display": "Lake Manitoba Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3980-0",
+            "display": "Lake St. Martin Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3981-8",
+            "display": "Lennox Island Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3982-6",
+            "display": "Liard River First Nation",
+            "definition": "NA"
+        },
+        { "code": "3983-4", "display": "Lillooet", "definition": "NA" },
+        {
+            "code": "3984-2",
+            "display": "Listuguj Mi'Gmaq First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3985-9",
+            "display": "Little Shuswap Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3986-7",
+            "display": "Long Plain First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3987-5",
+            "display": "Lower Nicola Indian Band",
+            "definition": "NA"
+        },
+        {
+            "code": "3988-3",
+            "display": "Malahat First Nation",
+            "definition": "NA"
+        },
+        { "code": "3989-1", "display": "Matachewan Band", "definition": "NA" },
+        { "code": "3990-9", "display": "Mcleod Lake", "definition": "NA" },
+        { "code": "3991-7", "display": "Metis", "definition": "NA" },
+        {
+            "code": "3992-5",
+            "display": "Millbrook First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "3993-3",
+            "display": "Mississaugas of the Credit",
+            "definition": "NA"
+        },
+        { "code": "3994-1", "display": "Mohawk Canadian", "definition": "NA" },
+        { "code": "3995-8", "display": "Mohawk Kahnawake", "definition": "NA" },
+        {
+            "code": "3996-6",
+            "display": "Mohawks of Kanesatake",
+            "definition": "NA"
+        },
+        {
+            "code": "3997-4",
+            "display": "Mohawks of the Bay of Quinte",
+            "definition": "NA"
+        },
+        { "code": "3998-2", "display": "Mohican Canadian", "definition": "NA" },
+        { "code": "3999-0", "display": "Musqueam Band", "definition": "NA" },
+        {
+            "code": "4000-6",
+            "display": "N’Quatqua (Anderson Lake)",
+            "definition": "NA"
+        },
+        {
+            "code": "4001-4",
+            "display": "Namgis First Nation (Nimpkish)",
+            "definition": "NA"
+        },
+        {
+            "code": "4002-2",
+            "display": "Nanaimo (Snuneymuxw)",
+            "definition": "NA"
+        },
+        {
+            "code": "4003-0",
+            "display": "Nanoose First Nation",
+            "definition": "NA"
+        },
+        { "code": "4004-8", "display": "Naskapi", "definition": "NA" },
+        {
+            "code": "4005-5",
+            "display": "Nation Huronne Wendat",
+            "definition": "NA"
+        },
+        {
+            "code": "4006-3",
+            "display": "Nipissing First Nation",
+            "definition": "NA"
+        },
+        { "code": "4007-1", "display": "Nisga'a Nation", "definition": "NA" },
+        {
+            "code": "4008-9",
+            "display": "North Thompson Band (Simpcw First Nation)",
+            "definition": "NA"
+        },
+        {
+            "code": "4009-7",
+            "display": "Nuu-chah-nulth (Nootka)",
+            "definition": "NA"
+        },
+        { "code": "4010-5", "display": "Odanak", "definition": "NA" },
+        {
+            "code": "4011-3",
+            "display": "Ohiaht Band (Huu-ay-aht First Nation)",
+            "definition": "NA"
+        },
+        {
+            "code": "4012-1",
+            "display": "Oneida Nation of the Thames",
+            "definition": "NA"
+        },
+        {
+            "code": "4013-9",
+            "display": "Opaskwayak Cree Nation",
+            "definition": "NA"
+        },
+        { "code": "4014-7", "display": "Osoyoos Band", "definition": "NA" },
+        {
+            "code": "4015-4",
+            "display": "Pacheedaht First Nation",
+            "definition": "NA"
+        },
+        { "code": "4016-2", "display": "Pauquachin", "definition": "NA" },
+        { "code": "4017-0", "display": "Peepeekisis", "definition": "NA" },
+        { "code": "4018-8", "display": "Peguis", "definition": "NA" },
+        { "code": "4019-6", "display": "Penelakut", "definition": "NA" },
+        { "code": "4020-4", "display": "Penticton", "definition": "NA" },
+        { "code": "4021-2", "display": "Pine Creek", "definition": "NA" },
+        { "code": "4022-0", "display": "Plains Cree", "definition": "NA" },
+        {
+            "code": "4023-8",
+            "display": "Rainy River First Nations",
+            "definition": "NA"
+        },
+        { "code": "4024-6", "display": "Red Earth Band", "definition": "NA" },
+        { "code": "4025-3", "display": "Roseau River", "definition": "NA" },
+        { "code": "4026-1", "display": "Saddle Lake", "definition": "NA" },
+        {
+            "code": "4027-9",
+            "display": "Sakimay First Nations",
+            "definition": "NA"
+        },
+        { "code": "4028-7", "display": "Sandy Bay Band", "definition": "NA" },
+        {
+            "code": "4029-5",
+            "display": "Sarcee (Tsuut'Ina Nation)",
+            "definition": "NA"
+        },
+        { "code": "4030-3", "display": "Saugeen", "definition": "NA" },
+        {
+            "code": "4031-1",
+            "display": "Saulteau First Nations",
+            "definition": "NA"
+        },
+        { "code": "4032-9", "display": "Saulteaux", "definition": "NA" },
+        { "code": "4033-7", "display": "Seabird Island", "definition": "NA" },
+        { "code": "4034-5", "display": "Sechelt", "definition": "NA" },
+        {
+            "code": "4035-2",
+            "display": "Seine River First Nation",
+            "definition": "NA"
+        },
+        { "code": "4036-0", "display": "Serpent River", "definition": "NA" },
+        { "code": "4037-8", "display": "Seton Lake", "definition": "NA" },
+        {
+            "code": "4038-6",
+            "display": "Shoal Lake Cree Nation",
+            "definition": "NA"
+        },
+        { "code": "4039-4", "display": "Shuswap", "definition": "NA" },
+        { "code": "4040-2", "display": "Siksika Canadian", "definition": "NA" },
+        { "code": "4041-0", "display": "Similkameen", "definition": "NA" },
+        {
+            "code": "4042-8",
+            "display": "Six Nations Canada",
+            "definition": "NA"
+        },
+        {
+            "code": "4043-6",
+            "display": "Six Nations of the Grand River",
+            "definition": "NA"
+        },
+        {
+            "code": "4044-4",
+            "display": "Skawahlook First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4045-1",
+            "display": "Skeetchestn Indian Band",
+            "definition": "NA"
+        },
+        {
+            "code": "4046-9",
+            "display": "Skookum Chuck Band",
+            "definition": "NA"
+        },
+        { "code": "4047-7", "display": "Skowkale", "definition": "NA" },
+        { "code": "4048-5", "display": "Skuppah", "definition": "NA" },
+        {
+            "code": "4049-3",
+            "display": "Skwah First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4050-1",
+            "display": "Skway First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4051-9",
+            "display": "Songhees First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4052-7",
+            "display": "Soowahlie First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4053-5",
+            "display": "Spuzzum First Nation",
+            "definition": "NA"
+        },
+        { "code": "4054-3", "display": "Squamish Nation", "definition": "NA" },
+        {
+            "code": "4055-0",
+            "display": "Stanjikoming First Nation",
+            "definition": "NA"
+        },
+        { "code": "4056-8", "display": "Sto:lo Nation", "definition": "NA" },
+        { "code": "4057-6", "display": "Stone", "definition": "NA" },
+        {
+            "code": "4058-4",
+            "display": "Sucker Creek First Nation",
+            "definition": "NA"
+        },
+        { "code": "4059-2", "display": "Swampy Cree", "definition": "NA" },
+        { "code": "4060-0", "display": "Tahltan", "definition": "NA" },
+        {
+            "code": "4061-8",
+            "display": "Taku River Tlingit",
+            "definition": "NA"
+        },
+        {
+            "code": "4062-6",
+            "display": "Tete De Boule (Attikamek)",
+            "definition": "NA"
+        },
+        { "code": "4063-4", "display": "Thompson", "definition": "NA" },
+        {
+            "code": "4064-2",
+            "display": "Tobacco Plains Band",
+            "definition": "NA"
+        },
+        {
+            "code": "4065-9",
+            "display": "Tobique First Nation",
+            "definition": "NA"
+        },
+        { "code": "4066-7", "display": "Toquaht", "definition": "NA" },
+        { "code": "4067-5", "display": "Tsartlip", "definition": "NA" },
+        {
+            "code": "4068-3",
+            "display": "Tsawout First Nation",
+            "definition": "NA"
+        },
+        { "code": "4069-1", "display": "Tseycum", "definition": "NA" },
+        { "code": "4070-9", "display": "Uchucklesaht", "definition": "NA" },
+        {
+            "code": "4071-7",
+            "display": "Ucluelet First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4072-5",
+            "display": "Vuntut Gwitchin First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4073-3",
+            "display": "Wabauskang First Nation",
+            "definition": "NA"
+        },
+        { "code": "4074-1", "display": "Walpole Island", "definition": "NA" },
+        {
+            "code": "4075-8",
+            "display": "Wasauksing First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4076-6",
+            "display": "Waywayseecappo First Nation",
+            "definition": "NA"
+        },
+        { "code": "4077-4", "display": "West Bay Band", "definition": "NA" },
+        { "code": "4078-2", "display": "White Bear Band", "definition": "NA" },
+        {
+            "code": "4079-0",
+            "display": "Whitefish Lake Band",
+            "definition": "NA"
+        },
+        { "code": "4080-8", "display": "Wikwemikong", "definition": "NA" },
+        { "code": "4081-6", "display": "Wolf Lake Band", "definition": "NA" },
+        {
+            "code": "4082-4",
+            "display": "Woodland Cree First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4083-2",
+            "display": "Woodstock First Nation",
+            "definition": "NA"
+        },
+        {
+            "code": "4084-0",
+            "display": "Xaxli'p First Nation (Fountain Band)",
+            "definition": "NA"
+        },
+        {
+            "code": "4085-7",
+            "display": "LATIN AMERICAN INDIAN",
+            "definition": "NA"
+        },
+        { "code": "4087-3", "display": "Belizean Indian", "definition": "NA" },
+        { "code": "4088-1", "display": "Cakchiquel", "definition": "NA" },
+        { "code": "4089-9", "display": "Choco", "definition": "NA" },
+        {
+            "code": "4090-7",
+            "display": "Costa Rican Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "4091-5",
+            "display": "Salvadoran Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "4092-3",
+            "display": "Guatemalan Indian",
+            "definition": "NA"
+        },
+        { "code": "4093-1", "display": "Guatemalan Mayan", "definition": "NA" },
+        { "code": "4094-9", "display": "Guaymi", "definition": "NA" },
+        { "code": "4095-6", "display": "Honduran Indian", "definition": "NA" },
+        { "code": "4096-4", "display": "Kanjobal", "definition": "NA" },
+        { "code": "4097-2", "display": "Kekchi", "definition": "NA" },
+        { "code": "4098-0", "display": "Kuna Indian", "definition": "NA" },
+        { "code": "4099-8", "display": "Lenca", "definition": "NA" },
+        {
+            "code": "4100-4",
+            "display": "Maya Central American",
+            "definition": "NA"
+        },
+        { "code": "4101-2", "display": "Miskito", "definition": "NA" },
+        {
+            "code": "4102-0",
+            "display": "Nicaraguan Indian",
+            "definition": "NA"
+        },
+        {
+            "code": "4103-8",
+            "display": "Panamanian Indian",
+            "definition": "NA"
+        },
+        { "code": "4104-6", "display": "Pipil", "definition": "NA" },
+        { "code": "4105-3", "display": "Quiche", "definition": "NA" },
+        { "code": "4106-1", "display": "Rama", "definition": "NA" },
+        { "code": "4107-9", "display": "Sumo", "definition": "NA" },
+        { "code": "4108-7", "display": "Nahua", "definition": "NA" },
+        { "code": "4109-5", "display": "Mexican Indian", "definition": "NA" },
+        { "code": "4110-3", "display": "Amuzgo", "definition": "NA" },
+        { "code": "4111-1", "display": "Aztec", "definition": "NA" },
+        { "code": "4112-9", "display": "Chatino", "definition": "NA" },
+        { "code": "4113-7", "display": "Chinantec", "definition": "NA" },
+        { "code": "4114-5", "display": "Chocho", "definition": "NA" },
+        { "code": "4115-2", "display": "Concho", "definition": "NA" },
+        { "code": "4116-0", "display": "Cora", "definition": "NA" },
+        { "code": "4117-8", "display": "Cochimi", "definition": "NA" },
+        { "code": "4118-6", "display": "Cuicatec", "definition": "NA" },
+        { "code": "4119-4", "display": "Huastec", "definition": "NA" },
+        { "code": "4120-2", "display": "Huave", "definition": "NA" },
+        { "code": "4121-0", "display": "Huichol", "definition": "NA" },
+        { "code": "4122-8", "display": "Ixcatec", "definition": "NA" },
+        { "code": "4123-6", "display": "Lacandon", "definition": "NA" },
+        { "code": "4124-4", "display": "Lagunero", "definition": "NA" },
+        { "code": "4125-1", "display": "Mazahua", "definition": "NA" },
+        { "code": "4126-9", "display": "Mazatec", "definition": "NA" },
+        { "code": "4127-7", "display": "Mixe", "definition": "NA" },
+        { "code": "4128-5", "display": "Mixtec", "definition": "NA" },
+        { "code": "4129-3", "display": "Nahuatl", "definition": "NA" },
+        { "code": "4130-1", "display": "Olmec", "definition": "NA" },
+        { "code": "4131-9", "display": "Opata", "definition": "NA" },
+        { "code": "4132-7", "display": "Otomi", "definition": "NA" },
+        { "code": "4133-5", "display": "Popoluca", "definition": "NA" },
+        { "code": "4134-3", "display": "Seri", "definition": "NA" },
+        {
+            "code": "4135-0",
+            "display": "Tarahumara (Raramuri)",
+            "definition": "NA"
+        },
+        {
+            "code": "4136-8",
+            "display": "Tarasco (Purepecha)",
+            "definition": "NA"
+        },
+        { "code": "4137-6", "display": "Tepehua", "definition": "NA" },
+        { "code": "4138-4", "display": "Tequistlatec", "definition": "NA" },
+        { "code": "4139-2", "display": "Tlapanec", "definition": "NA" },
+        { "code": "4140-0", "display": "Tojolabal", "definition": "NA" },
+        { "code": "4141-8", "display": "Toltec", "definition": "NA" },
+        { "code": "4142-6", "display": "Triqui (Trique)", "definition": "NA" },
+        { "code": "4143-4", "display": "Tzeltal", "definition": "NA" },
+        { "code": "4144-2", "display": "Tzotzil", "definition": "NA" },
+        { "code": "4145-9", "display": "Zapotec", "definition": "NA" },
+        { "code": "4146-7", "display": "Zoque", "definition": "NA" },
+        { "code": "4148-3", "display": "Chichimeca", "definition": "NA" },
+        { "code": "4150-9", "display": "Ache Indian", "definition": "NA" },
+        { "code": "4151-7", "display": "Amazon Indian", "definition": "NA" },
+        { "code": "4152-5", "display": "Andean Indian", "definition": "NA" },
+        { "code": "4153-3", "display": "Arawak", "definition": "NA" },
+        {
+            "code": "4154-1",
+            "display": "Argentinean Indian",
+            "definition": "NA"
+        },
+        { "code": "4155-8", "display": "Aymara", "definition": "NA" },
+        { "code": "4156-6", "display": "Bolivian Indian", "definition": "NA" },
+        { "code": "4157-4", "display": "Brazilian Indian", "definition": "NA" },
+        { "code": "4158-2", "display": "Canela", "definition": "NA" },
+        { "code": "4159-0", "display": "Chilean Indian", "definition": "NA" },
+        { "code": "4160-8", "display": "Colombian Indian", "definition": "NA" },
+        {
+            "code": "4161-6",
+            "display": "Ecuadorian Indian",
+            "definition": "NA"
+        },
+        { "code": "4162-4", "display": "Guarani", "definition": "NA" },
+        {
+            "code": "4163-2",
+            "display": "Guyanese South American Indian",
+            "definition": "NA"
+        },
+        { "code": "4164-0", "display": "Inca", "definition": "NA" },
+        {
+            "code": "4165-7",
+            "display": "Mapuche (Araucanian)",
+            "definition": "NA"
+        },
+        {
+            "code": "4166-5",
+            "display": "Maya South American",
+            "definition": "NA"
+        },
+        {
+            "code": "4167-3",
+            "display": "Paraguayan Indian",
+            "definition": "NA"
+        },
+        { "code": "4168-1", "display": "Peruvian Indian", "definition": "NA" },
+        { "code": "4169-9", "display": "Quechua", "definition": "NA" },
+        { "code": "4170-7", "display": "Quichua", "definition": "NA" },
+        { "code": "4171-5", "display": "Tehuelche", "definition": "NA" },
+        { "code": "4172-3", "display": "Tupi", "definition": "NA" },
+        { "code": "4173-1", "display": "Uruguayan Indian", "definition": "NA" },
+        {
+            "code": "4174-9",
+            "display": "Venezuelan Indian",
+            "definition": "NA"
+        },
+        { "code": "4175-6", "display": "Zaparo", "definition": "NA" },
+        { "code": "4176-4", "display": "Caribbean Indian", "definition": "NA" },
+        { "code": "4177-2", "display": "Carib", "definition": "NA" },
+        { "code": "4178-0", "display": "Taino", "definition": "NA" },
+        { "code": "4179-8", "display": "Dominican Indian", "definition": "NA" },
+        {
+            "code": "4180-6",
+            "display": "Puerto Rican Indian",
+            "definition": "NA"
+        },
+        { "code": "4181-4", "display": "Cuban Indian", "definition": "NA" },
+        {
+            "code": "4183-0",
+            "display": "Mesoamerian Indian",
+            "definition": "NA"
+        },
+        { "code": "4184-8", "display": "Mayo", "definition": "NA" },
+        { "code": "4185-5", "display": "Maya", "definition": "NA" },
+        { "code": "4186-3", "display": "Somali", "definition": "NA" },
+        { "code": "4187-1", "display": "Alutiiq", "definition": "NA" }
+    ],
+    "count": 1441
+}
