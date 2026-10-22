@@ -2,7 +2,6 @@ set dotenv-load := true
 config := "dev.yaml"
 chunk_size := "5000"
 
-
 extract vocab="" report="":
     uv run trawler -c {{config}} -ch {{chunk_size}} {{ if vocab != "" { "--vocab " + quote(vocab) } else { "" } }} {{ if report != "" { "--report " + quote(report) } else { "" } }}
 

@@ -206,7 +206,7 @@ def upsert_concepts(session, rows: dict[str, dict]):
         index_elements=["concept_curie"],
         # Sets row excluded due to pre-existence/conflict to the value of the new row
         set_={k: stmt.excluded[k] for k in update_cols},
-        # Only update if the value in an existing column is different from a value in the new row
+        # Only update if the value in an existing row is different from a value in the new row
         where=or_(
             *[table.c[k].is_distinct_from(stmt.excluded[k]) for k in update_cols]
         ),
