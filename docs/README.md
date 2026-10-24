@@ -53,7 +53,6 @@ A [EULA](https://mid.meddra.org/eula.html) (End-User License Agreement) is requi
 - The EULA will need to be provisioned for your user account 
 - More information to come once EULA has been provisioned
 
-
 ### OMIM
 The OMIM vocabulary can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
 
