@@ -14,17 +14,6 @@ pip install -e .
 #### To extract all vocabularies in config file:
 `uv run trawler -c {path/to/config/file}` or `just extract`
 
-
-#### To extract specific vocabularies, specify the vocabulary prefix separated by comma:
-`uv run trawler -c {path/to/config/file} --vocab {prefix1,prefix2}` or `just extract {prefix1,prefix2}`
-
-#### To save term count report to a file, provide the filepath where it should be saved:
-`uv run trawler -c {path/to/config/file} --report {path/to/output}` or `just extract "" {path/to/output}`
-
-(If saving report to a file and not specifying vocabularies to extract, `""` must be included before the report output when running the `just` command)
-
-
-
 ## Conventions
 ### Config File
 An example config file can be found at `example/config.yaml`
