@@ -361,7 +361,6 @@ def extract(
     """
     db_engine = get_engine(config_path)
     Base.metadata.create_all(db_engine)
-    print(f"FROMAKEMMTMTM {format}")
     with open(config_path) as c:
         config = yaml.safe_load(c)
     ExtractorBase.chunk_size = int(chunk_size)
