@@ -21,7 +21,14 @@ pip install -e .
 #### To save term count report to a file, provide the filepath where it should be saved:
 `uv run trawler -c {path/to/config/file} --report {path/to/output}` or `just extract "" {path/to/output}`
 
-(If saving report to a file and not specifying vocabularies to extract, `""` must be included before the report output when running the `just` command)
+(If saving report to a file and not specifying vocabularies to extract when running the `just` command, `""` must be included before the report output.)
+
+The default format of the report is table. An optional flag can be added to specify either csv or tsv formats.
+
+`--format csv`
+
+
+
 
 
 

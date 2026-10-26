@@ -1,3 +1,5 @@
+import csv
+import io
 import logging
 import os
 from pathlib import Path
@@ -305,26 +307,40 @@ def build_count_report(before: dict[str, int], after: dict[str, int]) -> list[di
     return rows
 
 
-def format_count_report(rows: list[dict]) -> str:
-    """Format the count report rows as an aligned table"""
-    lines = [f"{'Prefix':<22}{'Prev':>14}{'Current':>14}{'Change':>12}  Note"]
+def format_count_report(rows: list[dict], format: str = "table") -> str:
+    """Format the count report rows as a table, CSV or TSV."""
+    if format == "table":
+        lines = [f"{'Prefix':<22}{'Prev':>14}{'Current':>14}{'Change':>12}  Note"]
+        for r in rows:
+            lines.append(
+                f"{r['prefix']:<22}{r['prev']:>14,}{r['current']:>14,}"
+                f"{r['change']:>+12,}  {r['note']}"
+            )
+        return "\n".join(lines)
+
+    delimiter = "," if format == "csv" else "\t"
+    keys = ["prefix", "prev", "current", "change", "note"]
+    buffer = io.StringIO()
+    writer = csv.writer(
+        buffer,
+        delimiter=delimiter,
+        lineterminator="\n",
+    )
+    writer.writerow([k.capitalize() for k in keys])
     for r in rows:
-        lines.append(
-            f"{r['prefix']:<22}{r['prev']:>14,}{r['current']:>14,}"
-            f"{r['change']:>+12,}  {r['note']}"
-        )
-    return "\n".join(lines)
+        writer.writerow([r[k] for k in keys])
+    return buffer.getvalue().rstrip("\n")
 
 
-def print_count_report(rows: list[dict]):
+def print_count_report(rows: list[dict], fmt: str = "table"):
     """Print the report as an aligned table"""
-    print(format_count_report(rows))
+    print(format_count_report(rows, fmt))
 
 
-def write_count_report(rows: list[dict], output: Path) -> Path:
+def write_count_report(rows: list[dict], output: Path, format="table") -> Path:
     """Write count report to a timestamped CSV"""
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(format_count_report(rows) + "\n")
+    output.write_text(format_count_report(rows, format) + "\n")
     return output
 
 
@@ -333,6 +349,7 @@ def extract(
     chunk_size: int,
     report_path: Path | None = None,
     extract_vocab: str | None = None,
+    format: str = "table",
 ):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
@@ -344,7 +361,7 @@ def extract(
     """
     db_engine = get_engine(config_path)
     Base.metadata.create_all(db_engine)
-
+    print(f"FROMAKEMMTMTM {format}")
     with open(config_path) as c:
         config = yaml.safe_load(c)
     ExtractorBase.chunk_size = int(chunk_size)
@@ -416,9 +433,9 @@ def extract(
     with loader.create_session() as session:
         after = count_concepts(session, report_ids)
     report = build_count_report(before, after)
-    print_count_report(report)
+    print_count_report(report, format)
     if report_path:
-        write_count_report(report, report_path)
+        write_count_report(report, report_path, format)
         logger.info(f"Wrote count report to {report_path}")
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
