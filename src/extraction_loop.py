@@ -1,12 +1,12 @@
 import csv
 import io
 import logging
-import os
 from pathlib import Path
 
 import yaml
 from car_utils import LinkMLModelLoader
 from common_access_model.datamodel.common_access_model_sqla import (
+    Base,
     Concept,
     DeprecatedConcept,
     Vocabulary,
@@ -17,7 +17,7 @@ from sqlalchemy.dialects.postgresql import insert
 import extractors
 from extractors import ExtractorBase
 from streamer.engine import get_engine
-from utils import format_code, found_code
+from utils import build_db_url, format_code, found_code
 
 logger = logging.getLogger(__name__)
 
@@ -33,15 +33,30 @@ EXTRACTORS = {
 
 REPORT_DIR = Path("count_reports")
 
-loader = LinkMLModelLoader(
-    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
-    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
-    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-    table_prefix="{}",  # note the `{}` -- see Gotchas below
-    schema_name="dev_include_access",
-).load()
-assert loader.module is not None, "LinkML model failed to load"
-Base = loader.module.Base
+
+# loader = LinkMLModelLoader(
+#     database_url=build_db_url(),
+#     model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
+#     table_prefix="{}",  # note the `{}` -- see Gotchas below
+#     schema_name="dev_include_access",
+# ).load()
+# assert loader.module is not None, "LinkML model failed to load"
+# Base = loader.module.Base
+
+_loader = None
+
+
+def get_loader(config: dict | None = None):
+    global _loader
+    if _loader is None:
+        _loader = LinkMLModelLoader(
+            database_url=build_db_url(config),
+            model_import_path="common_access_model.datamodel.common_access_model_sqla",
+            table_prefix="{}",
+            schema_name="dev_include_access",
+        ).load()
+        assert _loader.module is not None, "LinkML model failed to load"
+    return _loader
 
 
 def select_vocabs(config: dict, extract_vocab: str | list[str] | None) -> list[dict]:
@@ -218,7 +233,7 @@ def upsert_concepts(session, rows: dict[str, dict]):
 
 def load_concept(data, config: dict, replacement=None):
     """Loads both Concept and DeprecatedConcept tables."""
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         # Builds one dict per concept
         for chunk in data:
             concepts = {}
@@ -255,7 +270,7 @@ def load_concept(data, config: dict, replacement=None):
 
 
 def load_vocab(data, config: dict):
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         for chunk in data:
             for row in chunk:
                 session.merge(Vocabulary(**vocab_rows(row, config)))
@@ -264,12 +279,12 @@ def load_vocab(data, config: dict):
 
 def create_omop_fallback():
     """Builds 'OMOP' vocabulary for updated codes to fall back to 'OMOP:0' if they do not have a replacement"""
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         session.merge(Vocabulary(**omop_vocab_row()))
         session.commit()
 
         # Create the fallback deprecated concept
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         session.merge(Concept(**omop_concept_row()))
         session.commit()
 
@@ -359,11 +374,13 @@ def extract(
     Arguments:
         config_path: The specified config file to iterate.
     """
-    db_engine = get_engine(config_path)
-    Base.metadata.create_all(db_engine)
     with open(config_path) as c:
         config = yaml.safe_load(c)
+    loader = get_loader(config)
+    get_loader(config)
+    db_engine = get_engine(config_path)
     ExtractorBase.chunk_size = int(chunk_size)
+    Base.metadata.create_all(db_engine)
     selected = select_vocabs(config, extract_vocab)
     report_ids = {v["prefix"] for v in selected if v.get("prefix")}
     with loader.create_session() as session:
