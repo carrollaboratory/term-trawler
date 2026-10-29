@@ -34,14 +34,6 @@ The source vocabulary files or URLs may need to be periodically updated.
 ### CDCREC
 The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary can be downloaded [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
-### MedDRA
-A [EULA](https://mid.meddra.org/eula.html) (End-User License Agreement) is required to download the MedDRA OMOP file on [Athena](https://athena.ohdsi.org/).
-- Create an account on the [Athena](https://athena.ohdsi.org/) website. 
-- Once created, select the Download tab on the top right, which should route to a [list of vocabularies](https://athena.ohdsi.org/vocabulary/list). 
-- Find MedDRA on the list and click the EULA Required link on the right. Hit Request in the pop-up.
-- The EULA will need to be provisioned for your user account 
-- More information to come once EULA has been provisioned
-
 ### OMIM
 The OMIM vocabulary can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
 
