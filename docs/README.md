@@ -34,7 +34,7 @@ An example config file can be found at `example/config.yaml`
 ### Source Types
 There are three source types for vocabularies. Each type must be specified under `source_type` per vocabulary entry. Each type must include a specific property for the location of the vocabulary terms. (See config example at `example/config.yaml` for more information.)
 - OMOP
-  - `archive_filename`
+  - `source_filename`
 - OWL
   - `owl_file`
 - FHIR 
