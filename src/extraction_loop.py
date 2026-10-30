@@ -33,16 +33,6 @@ EXTRACTORS = {
 
 REPORT_DIR = Path("count_reports")
 
-
-# loader = LinkMLModelLoader(
-#     database_url=build_db_url(),
-#     model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-#     table_prefix="{}",  # note the `{}` -- see Gotchas below
-#     schema_name="dev_include_access",
-# ).load()
-# assert loader.module is not None, "LinkML model failed to load"
-# Base = loader.module.Base
-
 _loader = None
 
 
