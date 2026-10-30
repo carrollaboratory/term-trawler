@@ -72,7 +72,7 @@ def build_db_url(config: dict | None = None):
         return url
     warehouse = (config or {}).get("warehouse") or {}
     if uri := warehouse.get("db_uri"):
-        return _normalize(os.path.expandvars(uri))
+        return os.path.expandvars(uri)
     if service := warehouse.get("service"):
         return f"postgresql:///?service={service}"
     if service := os.environ.get("PGSERVICE"):
