@@ -50,6 +50,15 @@ def exec():
         help="The term count report is written to the file specified",
     )
     parser.add_argument(
+        "-f",
+        "--format",
+        default="table",
+        type=str.lower,
+        choices=["table", "tsv", "csv"],
+        required=False,
+        help="The format of the term count report (table, tsv, csv).",
+    )
+    parser.add_argument(
         "-v",
         "--vocab",
         default=None,
@@ -70,6 +79,7 @@ def exec():
         chunk_size=args.chunk,
         report_path=args.report,
         extract_vocab=args.vocab,
+        format=args.format,
     )
 
 
