@@ -2,17 +2,83 @@
 Aggregate research terms from various sources including support for OMOP tables and OWL files.
 
 ## Install
-Install the dependencies: 
+Environment variables must be set in `.env` file prior to running the setup script.
+
+**`.env`**
+```
+PGUSER=user_name
+PGPASSWORD=password
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=term_trawler
+
+```
+
+
+Install the dependencies and create the PostgreSQL db.
 
 ```bash
-pip install -e .
+just setup
 ```
 
 
 ## Running the script
 #### `just` can be used by specifying the path to the config file in the `justfile`
-#### To extract all vocabularies in config file:
+### To extract all vocabularies in config file:
 `uv run trawler -c {path/to/config/file}` or `just extract`
+
+
+##### Extract Example:
+
+```bash
+uv run trawler -c dev.yaml
+```
+
+Loads every vocabulary listed in `dev.yaml` into the database.
+Output:
+
+```
+Starting vocabulary: SNOMED
+Starting concept load...
+Concept load finished.
+...
+Prefix                          Prev       Current      Change  Note
+HP                                 0        19,393      +19,393
+edam                               0         3,614       +3,614
+```
+
+The table at the end shows how many concepts each vocabulary had before and after the run. To check the database, run `just db` followed by a SELECT statement:
+
+```sql
+SELECT vocabulary_id, count(*)
+FROM dev_include_access.concept
+GROUP BY vocabulary_id;
+```
+
+### To extract specific vocabularies, specify the vocabulary prefix separated by comma:
+`uv run trawler -c {path/to/config/file} --vocab {prefix1,prefix2}` or `just extract {prefix1,prefix2}`
+
+##### Extract specific vocabulary example:
+
+```bash
+uv run trawler -c dev.yaml --vocab edam
+```
+
+Loads only EDAM. The report at the end shows only EDAM.
+
+### To save term count report to a file, provide the filepath where it should be saved:
+`uv run trawler -c {path/to/config/file} --report {path/to/output}` or `just extract "" {path/to/output}`
+
+(If saving report to a file and not specifying vocabularies to extract when running the `just` command, `""` must be included before the report output.)
+
+The default format of the report is table. An optional flag can be added to specify either csv or tsv formats.
+
+##### Save report to file example:
+```bash
+uv run trawler -c dev.yaml --vocab snomedct,edam --report counts.csv --format csv
+```
+
+Writes the term counts for snomedct and EDAM to `counts.csv`.
 
 ## Conventions
 ### Config File
@@ -21,15 +87,15 @@ An example config file can be found at `example/config.yaml`
 ### Source Types
 There are three source types for vocabularies. Each type must be specified under `source_type` per vocabulary entry. Each type must include a specific property for the location of the vocabulary terms. (See config example at `example/config.yaml` for more information.)
 - OMOP
-  - `archive_filename`
+  - `source_filename`
 - OWL
   - `owl_file`
-- FHIR 
+- FHIR
   - `source_filename`
 
 
 ## Obtaining Vocabularies
-The source vocabulary files or URLs may need to be periodically updated. 
+The source vocabulary files or URLs may need to be periodically updated.
 
 ### CDCREC
 The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary can be downloaded [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
@@ -39,7 +105,7 @@ The OMIM vocabulary can be found on the [BioPortal](https://bioportal.bioontolog
 
 ### OMOP Files from Athena
 - Create an account on the [Athena](https://athena.ohdsi.org/) website.
-- Once created, select the Download tab on top right, which should route to a [list of vocabularies](https://athena.ohdsi.org/vocabulary/list). 
+- Once created, select the Download tab on top right, which should route to a [list of vocabularies](https://athena.ohdsi.org/vocabulary/list).
 - Select the checkboxes of the vocabularies to download and hit the Download Vocabularies button in the rop right
 - Provide bundle name and click Download
 - You will receive an email with a link to download the zip file
