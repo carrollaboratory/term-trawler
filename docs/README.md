@@ -99,7 +99,7 @@ There are three source types for vocabularies. Each type must be specified under
   - `source_filename`
 
 
-## Obtaining Vocabularies
+## Vocabularies Details
 The source vocabulary files or URLs may need to be periodically updated.
 
 ### CDCREC
