@@ -28,7 +28,6 @@ just setup
 `uv run trawler -c {path/to/config/file}` or `just extract`
 
 
-<<<<<<< HEAD
 ##### Extract Example:
 
 ```bash
@@ -68,28 +67,23 @@ uv run trawler -c dev.yaml --vocab edam
 Loads only EDAM. The report at the end shows only EDAM.
 
 ### To save term count report to a file, provide the filepath where it should be saved:
-=======
 #### To extract specific vocabularies, specify the vocabulary prefix separated by comma:
 `uv run trawler -c {path/to/config/file} --vocab {prefix1,prefix2}` or `just extract {prefix1,prefix2}`
 
 #### To save term count report to a file, provide the filepath where it should be saved:
->>>>>>> term-count-changes
+
 `uv run trawler -c {path/to/config/file} --report {path/to/output}` or `just extract "" {path/to/output}`
 
 (If saving report to a file and not specifying vocabularies to extract when running the `just` command, `""` must be included before the report output.)
 
 The default format of the report is table. An optional flag can be added to specify either csv or tsv formats.
 
-<<<<<<< HEAD
 ##### Save report to file example:
 ```bash
 uv run trawler -c dev.yaml --vocab snomedct,edam --report counts.csv --format csv
 ```
 
 Writes the term counts for snomedct and EDAM to `counts.csv`.
-=======
-`--format csv`
->>>>>>> term-count-changes
 
 ## Conventions
 ### Config File
