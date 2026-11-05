@@ -1,6 +1,6 @@
 import os
 
-from sqlalchemy.engine import URL, make_url
+from sqlalchemy.engine import URL
 
 PREFIXES = {"SNOMED": "snomedct", "NCIT": "NCIT", "EDAM": "edam"}
 
