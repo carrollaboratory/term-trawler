@@ -1,19 +1,10 @@
-import os
-
 import yaml
 from sqlalchemy import create_engine
+
+from utils import build_db_url
 
 
 def get_engine(config_path):
     with open(config_path) as c:
         config = yaml.safe_load(c)
-
-    db_uri = os.path.expandvars(config["warehouse"]["db_uri"])
-    missing = [
-        v
-        for v in ("PGUSER", "PGPASSWORD", "PGHOST", "PGPORT", "PGDATABASE")
-        if v not in os.environ
-    ]
-    if missing:
-        raise RuntimeError(f"Missing environment variables: {', '.join(missing)}")
-    return create_engine(db_uri, future=True)
+    return create_engine(build_db_url(config))
