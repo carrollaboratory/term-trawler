@@ -1,3 +1,7 @@
+import os
+
+from sqlalchemy.engine import URL, make_url
+
 PREFIXES = {"SNOMED": "snomedct", "NCIT": "NCIT", "EDAM": "edam"}
 
 
@@ -61,3 +65,29 @@ def found_code(concept_code: str):
     if ":" in concept_code:
         return concept_code.split(":", 1)[1]
     return concept_code
+
+
+def build_db_url(config: dict | None = None):
+    if url := os.environ.get("DATABASE_URL"):
+        return url
+    warehouse = (config or {}).get("warehouse") or {}
+    if uri := warehouse.get("db_uri"):
+        return os.path.expandvars(uri)
+    if service := warehouse.get("service"):
+        return f"postgresql:///?service={service}"
+    if service := os.environ.get("PGSERVICE"):
+        return f"postgresql:///?service={service}"
+    missing = [v for v in ("PGUSER", "PGPASSWORD", "PGDATABASE") if v not in os.environ]
+    if missing:
+        raise RuntimeError(
+            "No database connection info found. Set DATABASE_URL, provide "
+            f"warehouse.db_uri in the config, or set: {', '.join(missing)}"
+        )
+    return URL.create(
+        "postgresql",
+        username=os.environ["PGUSER"],
+        password=os.environ["PGPASSWORD"],
+        host=os.environ.get("PGHOST", "localhost"),
+        port=int(os.environ.get("PGPORT", "5432")),
+        database=os.environ["PGDATABASE"],
+    ).render_as_string(hide_password=False)

@@ -1,10 +1,12 @@
+import csv
+import io
 import logging
-import os
 from pathlib import Path
 
 import yaml
 from car_utils import LinkMLModelLoader
 from common_access_model.datamodel.common_access_model_sqla import (
+    Base,
     Concept,
     DeprecatedConcept,
     Vocabulary,
@@ -15,7 +17,7 @@ from sqlalchemy.dialects.postgresql import insert
 import extractors
 from extractors import ExtractorBase
 from streamer.engine import get_engine
-from utils import format_code, found_code
+from utils import build_db_url, format_code, found_code
 
 logger = logging.getLogger(__name__)
 
@@ -31,15 +33,20 @@ EXTRACTORS = {
 
 REPORT_DIR = Path("count_reports")
 
-loader = LinkMLModelLoader(
-    database_url=f"postgresql://{os.environ['PGUSER']}:{os.environ['PGPASSWORD']}"
-    f"@{os.environ['PGHOST']}:{os.environ['PGPORT']}/{os.environ['PGDATABASE']}",
-    model_import_path="common_access_model.datamodel.common_access_model_sqla",  # the name you found in the wheel
-    table_prefix="{}",  # note the `{}` -- see Gotchas below
-    schema_name="dev_include_access",
-).load()
-assert loader.module is not None, "LinkML model failed to load"
-Base = loader.module.Base
+_loader = None
+
+
+def get_loader(config: dict | None = None):
+    global _loader
+    if _loader is None:
+        _loader = LinkMLModelLoader(
+            database_url=build_db_url(config),
+            model_import_path="common_access_model.datamodel.common_access_model_sqla",
+            table_prefix="{}",
+            schema_name="dev_include_access",
+        ).load()
+        assert _loader.module is not None, "LinkML model failed to load"
+    return _loader
 
 
 def select_vocabs(config: dict, extract_vocab: str | list[str] | None) -> list[dict]:
@@ -216,7 +223,7 @@ def upsert_concepts(session, rows: dict[str, dict]):
 
 def load_concept(data, config: dict, replacement=None):
     """Loads both Concept and DeprecatedConcept tables."""
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         # Builds one dict per concept
         for chunk in data:
             concepts = {}
@@ -253,7 +260,7 @@ def load_concept(data, config: dict, replacement=None):
 
 
 def load_vocab(data, config: dict):
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         for chunk in data:
             for row in chunk:
                 session.merge(Vocabulary(**vocab_rows(row, config)))
@@ -262,12 +269,12 @@ def load_vocab(data, config: dict):
 
 def create_omop_fallback():
     """Builds 'OMOP' vocabulary for updated codes to fall back to 'OMOP:0' if they do not have a replacement"""
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         session.merge(Vocabulary(**omop_vocab_row()))
         session.commit()
 
         # Create the fallback deprecated concept
-    with loader.create_session() as session:
+    with get_loader().create_session() as session:
         session.merge(Concept(**omop_concept_row()))
         session.commit()
 
@@ -305,26 +312,40 @@ def build_count_report(before: dict[str, int], after: dict[str, int]) -> list[di
     return rows
 
 
-def format_count_report(rows: list[dict]) -> str:
-    """Format the count report rows as an aligned table"""
-    lines = [f"{'Prefix':<22}{'Prev':>14}{'Current':>14}{'Change':>12}  Note"]
+def format_count_report(rows: list[dict], format: str = "table") -> str:
+    """Format the count report rows as a table, CSV or TSV."""
+    if format == "table":
+        lines = [f"{'Prefix':<22}{'Prev':>14}{'Current':>14}{'Change':>12}  Note"]
+        for r in rows:
+            lines.append(
+                f"{r['prefix']:<22}{r['prev']:>14,}{r['current']:>14,}"
+                f"{r['change']:>+12,}  {r['note']}"
+            )
+        return "\n".join(lines)
+
+    delimiter = "," if format == "csv" else "\t"
+    keys = ["prefix", "prev", "current", "change", "note"]
+    buffer = io.StringIO()
+    writer = csv.writer(
+        buffer,
+        delimiter=delimiter,
+        lineterminator="\n",
+    )
+    writer.writerow([k.capitalize() for k in keys])
     for r in rows:
-        lines.append(
-            f"{r['prefix']:<22}{r['prev']:>14,}{r['current']:>14,}"
-            f"{r['change']:>+12,}  {r['note']}"
-        )
-    return "\n".join(lines)
+        writer.writerow([r[k] for k in keys])
+    return buffer.getvalue().rstrip("\n")
 
 
-def print_count_report(rows: list[dict]):
+def print_count_report(rows: list[dict], fmt: str = "table"):
     """Print the report as an aligned table"""
-    print(format_count_report(rows))
+    print(format_count_report(rows, fmt))
 
 
-def write_count_report(rows: list[dict], output: Path) -> Path:
+def write_count_report(rows: list[dict], output: Path, format="table") -> Path:
     """Write count report to a timestamped CSV"""
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(format_count_report(rows) + "\n")
+    output.write_text(format_count_report(rows, format) + "\n")
     return output
 
 
@@ -333,6 +354,7 @@ def extract(
     chunk_size: int,
     report_path: Path | None = None,
     extract_vocab: str | None = None,
+    format: str = "table",
 ):
     """Iterates over the 'vocabularies' property in the config file and runs
     the appropriate extractor script based on source_type.
@@ -342,12 +364,13 @@ def extract(
     Arguments:
         config_path: The specified config file to iterate.
     """
-    db_engine = get_engine(config_path)
-    Base.metadata.create_all(db_engine)
-
     with open(config_path) as c:
         config = yaml.safe_load(c)
+    loader = get_loader(config)
+    get_loader(config)
+    db_engine = get_engine(config_path)
     ExtractorBase.chunk_size = int(chunk_size)
+    Base.metadata.create_all(db_engine)
     selected = select_vocabs(config, extract_vocab)
     report_ids = {v["prefix"] for v in selected if v.get("prefix")}
     with loader.create_session() as session:
@@ -416,9 +439,9 @@ def extract(
     with loader.create_session() as session:
         after = count_concepts(session, report_ids)
     report = build_count_report(before, after)
-    print_count_report(report)
+    print_count_report(report, format)
     if report_path:
-        write_count_report(report, report_path)
+        write_count_report(report, report_path, format)
         logger.info(f"Wrote count report to {report_path}")
     for extractor in dirs_to_cleanup:
         extractor.__exit__(None, None, None)
