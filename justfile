@@ -3,21 +3,24 @@ container := "term_trawler"
 config := "dev.yaml"
 chunk_size := "5000"
 
-# Install dependencies in pyproject.toml and create the PostgreSQL db.
-# Must have POSTGRES variables set in .env file.
+
+default:
+    just --list --unsorted
+
+# Install dependencies and create the PostgreSQL db. Must have POSTGRES variables set in .env file.
 setup:
     just init
     just db-setup
 
-# Run the extract sript
+# Run the extract script
 extract vocab="" report="" format="":
     uv run trawler -c {{config}} -ch {{chunk_size}} {{ if vocab != "" { "--vocab " + quote(vocab) } else { "" } }} {{ if report != "" { "--report " + quote(report) } else { "" } }} {{ if format != "" { "--format " + quote(format) } else { "" } }}
 
+# Install dependencies
 init:
     uv sync
 
-# Create the postgreSQL database with Docker. Must have POSTGRES variables set in .env file.
-# If Docker container already exists, it starts it.
+# Create the postgreSQL database with Docker. Must have POSTGRES variables set in .env. If Docker container already exists, it starts it.
 db-setup:
     if docker container inspect {{container}} >/dev/null 2>&1; then \
         just db-start; \
@@ -27,7 +30,7 @@ db-setup:
         just db-schema; \
     fi
 
-# Create the postgreSQL database with Docker. Must have POSTGRES variables set in .env file.
+# Create the postgreSQL database with Docker. Must have POSTGRES variables set in .env.
 db-up:
     docker run --name {{container}} \
         -e POSTGRES_USER="$PGUSER" \
