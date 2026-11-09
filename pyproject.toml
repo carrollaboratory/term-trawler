@@ -20,6 +20,7 @@ dependencies = [
     "psycopg2-binary>=2.9.12",
     "common-access-model",
     "py-horned-owl>=2.0.0",
+    "python-dotenv>=1.2.4",
 ]
 dynamic = ["version"]
 

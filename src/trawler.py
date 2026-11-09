@@ -1,4 +1,7 @@
 #!/bin/env python
+from dotenv import load_dotenv
+
+load_dotenv()
 import logging
 from argparse import ArgumentParser  # , FileType
 from importlib.metadata import version

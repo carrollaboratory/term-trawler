@@ -1,4 +1,5 @@
 import os
+from string import Template
 
 from sqlalchemy.engine import URL
 
@@ -65,6 +66,17 @@ def found_code(concept_code: str):
     if ":" in concept_code:
         return concept_code.split(":", 1)[1]
     return concept_code
+
+
+def expand_env(text: str) -> str:
+    template = Template(text)
+    names = template.get_identifiers()
+    missing = [n for n in names if n not in os.environ]
+    if missing:
+        raise RuntimeError(
+            f"Unset environment variable(s) in db_uri: {', '.join(sorted(missing))}"
+        )
+    return template.substitute(os.environ)
 
 
 def build_db_url(config: dict | None = None):
