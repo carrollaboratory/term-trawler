@@ -1,8 +1,18 @@
 # term-trawler
-Aggregate research terms from various sources including support for OMOP tables and OWL files.
+Aggregate research terms from various sources, including support for OMOP tables, OWL, and JSON files. 
+
+Term-Trawler will extract the vocabularies identified by the user in a config file (dev.yaml), then load the vocabulary data into the database configured in the user's `.env` file. For more information about vocabulary sources, see the [Conventions](https://carrollaboratory.github.io/term-trawler/#/?id=conventions) section below for more information.
+
+## Helpful Tips
+- Know what vocabularies you need.
+- Fill out the `dev.yaml` config file for the necessary vocabs. 
+  - An example config file can be found [here]((https://github.com/carrollaboratory/term-trawler/blob/main/example/config.yaml)). 
+- OMOP source vocabularies will need to be downloaded from [Athena](https://athena.ohdsi.org/). See the [Conventions](https://carrollaboratory.github.io/term-trawler/#/?id=conventions) section below for more details.
+- The vocabulary sources may need to be updated if they become outdated. 
+
 
 ## Install
-Environment variables must be set in `.env` file prior to running the setup script.
+Environment variables must be set in `.env` file prior to running the setup script. Create `.env` file in the root directory
 
 **`.env`**
 ```
@@ -87,7 +97,7 @@ Writes the term counts for snomedct and EDAM to `counts.csv`.
 
 ## Conventions
 ### Config File
-An example config file can be found at `example/config.yaml`
+An example config file can be found at [`example/config.yaml`](https://github.com/carrollaboratory/term-trawler/blob/main/example/config.yaml)
 
 ### Source Types
 There are three source types for vocabularies. Each type must be specified under `source_type` per vocabulary entry. Each type must include a specific property for the location of the vocabulary terms. (See config example at `example/config.yaml` for more information.)
@@ -103,10 +113,10 @@ There are three source types for vocabularies. Each type must be specified under
 The source vocabulary files or URLs may need to be periodically updated.
 
 ### CDCREC
-The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary can be downloaded [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
+The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary URL for the `source_filename` be found [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
 ### OMIM
-The OMIM vocabulary can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
+If the OMIM vocabulary `source_filename` needs to be updated, it can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
 
 ### OMOP Files from Athena
 - Create an account on the [Athena](https://athena.ohdsi.org/) website.
@@ -114,7 +124,8 @@ The OMIM vocabulary can be found on the [BioPortal](https://bioportal.bioontolog
 - Select the checkboxes of the vocabularies to download and hit the Download Vocabularies button in the rop right
 - Provide bundle name and click Download
 - You will receive an email with a link to download the zip file
-- The location of where you saved the zip file on your machine will be the `source_filename` in the config file
+- The location of the saved zip file on your machine will be the `source_filename` in the config file
+  - Example: /mnt/c/Users/user/Documents/vocabulary.zip 
 
 ### UCUM
 UCUM is automatically downloaded as a standard, default vocabulary when downloading any vocabulary on [Athena](https://athena.ohdsi.org/). It will not be found in the vocabulary downloads list because it is a mandatory vocabulay loaded automatically in the background.

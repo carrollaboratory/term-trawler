@@ -392,6 +392,8 @@ def extract(
             continue
 
         vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
+        prefix = vocab.get("prefix")
+
         if not vocabulary_id:
             logger.warning(
                 f"Skipping vocabulary entry with no vocabulary_id or prefix: {vocab}"
@@ -409,7 +411,7 @@ def extract(
             if filename is not None and extractor.temp_dir is not None:
                 extracted_files[filename] = extractor.temp_dir
 
-        print(f"Starting vocabulary: {vocabulary_id}", flush=True)
+        print(f"Starting vocabulary: {prefix}", flush=True)
 
         replacement = extractor.get_replacement(vocab)
         if replacement:
