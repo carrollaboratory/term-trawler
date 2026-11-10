@@ -57,7 +57,7 @@ db-stop:
 
 # Access the db
 db:
-    sudo -u postgres psql -d $PGDATABASE
+    sudo -u postgres psql -d "$PGDATABASE"
 
 
 
