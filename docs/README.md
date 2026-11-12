@@ -115,6 +115,12 @@ The source vocabulary files or URLs may need to be periodically updated.
 ### CDCREC
 The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary URL for the `source_filename` be found [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
+### NCBITaxon
+The NCBITaxon ontology is very large and parsing can fail when connecting directly to the OWL URL. To use NCBITaxon, save a local copy to your machine.
+- Download the ontology at the [OWL URL](http://purl.obolibrary.org/obo/ncbitaxon.owl)
+- Set the `owl_file` in the config file to the file path of the saved OWL file
+  - Example: /home/user/Documents/ncbitaxon.owl
+
 ### OMIM
 If the OMIM vocabulary `source_filename` needs to be updated, it can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
 
@@ -124,7 +130,7 @@ If the OMIM vocabulary `source_filename` needs to be updated, it can be found on
 - Select the checkboxes of the vocabularies to download and hit the Download Vocabularies button in the rop right
 - Provide bundle name and click Download
 - You will receive an email with a link to download the zip file
-- The location of the saved zip file on your machine will be the `source_filename` in the config file
+- The file path of the saved zip file on your machine will be the `source_filename` in the config file
   - Example: /mnt/c/Users/user/Documents/vocabulary.zip 
 
 ### UCUM

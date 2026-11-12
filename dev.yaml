@@ -182,7 +182,7 @@ vocabularies:
     prefix: "NCBITaxon"
     fhir_system: "http://purl.obolibrary.org/obo/ncbitaxon.owl"
     vocabulary_uri: "http://purl.obolibrary.org/obo/NCBITaxon_[code]"
-    owl_file: "http://purl.obolibrary.org/obo/ncbitaxon.owl"
+    owl_file: "{absolute/path/to/downloaded/owl_file}"
     source_type: "OWL"
   - vocabulary_name: "Ontology for Biomedical Investigations"
     description: "The Ontology for Biomedical Investigations (OBI) project is developing an integrated ontology for the description of biological and clinical investigations. The ontology will represent the design of an investigation, the protocols and instrumentation used, the material used, the data generated and the type analysis performed on it. Currently OBI is being built under the Basic Formal Ontology (BFO)."
