@@ -50,3 +50,4 @@ car-utils = { git = "https://github.com/carrollaboratory/car-utils.git" }
 
 [project.scripts]
 trawler = "trawler:exec"
+shrimp-basket = "shrimp:exec"
