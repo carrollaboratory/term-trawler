@@ -118,7 +118,7 @@ The details page for CDCREC can can be found on the [CDC Public Health Informati
 ### NCBITaxon
 The NCBITaxon ontology is very large and parsing can fail when connecting directly to the OWL URL. To run the sript with NCBITaxon, save a local copy on your machine.
 - Download the ontology at the [OWL URL](http://purl.obolibrary.org/obo/ncbitaxon.owl)
-- Set the `source_filename` in the config file to the file path of the saved OWL file
+- Set the `owl_file` in the config file to the file path of the saved OWL file
   - Example: /home/user/Documents/ncbitaxon.owl
 
 ### OMIM
