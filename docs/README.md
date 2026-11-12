@@ -116,7 +116,7 @@ The source vocabulary files or URLs may need to be periodically updated.
 The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary URL for the `source_filename` be found [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
 ### NCBITaxon
-The NCBITaxon ontology is very large and parsing can fail when connecting directly to the OWL URL. To run the sript with NCBITaxon, save a local copy on your machine.
+The NCBITaxon ontology is very large and parsing can fail when connecting directly to the OWL URL. To use NCBITaxon, save a local copy to your machine.
 - Download the ontology at the [OWL URL](http://purl.obolibrary.org/obo/ncbitaxon.owl)
 - Set the `owl_file` in the config file to the file path of the saved OWL file
   - Example: /home/user/Documents/ncbitaxon.owl
