@@ -1,9 +1,8 @@
 import logging
-import urllib.error
+import os
 import xml.sax
 import xml.sax._exceptions
 
-import rdflib.plugin
 from car_utils.owl_handler import open_fowl2owl, open_owl
 from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
 from rdflib.namespace import DCTERMS, SKOS
@@ -143,19 +142,25 @@ class OwlExtractor(ExtractorBase):
         return replacement
 
     def _load_graph(self, url: str, ssl_no_verify=False) -> Graph:
-        g = Graph()
+        if os.path.exists(url):
+            g = Graph()
+            try:
+                return g.parse(url)
+            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
+                return open_fowl2owl(url, ssl_no_verify=ssl_no_verify)
         if ssl_no_verify:
             try:
                 return open_owl(url, ssl_no_verify=True)
-            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
+            except (
+                xml.sax.SAXParseException,
+                xml.sax._exceptions.SAXParseException,
+            ):
                 return open_fowl2owl(url, ssl_no_verify=True)
+
         try:
-            g.parse(url)
-        except (TimeoutError, urllib.error.URLError, rdflib.plugin.PluginException):
-            try:
-                g = open_owl(url, ssl_no_verify=False)
-            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
-                g = open_fowl2owl(url, ssl_no_verify=False)
+            g = open_owl(url, ssl_no_verify=False)
+        except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
+            g = open_fowl2owl(url, ssl_no_verify=False)
         return g
 
     @staticmethod
