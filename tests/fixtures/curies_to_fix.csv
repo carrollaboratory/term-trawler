@@ -1,0 +1,62 @@
+curie,prefix,expected_curie,expected_display,vocabulary_prefix
+0000001,hp,HP:0000001,All,HP
+HP:0000973,,HP:0000973,Cutis laxa,HP
+HP:0001067 ,,HP:0001067,Neurofibroma,HP
+ HP:0001169,,HP:0001169,Broad palm,HP
+HPO:0001171,,HP:0001171,Split hand,HP
+hpo:0002018,,HP:0002018,Nausea,HP
+0002104,HPO,HP:0002104,Apnea,HP
+0002105,hpo,HP:0002105,Hemoptysis,HP
+0002312,HP,HP:0002312,Clumsiness,HP
+HP:0002425,,HP:0002425,Anarthria,HP
+HP:0000093,,HP:0000093,Proteinuria,HP
+HP:0000639,,HP:0000639,Nystagmus,HP
+HP:0000771,,HP:0000771,Gynecomastia,HP
+HP:0001337,,HP:0001337,Tremor,HP
+HP:0001941,,HP:0001941,Acidosis,HP
+HP:0002797,,HP:0002797,Osteolysis,HP
+HP:0003634,,HP:0003634,Amyoplasia,HP
+HP:0000002,,HP:0000002,Abnormality of body height,HP
+HP:0000003,,HP:0000003,Multicystic kidney dysplasia,HP
+HP:0000005,,HP:0000005,Mode of inheritance,HP
+SNOMED:694331000000106,,snomedct:694331000000106,Adverse reaction to drug primarily affecting the autonomic nervous system NOS,snomedct
+SNOMEDCT:705311000000105,,snomedct:705311000000105,Adverse reaction to other central nervous system depressants and anaesthetics,snomedct
+SNOMECT:762620006,,snomedct:762620006,Somatic hallucination,snomedct
+SCT:76358005,,snomedct:76358005,Stillbirth,snomedct
+SNOMED_CT:671311000000108,,snomedct:671311000000108,"Adverse reaction to other skin, mucous membrane, ophthalmological, otorhinolaryngological and dental drugs",snomedct
+674831000000108,snomedct,snomedct:674831000000108,Adverse reaction to vaccine or biological substance NOS,snomedct
+680581000000106,SNOMED,snomedct:680581000000106,Adverse reaction to psychotropic agent NOS,snomedct
+1052701000000107,SCT,snomedct:1052701000000107,Refer to health visitor (& referred to),snomedct
+108225002,sct,snomedct:108225002,Preventive medicine counseling AND/OR risk factor evaluation service,snomedct
+SNOMEDCT_US:11030007,,snomedct:11030007,Small visual image,snomedct
+snomedct:139316002,,snomedct:139316002,Pain: [site of GIT] or [abdominal site symptom] or [flank] or [subcostal] or [iliac fossa],snomedct
+snomedct:139404007,,snomedct:139404007,Micturition stream normal,snomedct
+snomedct:139406009,,snomedct:139406009,Poor stream of urine,snomedct
+snomedct:139407000,,snomedct:139407000,Delay when starting to pass urine,snomedct
+snomedct:139408005,,snomedct:139408005,Urgent desire to urinate,snomedct
+snomedct:139421003,,snomedct:139421003,(Pain: [lumbar] or [renal] or [loin]) or (lumbar renal ache),snomedct
+snomedct:139547009,,snomedct:139547009,Floaters in visual field,snomedct
+snomedct:139549007,,snomedct:139549007,Temporary visual disturbance,snomedct
+snomedct:140179000,,snomedct:140179000,(Bronchospasm) or (O/E - rhonchi (& present)),snomedct
+snomedct:140908006,,snomedct:140908006,O/E - hyperesthesia present (& [hyperalgesia]),snomedct
+concept_curie,,concept_curie,display,vocabulary_prefix
+MONDO:10001,,MONDO:10001,RGS5,MONDO
+mondo:10004,,MONDO:10004,RGS9,MONDO
+10006,MONDO,MONDO:10006,RHAG,MONDO
+10009,mondo,MONDO:10009,RHD,MONDO
+MONDO:10012,,MONDO:10012,RHO,MONDO
+MONDO:10013,,MONDO:10013,GRK1,MONDO
+MONDO:10019,,MONDO:10019,RIPK1,MONDO
+MONDO:10021,,MONDO:10021,RIPK3,MONDO
+MONDO:10023,,MONDO:10023,RIT1,MONDO
+MONDO:10024,,MONDO:10024,RLBP1,MONDO
+MONDO:10031,,MONDO:10031,RMRP,MONDO
+MONDO:10050,,MONDO:10050,RNASEL,MONDO
+MONDO:10057,,MONDO:10057,RNF13,MONDO
+MONDO:10061,,MONDO:10061,RNF2,MONDO
+MONDO:10069,,MONDO:10069,RNF6,MONDO
+MONDO:10074,,MONDO:10074,RNH1,MONDO
+MONDO:1012,,MONDO:1012,OPN1SW,MONDO
+MONDO:1014,,MONDO:1014,BCR,MONDO
+MONDO:10152,,MONDO:10152,RNU2-2,MONDO
+MONDO:10193,,MONDO:10193,RNU4-2,MONDO
