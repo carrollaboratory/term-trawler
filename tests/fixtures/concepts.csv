@@ -1,0 +1,62 @@
+"concept_curie","concept_id","vocabulary_prefix","concept_code","display","definition"
+"HP:0000001",37420594,"HP","0000001","All"
+"HP:0000973",37420595,"HP","0000973","Cutis laxa"
+"HP:0001067",37420596,"HP","0001067","Neurofibroma"
+"HP:0001169",37420597,"HP","0001169","Broad palm"
+"HP:0001171",37420598,"HP","0001171","Split hand"
+"HP:0002018",37420599,"HP","0002018","Nausea"
+"HP:0002104",37420600,"HP","0002104","Apnea"
+"HP:0002105",37420601,"HP","0002105","Hemoptysis"
+"HP:0002312",37420602,"HP","0002312","Clumsiness"
+"HP:0002425",37420603,"HP","0002425","Anarthria"
+"HP:0000093",37420686,"HP","0000093","Proteinuria"
+"HP:0000639",37421100,"HP","0000639","Nystagmus"
+"HP:0000771",37421203,"HP","0000771","Gynecomastia"
+"HP:0001337",37421607,"HP","0001337","Tremor"
+"HP:0001941",37422007,"HP","0001941","Acidosis"
+"HP:0002797",37422609,"HP","0002797","Osteolysis"
+"HP:0003634",37423174,"HP","0003634","Amyoplasia"
+"HP:0000002",37420604,"HP","0000002","Abnormality of body height"
+"HP:0000003",37420605,"HP","0000003","Multicystic kidney dysplasia"
+"HP:0000005",37420606,"HP","0000005","Mode of inheritance"
+"snomedct:694331000000106",3541502,"snomedct","694331000000106","Adverse reaction to drug primarily affecting the autonomic nervous system NOS",
+"snomedct:705311000000105",3542356,"snomedct","705311000000105","Adverse reaction to other central nervous system depressants and anaesthetics",
+"snomedct:762620006",42538812,"snomedct","762620006","Somatic hallucination",
+"snomedct:76358005",40629514,"snomedct","76358005","Stillbirth",
+"snomedct:671311000000108",3539866,"snomedct","671311000000108","Adverse reaction to other skin, mucous membrane, ophthalmological, otorhinolaryngological and dental drugs",
+"snomedct:674831000000108",3566393,"snomedct","674831000000108","Adverse reaction to vaccine or biological substance NOS",
+"snomedct:680581000000106",3540542,"snomedct","680581000000106","Adverse reaction to psychotropic agent NOS",
+"snomedct:1052701000000107",3561590,"snomedct","1052701000000107","Refer to health visitor (& referred to)",
+"snomedct:108225002",40270680,"snomedct","108225002","Preventive medicine counseling AND/OR risk factor evaluation service",
+"snomedct:11030007",40277853,"snomedct","11030007","Small visual image",
+"snomedct:139316002",40304440,"snomedct","139316002","Pain: [site of GIT] or [abdominal site symptom] or [flank] or [subcostal] or [iliac fossa]",
+"snomedct:139404007",40304969,"snomedct","139404007","Micturition stream normal",
+"snomedct:139406009",40304971,"snomedct","139406009","Poor stream of urine",
+"snomedct:139407000",40304972,"snomedct","139407000","Delay when starting to pass urine",
+"snomedct:139408005",40304973,"snomedct","139408005","Urgent desire to urinate",
+"snomedct:139421003",40304988,"snomedct","139421003","(Pain: [lumbar] or [renal] or [loin]) or (lumbar renal ache)",
+"snomedct:139547009",40305577,"snomedct","139547009","Floaters in visual field",
+"snomedct:139549007",40305579,"snomedct","139549007","Temporary visual disturbance",
+"snomedct:140179000",40298787,"snomedct","140179000","(Bronchospasm) or (O/E - rhonchi (& present))",
+"snomedct:140908006",40302251,"snomedct","140908006","O/E - hyperesthesia present (& [hyperalgesia])",
+"concept_curie","concept_id","vocabulary_prefix","concept_code","display","definition"
+"MONDO:10001",,"MONDO","10001","RGS5",
+"MONDO:10004",,"MONDO","10004","RGS9",
+"MONDO:10006",,"MONDO","10006","RHAG",
+"MONDO:10009",,"MONDO","10009","RHD",
+"MONDO:10012",,"MONDO","10012","RHO",
+"MONDO:10013",,"MONDO","10013","GRK1",
+"MONDO:10019",,"MONDO","10019","RIPK1",
+"MONDO:10021",,"MONDO","10021","RIPK3",
+"MONDO:10023",,"MONDO","10023","RIT1",
+"MONDO:10024",,"MONDO","10024","RLBP1",
+"MONDO:10031",,"MONDO","10031","RMRP",
+"MONDO:10050",,"MONDO","10050","RNASEL",
+"MONDO:10057",,"MONDO","10057","RNF13",
+"MONDO:10061",,"MONDO","10061","RNF2",
+"MONDO:10069",,"MONDO","10069","RNF6",
+"MONDO:10074",,"MONDO","10074","RNH1",
+"MONDO:1012",,"MONDO","1012","OPN1SW",
+"MONDO:1014",,"MONDO","1014","BCR",
+"MONDO:10152",,"MONDO","10152","RNU2-2",
+"MONDO:10193",,"MONDO","10193","RNU4-2",
