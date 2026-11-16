@@ -4,6 +4,7 @@ import logging
 import sys
 from argparse import ArgumentParser  # , FileType
 from csv import DictReader
+from csv import writer as CsvWriter
 from importlib.metadata import version
 from itertools import batched
 from pathlib import Path
@@ -12,7 +13,7 @@ from urllib.request import urlopen
 
 from common_access_model.datamodel.common_access_model_sqla import Concept, Vocabulary
 from dotenv import load_dotenv
-from sqlalchemy import select
+from sqlalchemy import inspect, select
 from sqlalchemy.orm import Session
 from yaml import safe_load
 
@@ -113,6 +114,7 @@ def parse_curie_file(
 def harmonize_curie(curie: str, prefix: str | None = None) -> str:
     """Harmonize a term. If you know a column's type (by synonym is fine) this will return the Curie using the preferred prefix whether or not it is prefixed."""
 
+    global _harmony_log
     pref_lookup = get_prefix_lookup()
 
     code = curie.strip()
@@ -130,7 +132,7 @@ def harmonize_curie(curie: str, prefix: str | None = None) -> str:
     new_curie = f"{new_prefix}:{code.strip()}"
 
     # Log the transformation so we can output the transform as a CSV
-    _harmony_log[curie] = [curie, prefix, new_curie]
+    _harmony_log[new_curie] = [curie, prefix, new_curie]
 
     return new_curie
 
@@ -195,6 +197,12 @@ def exec():
         required=False,
         help="Configuration file specifying vocabularies to load and warehouse for loading.",
     )
+    parser.add_argument(
+        "-o",
+        "--outdir",
+        required=True,
+        help="Directory where output CSVs will be written such as 'output/study_id/'  ",
+    )
 
     args = parser.parse_args()
 
@@ -209,7 +217,11 @@ def exec():
 
     logger.info(f"You have chosen to use: {args}")
 
-    curie_list = parse_curie_file(args.curie_file, harmonize=args.harmonize_prefix)
+    # For now, I'm going to assume we'll always harmonize the curies even if
+    # the user is confident they are good
+    curie_list = parse_curie_file(
+        args.curie_file, harmonize=True
+    )  # harmonize=args.harmonize_prefix)
     if args.curie is not None:
         for curie in args.curie.split(","):
             curie = curie.strip()
@@ -227,8 +239,50 @@ def exec():
     logger.info(
         f"Found {len(concepts)} concept(s) across {len(vocabularies)} vocabularies"
     )
-    # TODO: write concepts/vocabularies out in the AnVIL/dbt file format
 
+    outputdir = Path(args.outdir)
+    outputdir.mkdir(parents=True, exist_ok=True)
+    missing_terms = set(curie_list) - set(list(concepts.keys()))
+    if len(missing_terms) > 0:
+        with (outputdir / "unmatched_curies.csv").open("wt", encoding="utf-8") as outf:
+            writer = CsvWriter(outf, delimiter=",", quotechar='"')
+            writer.writerow(["curie", "prefix", "harmonized_curie"])
+
+            for term in missing_terms:
+                # [curie, prefix, new_curie]
+                writer.writerow(_harmony_log[term])
+
+    # Harmony Mapping - [curie, prefix, new_curie]
+    if len(_harmony_log) > 0:
+        with (outputdir / "curie_harmonization.csv").open(
+            "wt", encoding="utf-8"
+        ) as outf:
+            writer = CsvWriter(outf, delimiter=",", quotechar='"')
+            writer.writerow(["curie", "prefix", "harmonized_curie"])
+
+            for term in _harmony_log.values():
+                # [curie, prefix, new_curie]
+                writer.writerow(term)
+
+    # Concepts
+    mapper = inspect(Concept)
+    model_headers = [column.key for column in mapper.column_attrs]
+    with (outputdir / "concepts.csv").open("wt", encoding="utf-8") as outf:
+        writer = CsvWriter(outf, delimiter=",", quotechar='"')
+        writer.writerow(model_headers)
+
+        for concept in concepts.values():
+            writer.writerow([getattr(concept, col) for col in model_headers])
+
+    # Vocabularies
+    mapper = inspect(Vocabulary)
+    model_headers = [column.key for column in mapper.column_attrs]
+    with (outputdir / "vocabulary.csv").open("wt", encoding="utf-8") as outf:
+        writer = CsvWriter(outf, delimiter=",", quotechar='"')
+        writer.writerow(model_headers)
+
+        for vocab in vocabularies.values():
+            writer.writerow([getattr(vocab, col) for col in model_headers])
 
 
 if __name__ == "__main__":
