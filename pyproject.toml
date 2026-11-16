@@ -44,6 +44,11 @@ where = ["src"]  # list of folders that contain the packages (["."] by default)
 [tool.setuptools.package-data]
 "*" = ["*.yaml"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+
 [tool.uv.sources]
 common-access-model = { url = "https://github.com/include-dcc/common-access-model/releases/download/v0.2.0/common_access_model-0.2.0-py3-none-any.whl" }
 car-utils = { git = "https://github.com/carrollaboratory/car-utils.git" }
