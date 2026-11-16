@@ -39,7 +39,6 @@
 "snomedct:139549007",40305579,"snomedct","139549007","Temporary visual disturbance",
 "snomedct:140179000",40298787,"snomedct","140179000","(Bronchospasm) or (O/E - rhonchi (& present))",
 "snomedct:140908006",40302251,"snomedct","140908006","O/E - hyperesthesia present (& [hyperalgesia])",
-"concept_curie","concept_id","vocabulary_prefix","concept_code","display","definition"
 "MONDO:10001",,"MONDO","10001","RGS5",
 "MONDO:10004",,"MONDO","10004","RGS9",
 "MONDO:10006",,"MONDO","10006","RHAG",
