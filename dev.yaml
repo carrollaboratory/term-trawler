@@ -1,4 +1,6 @@
 warehouse:
+  # db_uri: "sqlite:///db/trawler.db"
+  # db_uri: "duckdb:///db/trawler.duckdb"
   db_uri: "postgresql+psycopg2://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
 vocabularies:
   - vocabulary_id: "2.16.840.1.113883.6.238"
