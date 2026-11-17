@@ -68,6 +68,13 @@ def get_loader(config: dict | None = None):
     if _loader is None:
         database_url = build_db_url(config)
         backend = get_backend(database_url)
+
+        url = make_url(database_url)
+        if url.get_backend_name() in ("sqlite", "duckdb"):
+            db_path = url.database
+            if db_path and db_path != ":memory":
+                Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+
         _loader = LinkMLModelLoader(
             database_url=database_url,
             model_import_path="common_access_model.datamodel.common_access_model_sqla",
