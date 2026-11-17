@@ -21,6 +21,8 @@ dependencies = [
     "common-access-model",
     "py-horned-owl>=2.0.0",
     "python-dotenv>=1.2.4",
+    "duckdb>=2.0.0",
+    "duckdb-engine>=0.17.0",
 ]
 dynamic = ["version"]
 

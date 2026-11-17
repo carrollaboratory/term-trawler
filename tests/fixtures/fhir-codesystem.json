@@ -1,0 +1,20 @@
+{
+    "resourceType": "CodeSystem",
+    "id": "trawler-test",
+    "url": "http://example.org/fhir/CodeSystem/trawler-test",
+    "version": "0.1.0",
+    "name": "TrawlerTest",
+    "status": "active",
+    "content": "complete",
+    "concept": [
+        {"code": "net", "display": "Net", "definition": "Something to catch things with."},
+        {"code": "trawl", "display": "Trawl", "definition": "A large net dragged along the sea bottom."},
+        {"code": "shrimp", "display": "Shrimp", "definition": "A small catch."},
+        {
+            "code": "harpoon",
+            "display": "Harpoon",
+            "definition": "Retired in favor of nets.",
+            "property": [{"code": "status", "valueCode": "retired"}]
+        }
+    ]
+}

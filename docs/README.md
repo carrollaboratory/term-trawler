@@ -43,6 +43,37 @@ Install the dependencies and create the PostgreSQL db.
 just setup
 ```
 
+### Using DuckDB or SQLite instead of PostgreSQL
+
+Term-Trawler can also load into a local DuckDB or SQLite file, which needs no
+server, Docker or `.env` file. Set `warehouse.db_uri` in your config to the
+file you want created (the file is created on the first run):
+
+```yaml
+warehouse:
+  db_uri: "duckdb:///path/to/term_trawler.duckdb"
+  # or
+  db_uri: "sqlite:///path/to/term_trawler.db"
+```
+
+Use three slashes for a relative path (`sqlite:///terms.db`) and four for an
+absolute one (`sqlite:////home/me/terms.db`). `just setup` and the `db-*`
+recipes only apply to PostgreSQL; for a file database, `just init` is all you
+need. If `DATABASE_URL` is set in your environment it takes priority over
+`db_uri`.
+
+| Backend    | Schema                                                                                    | Tables created                                       |
+| ---------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| PostgreSQL | `warehouse.schema` (default `dev_include_access`), created if missing                       | The full common access model                         |
+| DuckDB     | `warehouse.schema` (default `dev_include_access`), created if missing                       | `vocabulary`, `concept` and `deprecatedconcept` only |
+| SQLite     | None (SQLite has no schemas), so query `concept` rather than `dev_include_access.concept` | The full common access model                         |
+
+DuckDB only gets the three tables Term-Trawler writes to: the rest of the model
+has circular foreign keys, which DuckDB can't create.
+
+`shrimp-basket` reads from whichever database the config points to, so the
+same `db_uri` works for both tools.
+
 ## Running the script
 
 #### `just` can be used by specifying the path to the config file in the `justfile`
