@@ -1,20 +1,33 @@
 # term-trawler
-Aggregate research terms from various sources, including support for OMOP tables, OWL, and JSON files. 
 
-Term-Trawler will extract the vocabularies identified by the user in a config file (dev.yaml), then load the vocabulary data into the database configured in the user's `.env` file. For more information about vocabulary sources, see the [Conventions](https://carrollaboratory.github.io/term-trawler/#/?id=conventions) section below for more information.
+Aggregate research terms from various sources, including support for OMOP
+tables, OWL, and JSON files.
+
+Term-Trawler will extract the vocabularies identified by the user in a config
+file (dev.yaml), then load the vocabulary data into the database configured in
+the user's `.env` file. For more information about vocabulary sources, see the
+[Conventions](https://carrollaboratory.github.io/term-trawler/#/?id=conventions)
+section below for more information.
 
 ## Helpful Tips
-- Know what vocabularies you need.
-- Fill out the `dev.yaml` config file for the necessary vocabs. 
-  - An example config file can be found [here]((https://github.com/carrollaboratory/term-trawler/blob/main/example/config.yaml)). 
-- OMOP source vocabularies will need to be downloaded from [Athena](https://athena.ohdsi.org/). See the [Conventions](https://carrollaboratory.github.io/term-trawler/#/?id=conventions) section below for more details.
-- The vocabulary sources may need to be updated if they become outdated. 
 
+- Know what vocabularies you need.
+- Fill out the `dev.yaml` config file for the necessary vocabs.
+  - An example config file can be found
+    [here](<(https://github.com/carrollaboratory/term-trawler/blob/main/example/config.yaml)>).
+- OMOP source vocabularies will need to be downloaded from
+  [Athena](https://athena.ohdsi.org/). See the
+  [Conventions](https://carrollaboratory.github.io/term-trawler/#/?id=conventions)
+  section below for more details.
+- The vocabulary sources may need to be updated if they become outdated.
 
 ## Install
-Environment variables must be set in `.env` file prior to running the setup script. Create `.env` file in the root directory
+
+Environment variables must be set in `.env` file prior to running the setup
+script. Create `.env` file in the root directory
 
 **`.env`**
+
 ```
 PGUSER=user_name
 PGPASSWORD=password
@@ -24,19 +37,19 @@ PGDATABASE=term_trawler
 
 ```
 
-
 Install the dependencies and create the PostgreSQL db.
 
 ```bash
 just setup
 ```
 
-
 ## Running the script
-#### `just` can be used by specifying the path to the config file in the `justfile`
-### To extract all vocabularies in config file:
-`uv run trawler -c {path/to/config/file}` or `just extract`
 
+#### `just` can be used by specifying the path to the config file in the `justfile`
+
+### To extract all vocabularies in config file:
+
+`uv run trawler -c {path/to/config/file}` or `just extract`
 
 ##### Extract Example:
 
@@ -44,8 +57,7 @@ just setup
 uv run trawler -c dev.yaml
 ```
 
-Loads every vocabulary listed in `dev.yaml` into the database.
-Output:
+Loads every vocabulary listed in `dev.yaml` into the database. Output:
 
 ```
 Starting vocabulary: SNOMED
@@ -57,7 +69,9 @@ HP                                 0        19,393      +19,393
 edam                               0         3,614       +3,614
 ```
 
-The table at the end shows how many concepts each vocabulary had before and after the run. To check the database, run `just db` followed by a SELECT statement:
+The table at the end shows how many concepts each vocabulary had before and
+after the run. To check the database, run `just db` followed by a SELECT
+statement:
 
 ```sql
 SELECT vocabulary_id, count(*)
@@ -66,7 +80,9 @@ GROUP BY vocabulary_id;
 ```
 
 ### To extract specific vocabularies, specify the vocabulary prefix separated by comma:
-`uv run trawler -c {path/to/config/file} --vocab {prefix1,prefix2}` or `just extract {prefix1,prefix2}`
+
+`uv run trawler -c {path/to/config/file} --vocab {prefix1,prefix2}` or
+`just extract {prefix1,prefix2}`
 
 ##### Extract specific vocabulary example:
 
@@ -77,18 +93,25 @@ uv run trawler -c dev.yaml --vocab edam
 Loads only EDAM. The report at the end shows only EDAM.
 
 ### To save term count report to a file, provide the filepath where it should be saved:
+
 #### To extract specific vocabularies, specify the vocabulary prefix separated by comma:
-`uv run trawler -c {path/to/config/file} --vocab {prefix1,prefix2}` or `just extract {prefix1,prefix2}`
+
+`uv run trawler -c {path/to/config/file} --vocab {prefix1,prefix2}` or
+`just extract {prefix1,prefix2}`
 
 #### To save term count report to a file, provide the filepath where it should be saved:
 
-`uv run trawler -c {path/to/config/file} --report {path/to/output}` or `just extract "" {path/to/output}`
+`uv run trawler -c {path/to/config/file} --report {path/to/output}` or
+`just extract "" {path/to/output}`
 
-(If saving report to a file and not specifying vocabularies to extract when running the `just` command, `""` must be included before the report output.)
+(If saving report to a file and not specifying vocabularies to extract when
+running the `just` command, `""` must be included before the report output.)
 
-The default format of the report is table. An optional flag can be added to specify either csv or tsv formats.
+The default format of the report is table. An optional flag can be added to
+specify either csv or tsv formats.
 
 ##### Save report to file example:
+
 ```bash
 uv run trawler -c dev.yaml --vocab snomedct,edam --report counts.csv --format csv
 ```
@@ -96,11 +119,19 @@ uv run trawler -c dev.yaml --vocab snomedct,edam --report counts.csv --format cs
 Writes the term counts for snomedct and EDAM to `counts.csv`.
 
 ## Conventions
+
 ### Config File
-An example config file can be found at [`example/config.yaml`](https://github.com/carrollaboratory/term-trawler/blob/main/example/config.yaml)
+
+An example config file can be found at
+[`example/config.yaml`](https://github.com/carrollaboratory/term-trawler/blob/main/example/config.yaml)
 
 ### Source Types
-There are three source types for vocabularies. Each type must be specified under `source_type` per vocabulary entry. Each type must include a specific property for the location of the vocabulary terms. (See config example at `example/config.yaml` for more information.)
+
+There are three source types for vocabularies. Each type must be specified under
+`source_type` per vocabulary entry. Each type must include a specific property
+for the location of the vocabulary terms. (See config example at
+`example/config.yaml` for more information.)
+
 - OMOP
   - `source_filename`
 - OWL
@@ -108,30 +139,51 @@ There are three source types for vocabularies. Each type must be specified under
 - FHIR
   - `source_filename`
 
-
 ## Vocabularies Details
+
 The source vocabulary files or URLs may need to be periodically updated.
 
 ### CDCREC
-The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary URL for the `source_filename` be found [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
-### NCBITaxon
-The NCBITaxon ontology is very large and parsing can fail when connecting directly to the OWL URL. To use NCBITaxon, save a local copy to your machine.
-- Download the ontology at the [OWL URL](http://purl.obolibrary.org/obo/ncbitaxon.owl)
-- Set the `owl_file` in the config file to the file path of the saved OWL file
-  - Example: /home/user/Documents/ncbitaxon.owl
+The details page for CDCREC can can be found on the
+[CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#)
+page. The vocabulary URL for the `source_filename` be found
+[here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
 ### OMIM
-If the OMIM vocabulary `source_filename` needs to be updated, it can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
+
+If the OMIM vocabulary `source_filename` needs to be updated, it can be found on
+the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source
+URL for the OWL file can be obtained by right clicking the downloads icon on the
+top right of the page and copying the link address.
 
 ### OMOP Files from Athena
+
 - Create an account on the [Athena](https://athena.ohdsi.org/) website.
-- Once created, select the Download tab on top right, which should route to a [list of vocabularies](https://athena.ohdsi.org/vocabulary/list).
-- Select the checkboxes of the vocabularies to download and hit the Download Vocabularies button in the rop right
+- Once created, select the Download tab on top right, which should route to a
+  [list of vocabularies](https://athena.ohdsi.org/vocabulary/list).
+- Select the checkboxes of the vocabularies to download and hit the Download
+  Vocabularies button in the rop right
 - Provide bundle name and click Download
 - You will receive an email with a link to download the zip file
-- The file path of the saved zip file on your machine will be the `source_filename` in the config file
-  - Example: /mnt/c/Users/user/Documents/vocabulary.zip 
+- The file path of the saved zip file on your machine will be the
+  `source_filename` in the config file
+  - Example: /mnt/c/Users/user/Documents/vocabulary.zip
 
 ### UCUM
-UCUM is automatically downloaded as a standard, default vocabulary when downloading any vocabulary on [Athena](https://athena.ohdsi.org/). It will not be found in the vocabulary downloads list because it is a mandatory vocabulay loaded automatically in the background.
+
+UCUM is automatically downloaded as a standard, default vocabulary when
+downloading any vocabulary on [Athena](https://athena.ohdsi.org/). It will not
+be found in the vocabulary downloads list because it is a mandatory vocabulay
+loaded automatically in the background.
+
+### NCBI Taxonomy
+
+Given the large size of this particular vocabulary along with the fact that we
+will likely only need a small number of terms from it, we have decided not to
+load the entirerity of the vocabulary into the warehouse and instead, use an
+alternative method to capture relevant terms and to load only those relevant
+terms into the database.
+
+For future reference, the terminology's download uri is
+`http://purl.obolibrary.org/obo/ncbitaxon.owl`. the preferred prefix, NCBITaxon.
