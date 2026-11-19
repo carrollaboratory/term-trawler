@@ -11,12 +11,14 @@ from common_access_model.datamodel.common_access_model_sqla import (
     DeprecatedConcept,
     Vocabulary,
 )
-from sqlalchemy import func, or_, select
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import Integer, Sequence, func, inspect, or_, select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
+from sqlalchemy.engine import make_url
+from sqlalchemy.schema import CreateSchema
 
 import extractors
 from extractors import ExtractorBase
-from streamer.engine import get_engine
 from utils import build_db_url, format_code, found_code
 
 logger = logging.getLogger(__name__)
@@ -34,20 +36,93 @@ EXTRACTORS = {
 REPORT_DIR = Path("count_reports")
 
 
+DEFAULT_SCHEMA = "dev_include_access"
+# Backends that support CREATE SCHEMA. SQLite has no schemas, so its tables live
+# at the top level of the database file.
+SCHEMA_BACKENDS = {"postgresql", "duckdb"}
+SUPPORTED_BACKENDS = SCHEMA_BACKENDS | {"sqlite"}
+
 _loader = None
+
+
+def get_backend(database_url: str) -> str:
+    """Return the database type ('postgresql', 'duckdb' or 'sqlite') for a db url"""
+    backend = make_url(database_url).get_backend_name()
+    if backend not in SUPPORTED_BACKENDS:
+        raise ValueError(
+            f"Unsupported database '{backend}'. Expected one of: "
+            f"{', '.join(sorted(SUPPORTED_BACKENDS))}"
+        )
+    return backend
+
+
+def get_schema_name(config: dict | None, backend: str) -> str | None:
+    if backend not in SCHEMA_BACKENDS:
+        return None
+    warehouse = (config or {}).get("warehouse") or {}
+    return warehouse.get("schema") or DEFAULT_SCHEMA
 
 
 def get_loader(config: dict | None = None):
     global _loader
     if _loader is None:
+        database_url = build_db_url(config)
+        backend = get_backend(database_url)
+
+        url = make_url(database_url)
+        if url.get_backend_name() in ("sqlite", "duckdb"):
+            db_path = url.database
+            if db_path and db_path != ":memory":
+                Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+
         _loader = LinkMLModelLoader(
-            database_url=build_db_url(config),
+            database_url=database_url,
             model_import_path="common_access_model.datamodel.common_access_model_sqla",
             table_prefix="{}",
-            schema_name="dev_include_access",
+            schema_name=get_schema_name(config, backend),
         ).load()
         assert _loader.module is not None, "LinkML model failed to load"
     return _loader
+
+
+def _add_duckdb_sequences(schema: str | None):
+    """DuckDB has no SERIAL/autoincrement, so back integer surrogate keys with sequences."""
+    for table in Base.metadata.tables.values():
+        pk = list(table.primary_key.columns)
+        if len(pk) != 1:
+            continue
+        column = pk[0]
+        if (
+            isinstance(column.type, Integer)
+            and column.autoincrement in (True, "auto")
+            and column.default is None
+            and column.server_default is None
+        ):
+            Sequence(
+                f"{table.name}_{column.name}_seq", schema=schema
+            )._set_parent_with_dispatch(column)
+
+
+def init_database(loader):
+    """Create the schema (where supported) and any missing tables."""
+    backend = loader.engine.dialect.name
+    schema = loader.schema_name
+    if schema:
+        with loader.engine.begin() as conn:
+            # Check first: Postgres requires the CREATE privilege for
+            # CREATE SCHEMA IF NOT EXISTS even when the schema already exists
+            if not inspect(conn).has_schema(schema):
+                conn.execute(CreateSchema(schema))
+    if backend == "duckdb":
+        _add_duckdb_sequences(schema)
+        # The full model has circular foreign keys, which SQLAlchemy resolves with
+        # ALTER TABLE ... ADD FOREIGN KEY, and metadata-wide enum types whose
+        # existence check doesn't work on DuckDB. Neither is supported, so only
+        # create the tables term-trawler actually writes (none use enums).
+        for model in (Vocabulary, Concept, DeprecatedConcept):
+            model.__table__.create(loader.engine, checkfirst=True)
+    else:
+        Base.metadata.create_all(loader.engine)
 
 
 def select_vocabs(config: dict, extract_vocab: str | list[str] | None) -> list[dict]:
@@ -203,6 +278,8 @@ def omop_concept_row():
 
 def upsert_concepts(session, rows: dict[str, dict]):
     table = Concept.__table__
+    # DuckDB's SQLAlchemy dialect is built on the Postgres one, so it shares its ON CONFLICT syntax
+    insert = sqlite_insert if session.get_bind().dialect.name == "sqlite" else pg_insert
     # Multi-row inserts need identical keys in every row, so fill gaps with None (e.g. display vs definition)
     keys = {k for r in rows.values() for k in r}
     values = [{k: r.get(k) for k in keys} for r in rows.values()]
@@ -368,10 +445,8 @@ def extract(
     with open(config_path) as c:
         config = yaml.safe_load(c)
     loader = get_loader(config)
-    get_loader(config)
-    db_engine = get_engine(config_path)
     ExtractorBase.chunk_size = int(chunk_size)
-    Base.metadata.create_all(db_engine)
+    init_database(loader)
     selected = select_vocabs(config, extract_vocab)
     report_ids = {v["prefix"] for v in selected if v.get("prefix")}
     with loader.create_session() as session:

@@ -248,9 +248,10 @@ def exec():
             writer = CsvWriter(outf, delimiter=",", quotechar='"')
             writer.writerow(["curie", "prefix", "harmonized_curie"])
 
-            for term in missing_terms:
-                # [curie, prefix, new_curie]
-                writer.writerow(_harmony_log[term])
+            for term in sorted(missing_terms):
+                # [curie, prefix, new_curie]. Curies that skipped harmonization
+                # (--curie without --harmonize-prefix) have no log entry.
+                writer.writerow(_harmony_log.get(term, [term, "", term]))
 
     # Harmony Mapping - [curie, prefix, new_curie]
     if len(_harmony_log) > 0:

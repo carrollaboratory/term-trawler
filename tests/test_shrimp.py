@@ -85,12 +85,15 @@ def test_harmonize_unknown_prefix():
 
 def test_harmonize_logs_transformations():
     shrimp.harmonize_curie("hpo:0002018")
-    assert shrimp._harmony_log["hpo:0002018"] == ["hpo:0002018", "hpo", "HP:0002018"]
+    # Keyed by the harmonized curie so unmatched lookups can find the original
+    assert shrimp._harmony_log["HP:0002018"] == ["hpo:0002018", "hpo", "HP:0002018"]
 
 
 def test_parse_curie_file_raw():
     curies = shrimp.parse_curie_file(FIXTURES / "curie_list.csv")
-    assert len(curies) == len(CURIES_TO_FIX)
+    # curie_list.csv has every curie_to_fix plus 1234abc, which matches nothing
+    assert len(curies) == len(CURIES_TO_FIX) + 1
+    assert "1234abc" in curies
     # Whitespace is trimmed even without harmonization
     assert "HP:0001067" in curies
     assert "HP:0001169" in curies
