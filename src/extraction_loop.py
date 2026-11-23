@@ -350,6 +350,34 @@ def write_count_report(rows: list[dict], output: Path, format="table") -> Path:
     return output
 
 
+def mark_failures(rows: list[dict], failed_prefixes: set[str]) -> list[dict]:
+    """Set the note on rows for vocabularies that failed to run.
+
+    If a failed vocabulary has no row (e.g. it failed before anything
+    was counted), a row is added so it still appears in the report.
+    """
+    seen = set()
+    for r in rows:
+        if r["prefix"] in failed_prefixes:
+            seen.add(r["prefix"])
+            r["note"] = (
+                f"Failed to run. {r['note']}".strip()
+                if r.get("note")
+                else "Failed to run"
+            )
+    for prefix in sorted(failed_prefixes - seen):
+        rows.append(
+            {
+                "prefix": prefix,
+                "prev": 0,
+                "current": 0,
+                "change": 0,
+                "note": "Failed to run",
+            }
+        )
+    return rows
+
+
 def extract(
     config_path: Path,
     chunk_size: int,
@@ -362,13 +390,19 @@ def extract(
     Creates a collection of filenames and only runs the extractor
     on unique filenames to avoid duplicates.
 
+    A failure in one vocabulary is logged and the run continues. Vocabularies that failed
+    are flagged in the Note column of the term count report.
+
     Arguments:
         config_path: The specified config file to iterate.
+        chunk_size: The number of rows processed at a time.
+        report_path: The optional output filepath to write the term count report.
+        extract_vocab: Optional string specifying which vocab(s) to extract.
+        format: Optional string argument specifying the format of the term count report (defaults to "table").
     """
     with open(config_path) as c:
         config = yaml.safe_load(c)
     loader = get_loader(config)
-    get_loader(config)
     db_engine = get_engine(config_path)
     ExtractorBase.chunk_size = int(chunk_size)
     Base.metadata.create_all(db_engine)
@@ -384,67 +418,89 @@ def extract(
     dirs_to_cleanup = []
     all_replacements = {}
     owl_replacements = {}
-    for vocab in selected:
-        source_type = vocab["source_type"]
-        extractor_type = EXTRACTORS.get(source_type.upper())
-        if extractor_type is None:
-            logger.warning(f"{source_type} is not a valid source type.")
-            continue
+    failures: list[dict[str, str]] = []
 
-        vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
-        prefix = vocab.get("prefix")
+    try:
+        for vocab in selected:
+            label = vocab.get("prefix") or vocab.get("vocabulary_id")
+            try:
+                source_type = vocab["source_type"]
+                extractor_type = EXTRACTORS.get(source_type.upper())
+                if extractor_type is None:
+                    logger.warning(f"{source_type} is not a valid source type.")
+                    continue
 
-        if not vocabulary_id:
-            logger.warning(
-                f"Skipping vocabulary entry with no vocabulary_id or prefix: {vocab}"
-            )
-            continue
-        filename = vocab.get("source_filename")
+                vocabulary_id = vocab.get("vocabulary_id") or vocab.get("prefix")
+                prefix = vocab.get("prefix")
 
-        if filename is not None and filename in extracted_files:
-            extractor = extractor_type(vocab)
-            extractor.temp_dir = extracted_files[filename]
-        else:
-            extractor = extractor_type(vocab)
-            extractor.__enter__()
-            dirs_to_cleanup.append(extractor)
-            if filename is not None and extractor.temp_dir is not None:
-                extracted_files[filename] = extractor.temp_dir
+                if not vocabulary_id:
+                    logger.warning(
+                        f"Skipping vocabulary entry with no vocabulary_id or prefix: {vocab}"
+                    )
+                    continue
+                filename = vocab.get("source_filename")
 
-        print(f"Starting vocabulary: {prefix}", flush=True)
+                if filename is not None and filename in extracted_files:
+                    extractor = extractor_type(vocab)
+                    extractor.temp_dir = extracted_files[filename]
+                else:
+                    extractor = extractor_type(vocab)
+                    extractor.__enter__()
+                    dirs_to_cleanup.append(extractor)
+                    if filename is not None and extractor.temp_dir is not None:
+                        extracted_files[filename] = extractor.temp_dir
 
-        replacement = extractor.get_replacement(vocab)
-        if replacement:
-            all_replacements.update(replacement)
+                print(f"Starting vocabulary: {prefix}", flush=True)
 
-        load_vocab(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="VOCABULARY"),
-            config=vocab,
-        )
+                replacement = extractor.get_replacement(vocab)
+                if replacement:
+                    all_replacements.update(replacement)
 
-        print("Starting concept load...", flush=True)
+                load_vocab(
+                    extractor.extract_data(
+                        vocabulary_id=vocabulary_id, data_type="VOCABULARY"
+                    ),
+                    config=vocab,
+                )
 
-        load_concept(
-            extractor.extract_data(vocabulary_id=vocabulary_id, data_type="CONCEPT"),
-            config=vocab,
-            replacement=replacement,
-        )
-        print("Concept load finished.", flush=True)
-        if source_type.upper() == "OWL":
-            for chunk in extractor.extract_data(
-                vocabulary_id=vocabulary_id, data_type="DEPRECATED_CONCEPT"
-            ):
-                for row in chunk:
-                    if row.get("replacement_curie"):
-                        owl_replacements[row["concept_curie"]] = row[
-                            "replacement_curie"
-                        ]
-    with loader.create_session() as session:
-        after = count_concepts(session, report_ids)
-    report = build_count_report(before, after)
-    print_count_report(report, format)
-    if report_path:
-        write_count_report(report, report_path, format)
-        logger.info(f"Wrote count report to {report_path}")
-    for extractor in dirs_to_cleanup:
-        extractor.__exit__(None, None, None)
+                print("Starting concept load...", flush=True)
+
+                load_concept(
+                    extractor.extract_data(
+                        vocabulary_id=vocabulary_id, data_type="CONCEPT"
+                    ),
+                    config=vocab,
+                    replacement=replacement,
+                )
+                print("Concept load finished.", flush=True)
+
+                if source_type.upper() == "OWL":
+                    for chunk in extractor.extract_data(
+                        vocabulary_id=vocabulary_id, data_type="DEPRECATED_CONCEPT"
+                    ):
+                        for row in chunk:
+                            if row.get("replacement_curie"):
+                                owl_replacements[row["concept_curie"]] = row[
+                                    "replacement_curie"
+                                ]
+            except Exception as e:
+                logger.exception(f"Vocabulary failed: {label}.")
+                print(f"FAILED vocabulary: {label}: {e}", flush=True)
+                failures.append(
+                    {"vocabulary": label, "error": f"{type(e).__name__}: {e}"}
+                )
+
+        with loader.create_session() as session:
+            after = count_concepts(session, report_ids)
+        report = build_count_report(before, after)
+        report = mark_failures(report, {f["vocabulary"] for f in failures})
+        print_count_report(report, format)
+        if report_path:
+            write_count_report(report, report_path, format)
+            logger.info(f"Wrote count report to {report_path}")
+    finally:
+        for extractor in dirs_to_cleanup:
+            try:
+                extractor.__exit__(None, None, None)
+            except Exception:
+                logger.exception("Extractor cleanup failed")

@@ -116,7 +116,7 @@ The source vocabulary files or URLs may need to be periodically updated.
 The details page for CDCREC can can be found on the [CDC Public Health Information Network Vocabulary Access and Distribution System (PHIN VADS)](https://phinvads.cdc.gov/vads/ViewCodeSystem.action?id=2.16.840.1.113883.6.238#) page. The vocabulary URL for the `source_filename` be found [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
 ### OMIM
-If the OMIM vocabulary `source_filename` needs to be updated, it can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
+If the OMIM vocabulary `owl_file` needs to be updated, it can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the downloads icon on the top right of the page and copying the link address.
 
 ### OMOP Files from Athena
 - Create an account on the [Athena](https://athena.ohdsi.org/) website.
