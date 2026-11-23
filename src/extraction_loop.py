@@ -422,7 +422,7 @@ def extract(
 
     try:
         for vocab in selected:
-            label = vocab.get("prefix") or vocab.get("vocabulary_id")
+            label = vocab.get("prefix") or vocab.get("vocabulary_id") or "<unknown>"
             try:
                 source_type = vocab["source_type"]
                 extractor_type = EXTRACTORS.get(source_type.upper())
