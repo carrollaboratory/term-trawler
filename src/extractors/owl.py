@@ -1,5 +1,8 @@
+import gzip
+import io
 import logging
 import urllib.error
+import urllib.request
 import xml.sax
 import xml.sax._exceptions
 
@@ -151,7 +154,21 @@ class OwlExtractor(ExtractorBase):
                 return open_fowl2owl(url, ssl_no_verify=True)
         try:
             g.parse(url)
-        except (TimeoutError, urllib.error.URLError, rdflib.plugin.PluginException):
+        except (UnicodeDecodeError, rdflib.plugin.PluginException):
+            with urllib.request.urlopen(url) as res:
+                raw_bytes = res.read()
+
+            buf = io.BytesIO(raw_bytes)
+            if raw_bytes.startswith(b"\x1f\x8b"):
+                with gzip.open(buf, "rb") as f:
+                    g.parse(file=f, format="turtle")
+            else:
+                g = open_owl(url, ssl_no_verify=False)
+
+        except (
+            TimeoutError,
+            urllib.error.URLError,
+        ):
             try:
                 g = open_owl(url, ssl_no_verify=False)
             except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
