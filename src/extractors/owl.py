@@ -1,6 +1,7 @@
 import gzip
 import io
 import logging
+import os
 import urllib.error
 import urllib.request
 import xml.sax
@@ -147,6 +148,12 @@ class OwlExtractor(ExtractorBase):
         return replacement
 
     def _load_graph(self, url: str, ssl_no_verify=False) -> Graph:
+        if os.path.exists(url):
+            g = Graph()
+            try:
+                return g.parse(url)
+            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
+                return open_fowl2owl(url, ssl_no_verify=ssl_no_verify)
         g = Graph()
         if ssl_no_verify:
             try:
