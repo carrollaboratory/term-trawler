@@ -1,2 +1,3 @@
-* [Term Trawler](README.md)
-  * [Design](design/DESIGN.md)
+- [Term Trawler](README.md)
+  - [Shrimp Basket](shrimp.md)
+  - [Design](design/DESIGN.md)

@@ -7,7 +7,7 @@ import xml.sax
 import xml.sax._exceptions
 from typing import BinaryIO, cast
 
-import rdflib.plugin
+import rdflib
 from car_utils.owl_handler import open_fowl2owl, open_owl
 from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
 from rdflib.namespace import DCTERMS, SKOS

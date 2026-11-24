@@ -1,5 +1,7 @@
 warehouse:
   # Environtment variables for db_uri must be set in a .env file. See .env.example
+  # db_uri: "sqlite:///db/trawler.db"
+  # db_uri: "duckdb:///db/trawler.duckdb"
   db_uri: "postgresql+psycopg2://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
 vocabularies:
   - vocabulary_id: "SNOMED"

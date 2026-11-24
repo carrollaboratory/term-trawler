@@ -21,6 +21,9 @@ dependencies = [
     "common-access-model",
     "py-horned-owl>=2.0.0",
     "python-dotenv>=1.2.4",
+    "duckdb==1.3.2", #AnVIL's duckdb version is pretty old. We should bump this up whenever they do, because it has a ton of dependencies and failed once on install for me
+    #"duckdb>=2.0.0",
+    "duckdb-engine>=0.17.0",
 ]
 dynamic = ["version"]
 
@@ -44,9 +47,15 @@ where = ["src"]  # list of folders that contain the packages (["."] by default)
 [tool.setuptools.package-data]
 "*" = ["*.yaml"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+
 [tool.uv.sources]
 common-access-model = { url = "https://github.com/include-dcc/common-access-model/releases/download/v0.2.0/common_access_model-0.2.0-py3-none-any.whl" }
 car-utils = { git = "https://github.com/carrollaboratory/car-utils.git" }
 
 [project.scripts]
 trawler = "trawler:exec"
+shrimp-basket = "shrimp:exec"
