@@ -5,6 +5,7 @@ import urllib.error
 import urllib.request
 import xml.sax
 import xml.sax._exceptions
+from typing import BinaryIO, cast
 
 import rdflib.plugin
 from car_utils.owl_handler import open_fowl2owl, open_owl
@@ -161,7 +162,7 @@ class OwlExtractor(ExtractorBase):
             buf = io.BytesIO(raw_bytes)
             if raw_bytes.startswith(b"\x1f\x8b"):
                 with gzip.open(buf, "rb") as f:
-                    g.parse(file=f, format="turtle")
+                    g.parse(file=cast(BinaryIO, f), format="turtle")
             else:
                 g = open_owl(url, ssl_no_verify=False)
 
