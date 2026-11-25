@@ -219,5 +219,5 @@ vocabularies:
     prefix: "omim"
     fhir_system: "https://omim.org/"
     vocabulary_uri: "https://www.omim.org/entry/[code]"
-    owl_file: "https://data.bioontology.org/ontologies/OMIM/submissions/29/download?apikey=8b5b7825-538d-40e0-9e9e-5ab9274a9aeb"
+    owl_file: "https://data.bioontology.org/ontologies/OMIM/submissions/30/download?apikey=8b5b7825-538d-40e0-9e9e-5ab9274a9aeb"
     source_type: "OWL"

@@ -1,8 +1,14 @@
+import gzip
+import io
 import logging
 import os
+import urllib.error
+import urllib.request
 import xml.sax
 import xml.sax._exceptions
+from typing import BinaryIO, cast
 
+import rdflib
 from car_utils.owl_handler import open_fowl2owl, open_owl
 from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
 from rdflib.namespace import DCTERMS, SKOS
@@ -148,19 +154,33 @@ class OwlExtractor(ExtractorBase):
                 return g.parse(url)
             except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
                 return open_fowl2owl(url, ssl_no_verify=ssl_no_verify)
+        g = Graph()
         if ssl_no_verify:
             try:
                 return open_owl(url, ssl_no_verify=True)
-            except (
-                xml.sax.SAXParseException,
-                xml.sax._exceptions.SAXParseException,
-            ):
+            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
                 return open_fowl2owl(url, ssl_no_verify=True)
-
         try:
-            g = open_owl(url, ssl_no_verify=False)
-        except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
-            g = open_fowl2owl(url, ssl_no_verify=False)
+            g.parse(url)
+        except (UnicodeDecodeError, rdflib.plugin.PluginException):
+            with urllib.request.urlopen(url) as res:
+                raw_bytes = res.read()
+
+            buf = io.BytesIO(raw_bytes)
+            if raw_bytes.startswith(b"\x1f\x8b"):
+                with gzip.open(buf, "rb") as f:
+                    g.parse(file=cast(BinaryIO, f), format="turtle")
+            else:
+                g = open_owl(url, ssl_no_verify=False)
+
+        except (
+            TimeoutError,
+            urllib.error.URLError,
+        ):
+            try:
+                g = open_owl(url, ssl_no_verify=False)
+            except (xml.sax.SAXParseException, xml.sax._exceptions.SAXParseException):
+                g = open_fowl2owl(url, ssl_no_verify=False)
         return g
 
     @staticmethod

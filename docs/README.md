@@ -182,11 +182,7 @@ page. The vocabulary URL for the `source_filename` be found
 [here](https://phinvads.cdc.gov/baseStu3/CodeSystem/2.16.840.1.113883.6.238).
 
 ### OMIM
-
-If the OMIM vocabulary `source_filename` needs to be updated, it can be found on
-the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source
-URL for the OWL file can be obtained by right clicking the downloads icon on the
-top right of the page and copying the link address.
+If the OMIM vocabulary `owl_file` is out of date and needs to be updated, it can be found on the [BioPortal](https://bioportal.bioontology.org/ontologies/OMIM). The source URL for the OWL file can be obtained by right clicking the download link on the page and copying the link address.
 
 ### OMOP Files from Athena
 
